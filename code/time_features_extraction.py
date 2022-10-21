@@ -126,38 +126,3 @@ class TimeFeatureExtraction():
             self.frames = [self.Time_feature_matrix,self.df]
             self.Time_feature_matrix = pd.concat(self.frames)
 
-
-
-
-
-class Frequency_Features_Extraction():
-    def __init__(self,path,rolamento):
-        self.filename = '2004.02.12.10.32.39'
-        self.dataset=pd.read_csv(os.path.join(path, self.filename), sep='\t',header=None)
-
-        self.bearing_no = 1
-        self.bearing_data = np.array(self.dataset.iloc[:,self.bearing_no-1])
-
-        #self.feature_matrix=np.zeros((1,9))
-
-        self.length = len(self.bearing_data)
-    
-    def FFT(self):
-        self.fourier = np.fft.fftfreq(self.bearing_data)
-        return self.fourier
-
-    def picos_rpm(self):
-        pass
-    
-    def picos_pista_externa(self):
-        pass
-
-    def picos_pista_interna(self):
-        pass
-
-    def picos_gaiola(self):
-        pass
-
-    def picos_rolo(self):
-        pass
-
