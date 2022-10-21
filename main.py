@@ -1,5 +1,5 @@
 from asyncio.format_helpers import extract_stack
-from code.features_extraction import TimeFeatureExtraction
+from code.time_features_extraction import TimeFeatureExtraction
 import dotenv, os
 
 dotenv.load_dotenv()

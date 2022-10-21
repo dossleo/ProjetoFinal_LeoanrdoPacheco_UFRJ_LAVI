@@ -42,6 +42,6 @@ class Frequency_Features_Extraction():
         pass
 
     @logger
-   def PicosRolo(self):
+    def PicosRolo(self):
         pass
 
