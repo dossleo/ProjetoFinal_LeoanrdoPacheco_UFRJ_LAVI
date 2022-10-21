@@ -1,1 +1,1 @@
-# NASA-Bearing-Fault-Diagnosis
+# ProjetoFinal_LeonardoPacheco_UFRJ_LAVI
