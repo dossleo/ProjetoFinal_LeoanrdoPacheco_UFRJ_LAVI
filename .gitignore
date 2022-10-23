@@ -1,6 +1,6 @@
 #Personal ignore files and folders
 database/
-external_code/
+jupyter_code/
 
 
 # Byte-compiled / optimized / DLL files
