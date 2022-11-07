@@ -9,32 +9,35 @@ from math import sqrt
 import scipy.fftpack
 
 class Frequency_Features_Extraction():
-    def __init__(self,path):
+    def __init__(self,path,filename,column):
+        # self.filename = '2004.02.12.10.32.39'
+        
+        # Definindo variaveis de input
         self.path = path
-        self.filename = '2004.02.12.10.32.39'
-        self.dataset=pd.read_csv(os.path.join(path, self.filename), sep='\t',header=None)
+        self.filename = filename
+        self.bearing_no = column
 
-        self.bearing_no = 1
+        # Extraindo dados da coluna selecionada
+        self.dataset=pd.read_csv(os.path.join(path, self.filename), sep='\t',header=None)
         self.bearing_data = np.array(self.dataset.iloc[:,self.bearing_no-1])
 
+        # Criando vetor de extração
         self.feature_matrix=np.zeros((1,9))
 
+        # Extraindo informações do sistema
         self.length = len(self.bearing_data)
-
         self.freq_sample = 20480
         self.rpm = 2000
 
+        # Dados encontrados em https://www.rexnord.com/products/za2115
+        self.Frequency_Fundamental_Train = 0.0072*self.rpm
+        self.Frequency_Inner_Ring_Defect = 0.1617*self.rpm
+        self.Frequency_Outer_Ring_Defect = 0.1217*self.rpm
+        self.Frequency_Roller_Spin = 0.0559*self.rpm
+
+        # Essa discretização está correta?
         self.time_vector = np.linspace(0,1,self.freq_sample)
 
-        self.raw_data = np.array((self.bearing_data,self.time_vector))
-
-        # Dados encontrados em https://www.rexnord.com/products/za2115
-        self.Frequency_Fundamental_Train = 0.0072
-        self.Frequency_Inner_Ring_Defect = 0.1617
-        self.Frequency_Outer_Ring_Defect = 0.1217
-        self.Frequency_Roller_Spin = 0.0559
-
-        
         # Aplicando a transformada de Fourier
         self.fourier = scipy.fftpack.fft(self.raw_data)
 
