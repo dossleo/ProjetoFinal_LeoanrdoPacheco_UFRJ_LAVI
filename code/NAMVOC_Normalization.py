@@ -81,21 +81,21 @@ class DataNormalized():
 # file = '2004.02.12.11.02.39'
 # column = -1
 
-Teste1 = DataNormalized()
-normalizados = Teste1.DataNormalized()
+test = DataNormalized()
+normalizados = test.DataNormalized()
 
 
 # %%]
 
-brutos = Teste1.RawData()
+brutos = test.RawData()
 
 # %%
 
-plt.plot(Teste1.t,normalizados["x"])
+plt.plot(test.t,normalizados["x"])
 plt.show
 # %%
 
 # %%
-plt.plot(Teste1.t,brutos["y"])
+plt.plot(test.t,brutos["y"])
 plt.show
 # %%
