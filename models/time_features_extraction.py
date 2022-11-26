@@ -53,3 +53,20 @@ class TimeFeatures():
     def form_factor(self):
         self.ff = self.rms_value/self.media
         return self.ff
+
+    def run(self):
+
+            self.data_json = {
+                'maximum':self.maximum(),
+                'minimum':self.minimum(),
+                'mean':self.mean(),
+                'standard_deviation':self.standard_deviation(),
+                'rms':self.rms(),
+                'skewness':self.skewness(),
+                'kurtosis':self.kurtosis(),
+                'form_factor':self.form_factor(),
+                'crest_factor':self.crest_factor()
+            }
+
+            
+            return pd.json_normalize(self.data_json)

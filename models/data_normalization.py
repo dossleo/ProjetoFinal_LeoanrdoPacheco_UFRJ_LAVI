@@ -45,7 +45,7 @@ class DataNormalized():
 
         self.MovingMedian()
 
-        self.x = self.signal/self.mediana
+        self.x = np.array(self.signal/self.mediana)
 
         #Tentativa de passar a raiz quadrada no sinal
         # self.x = np.power(self.x,0.5)
@@ -53,7 +53,7 @@ class DataNormalized():
         self.d = {'x': self.x, 't': self.t}
         self.df = pd.DataFrame(self.d)
 
-        return self.df
+        return self.x
 
     def RawData(self):
         self.MovingMedian()

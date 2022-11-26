@@ -1,34 +1,42 @@
-from scipy.signal import butter,filtfilt, hilbert, chirp
-import plotly.graph_objects as go
-import scipy.io
-import numpy as np
-import pandas as pd
-import os
-from msilib.schema import SelfReg
-import matplotlib.pyplot as plt
-import glob
-from math import *
-import scipy.fftpack
+from models import get_data,low_pass_filter,data_normalization, time_features_extraction, frequency_features_extraction
 import models
-from models import get_data,low_pass_filter,data_normalization, time_features_extraction
-
 
 if __name__ == "__main__":
-    data = get_data.GetData(models.path,models.filename,1).Get()
+    
+    # Definição de frequência de aquisição
+    fs = models.freq_sample
+    
+# Passo 1: Descobrir maior frequência de defeito do rolamento
+    maior_freq_defeito = max(models.fault_frequency)
 
-
-    fs = 20480
-    cutoff = 400
+# Passo 2: Passar filtro passa baixa um pouco acima dessa frequência
+    
+    # Extraindo dados brutos
+    raw_data = get_data.GetData(models.path,models.filename,1).Get()
+    
+    # Definindo ordem do filtro
     order = 5
 
-    teste = low_pass_filter.LowPassFilter(data,cutoff,fs,order)
-    # teste.plot_matplotlib(plot_raw_data = False)
+    # Definindo frequência de aplicação do filtro
+    cutoff = maior_freq_defeito*4
 
-    data_filtered = teste.lowpass_filter()
+    dados_filtrados = low_pass_filter.LowPassFilter(raw_data,cutoff,order)
+    # dados_filtrados.PlotTimeDomain(plot_raw_data = False)
 
-    data_normalized = data_normalization.DataNormalized(data_filtered)
+    dados_filtrados = dados_filtrados.lowpass_filter()
 
-    data_normalized = data_normalized.Get()["x"]
 
-    
+# Passo 3: Normalizar os dados
+
+    dados_normalizados = data_normalization.DataNormalized(dados_filtrados)
+
+# Passo 4: Aplicar métricas no domínio do tempo
+
+    dominio_tempo = time_features_extraction.TimeFeatures(dados_normalizados.Get())
+
+# Passo 4: Aplicar FFT
+
+    dominio_frequencia = frequency_features_extraction.FrequencyFeaturesExtraction(dados_normalizados.Get())
+    dominio_frequencia.PlotFrequencyDomain()
+    dominio_frequencia.JanelaFrequencia(models.frequency_outer_ring_defect)
 
