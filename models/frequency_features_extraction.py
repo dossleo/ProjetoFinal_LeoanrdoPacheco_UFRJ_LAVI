@@ -9,7 +9,7 @@ from math import sqrt
 import scipy.fftpack
 
 class Frequency_Features_Extraction():
-    def __init__(self,path,filename,column):
+    def __init__(self,path,filename = '2004.02.12.10.32.39',column=0):
         # self.filename = '2004.02.12.10.32.39'
         
         # Definindo variaveis de input
@@ -39,7 +39,7 @@ class Frequency_Features_Extraction():
         self.time_vector = np.linspace(0,1,self.freq_sample)
 
         # Aplicando a transformada de Fourier
-        self.fourier = scipy.fftpack.fft(self.raw_data)
+        self.fourier = scipy.fftpack.fft(self.bearing_data)
 
         self.xf = self.time_vector
         self.yf = self.fourier
@@ -96,6 +96,8 @@ class Frequency_Features_Extraction():
         self.rms_value = sqrt(sum(n*n for n in self.bearing_data[0:len(self.bearing_data)*0.01])/self.length)        
         return self.rms_value 
 
-Teste = Frequency_Features_Extraction('C:/Users/leona/Documents/ProjetoFinal_LeonardoPacheco_UFRJ_LAVI/database/brutos/2nd_test')
 
-Teste.plot_fourier()
+if __name__ == "__main__":
+    Teste = Frequency_Features_Extraction('C:/Users/leona/Documents/ProjetoFinal_LeonardoPacheco_UFRJ_LAVI/database/brutos/2nd_test')
+    breakpoint()
+    Teste.plot_fourier()

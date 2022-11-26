@@ -50,7 +50,7 @@ class DataNormalized():
 
         self.mediana = sqrt(np.median(self.amplitude_envelope))
 
-    def DataNormalized(self):
+    def NormalizedData(self):
 
         self.MovingMedian()
 
@@ -82,8 +82,9 @@ class DataNormalized():
 # column = -1
 
 test = DataNormalized()
-normalizados = test.DataNormalized()
+normalizados = test.NormalizedData()
 
+print(test.dataset)
 
 # %%]
 

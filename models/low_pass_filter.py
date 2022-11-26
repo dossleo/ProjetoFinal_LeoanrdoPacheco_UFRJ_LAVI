@@ -14,15 +14,21 @@ class LowPassFilter():
         self.order = order
         self.nyq = 0.5 * fs
 
-    def butter_lowpass_filter(self):
+        t_final = int(len(self.data)/self.fs)
+        n = int(len(self.data))
+
+        self.vetor_tempo = np.linspace(0,t_final,n)
+        
+
+    def lowpass_filter(self):
         normal_cutoff = self.cutoff / self.nyq
         # Get the filter coefficients 
         b, a = butter(self.order, normal_cutoff, btype='low', analog=False)
         y = filtfilt(b, a, self.data)
         return y
 
-    def plot_filtered_plotly(self):
-        y = self.butter_lowpass_filter()
+    def plot_plotly(self):
+        y = self.lowpass_filter()
         fig = go.Figure()
         fig.add_trace(go.Scatter(
                     y = self.data,
@@ -36,9 +42,12 @@ class LowPassFilter():
                     ))
         fig.show()
     
-    def plot_filtered_matplotlib(self):
-        y = self.butter_lowpass_filter()
-        plt.plot(np.linspace(0,self.data[-1],int(len(self.data))),y)
-        plt.plot(np.linspace(0,self.data[-1],int(len(self.data))),self.data)
-        plt.legend(['filtered signal','signal with noise'])
+    def plot_matplotlib(self,plot_raw_data = False):
+
+        y = self.lowpass_filter()
+
+        plt.plot(self.vetor_tempo,y)
+        if plot_raw_data:
+            plt.plot(self.vetor_tempo,self.data)
+            plt.legend(['Filtrado','Dados Brutos'])
         plt.show()

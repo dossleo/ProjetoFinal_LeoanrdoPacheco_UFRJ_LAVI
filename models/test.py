@@ -1,16 +1,80 @@
-from scipy.signal import butter,filtfilt
+from scipy.signal import butter,filtfilt, hilbert, chirp
 import plotly.graph_objects as go
-from msilib.schema import SelfReg
-import matplotlib.pyplot as plt
 import scipy.io
 import numpy as np
 import pandas as pd
 import os
+from msilib.schema import SelfReg
+import matplotlib.pyplot as plt
 import glob
-from math import sqrt
+from math import *
+import scipy.fftpack
 
 path=r'database/brutos/2nd_test'
 filename = '2004.02.12.10.32.39'
+
+
+class DataNormalized():
+    def __init__(self,
+                data,
+                fs = 20480):
+
+        self.fs = fs
+        self.data = data
+        self.dt = int(len(data))/self.fs
+
+    def SignalSquared(self):
+        self.signal = np.power(self.data,2)
+        return self.signal
+
+    def TemporalWindow(self):
+
+        self.SignalSquared()
+
+        self.duration = 1.0
+        self.samples = int(self.fs*self.duration)
+        self.t = np.arange(self.samples) / self.fs
+        return self.t
+
+    def AmplitudeEnvelope(self):
+        
+        self.TemporalWindow()
+
+        self.analytic_signal = hilbert(self.signal)
+        self.amplitude_envelope = abs(self.analytic_signal)
+    
+    def MovingMedian(self):
+
+        self.AmplitudeEnvelope()
+
+        self.mediana = sqrt(np.median(self.amplitude_envelope))
+
+    def DataNormalized(self):
+
+        self.MovingMedian()
+
+        self.x = self.signal/self.mediana
+
+        self.d = {'x': self.x, 't': self.t}
+        self.df = pd.DataFrame(self.d)
+
+        return self.df
+
+    def RawData(self):
+        self.MovingMedian()
+
+        self.d = {'y': self.y, 't': self.t}
+        self.df = pd.DataFrame(self.d)
+
+        return self.df
+
+    def PlotNormalData(self):
+
+        self.DataNormalized()
+
+        plt.plot(self.t,self.x)
+        plt.show()
+
 
 class GetData():
 
@@ -36,16 +100,23 @@ class LowPassFilter():
         self.cutoff = cutoff
         self.fs = fs
         self.order = order
+        self.nyq = 0.5 * fs
 
-    def butter_lowpass_filter(self):
-        normal_cutoff = self.cutoff / nyq
+        t_final = int(len(self.data)/self.fs)
+        n = int(len(self.data))
+
+        self.vetor_tempo = np.linspace(0,t_final,n)
+        
+
+    def lowpass_filter(self):
+        normal_cutoff = self.cutoff / self.nyq
         # Get the filter coefficients 
         b, a = butter(self.order, normal_cutoff, btype='low', analog=False)
         y = filtfilt(b, a, self.data)
         return y
 
     def plot_plotly(self):
-        y = self.butter_lowpass_filter()
+        y = self.lowpass_filter()
         fig = go.Figure()
         fig.add_trace(go.Scatter(
                     y = self.data,
@@ -59,25 +130,26 @@ class LowPassFilter():
                     ))
         fig.show()
     
-    def plot_matplotlib(self):
-        y = self.butter_lowpass_filter()
-        plt.plot(np.linspace(0,self.data[-1],int(len(self.data))),y)
-        plt.plot(np.linspace(0,self.data[-1],int(len(self.data))),self.data)
-        plt.legend(['Filtrado','Dados Brutos'])
+    def plot_matplotlib(self,plot_raw_data = False):
+
+        y = self.lowpass_filter()
+
+        plt.plot(self.vetor_tempo,y)
+        if plot_raw_data:
+            plt.plot(self.vetor_tempo,self.data)
+            plt.legend(['Filtrado','Dados Brutos'])
         plt.show()
 
 if __name__ == "__main__":
-    # Filter requirements.
     data = GetData(path,filename,1).Get()
-    # data = data[0:len(data)//4]
 
 
-    fs = 20000
-    cutoff = 500
-    T = len(data)/fs
-    nyq = 0.5 * fs
+    fs = 20480
+    cutoff = 400
     order = 5
-    n = int(T * fs)
 
     teste = LowPassFilter(data,cutoff,fs,order)
-    teste.plot_matplotlib()
+    teste.plot_matplotlib(plot_raw_data = False)
+
+    data_filtered = teste.lowpass_filter()
+
