@@ -18,6 +18,8 @@ class FrequencyFeaturesExtraction():
         t_final = self.length/models.freq_sample
         self.T = t_final/models.freq_sample
         self.time_vector = np.linspace(0.0, t_final, self.length, endpoint=False)
+        self.ymin = -100
+        self.ymax = 100
 
     def RunFFT(self):
         self.fourier = fft(self.data)[0:self.length//2]
@@ -33,38 +35,38 @@ class FrequencyFeaturesExtraction():
         plt.title('Legenda')
         plt.xlabel('Frequency (Hz)')
         plt.ylabel('Amplitude')
-        ymin = -100
-        ymax = 100
 
         freq1 = models.fault_frequency[0]
         freq2 = models.fault_frequency[1]
         freq3 = models.fault_frequency[2]
         freq4 = models.fault_frequency[3]
         freq_plot = freq3
-        ordens = 7
+        ordens = 10
 
         for i in range(ordens):
-            plt.vlines(freq_plot*(i+1),ymin,ymax,'red','dashed')
+            plt.vlines(freq_plot*(i+1),self.ymin,self.ymax,'red','dashed')
 
         plt.grid(True)
         plt.show()
 
-    def JanelaFrequencia(self,freq_referencia):
+    def JanelaFrequencia(self,freq_referencia,tamanho_janela_hz = 40):
         self.RunFFT()
-
-        self.janela_hz = 40 #hz
         
-        intervalo_samples = (models.freq_sample//2)/len(self.freq)
-        self.janela_samples = int((intervalo_samples*self.janela_hz))
+        delta_f = (models.freq_sample/2)/len(self.freq)
+        tamanho_janela_samples = int((delta_f*tamanho_janela_hz))
 
-        elemento_referencia = freq_referencia*intervalo_samples
+        elemento_referencia = int(freq_referencia/delta_f)
 
-        self.inicio_janela = int(elemento_referencia-self.janela_samples//2)
-        self.fim_janela = int(elemento_referencia+self.janela_samples//2)
+        inicio_janela = int(elemento_referencia-tamanho_janela_samples/2)
+        fim_janela = int(elemento_referencia+tamanho_janela_samples/2)
 
-        self.intervalo_janela = [self.inicio_janela,self.fim_janela]
+        self.intervalo_janela = [inicio_janela,fim_janela]
 
-        plt.plot(self.freq[self.inicio_janela:self.fim_janela], self.fourier[self.inicio_janela:self.fim_janela])
+        self.janela_freq = self.freq[inicio_janela:fim_janela]
+        self.janela_fourier = self.fourier[inicio_janela:fim_janela]
+
+        plt.plot(self.janela_freq,self.janela_fourier)
+        plt.vlines(freq_referencia,self.ymin,self.ymax,'red','dashed')
         plt.show()
 
     def PicosRPM(self):

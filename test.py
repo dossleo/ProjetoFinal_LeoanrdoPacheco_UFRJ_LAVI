@@ -21,7 +21,7 @@ if __name__ == "__main__":
     cutoff = maior_freq_defeito*4
 
     dados_filtrados = low_pass_filter.LowPassFilter(raw_data,cutoff,order)
-    dados_filtrados.PlotTimeDomain(plot_raw_data = False)
+    # dados_filtrados.PlotTimeDomain(plot_raw_data = False)
 
     dados_filtrados = dados_filtrados.lowpass_filter()
 
@@ -38,5 +38,6 @@ if __name__ == "__main__":
 
     dominio_frequencia = frequency_features_extraction.FrequencyFeaturesExtraction(dados_normalizados.Get())
     dominio_frequencia.PlotFrequencyDomain()
-    dominio_frequencia.JanelaFrequencia(models.frequency_outer_ring_defect)
+    for defeito in models.fault_frequency:
+        dominio_frequencia.JanelaFrequencia(defeito,40)
 
