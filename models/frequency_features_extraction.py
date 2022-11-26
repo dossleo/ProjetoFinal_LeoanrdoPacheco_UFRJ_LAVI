@@ -18,8 +18,8 @@ class FrequencyFeaturesExtraction():
         t_final = self.length/models.freq_sample
         self.T = t_final/models.freq_sample
         self.time_vector = np.linspace(0.0, t_final, self.length, endpoint=False)
-        self.ymin = -100
-        self.ymax = 100
+        self.ymin = -200
+        self.ymax = 200
 
     def RunFFT(self):
         self.fourier = fft(self.data)[0:self.length//2]
@@ -67,6 +67,7 @@ class FrequencyFeaturesExtraction():
 
         plt.plot(self.janela_freq,self.janela_fourier)
         plt.vlines(freq_referencia,self.ymin,self.ymax,'red','dashed')
+        plt.ylim((self.ymin,self.ymax))
         plt.show()
 
     def PicosRPM(self):
