@@ -1,5 +1,6 @@
 from models import get_data,low_pass_filter,data_normalization, time_features_extraction, frequency_features_extraction
 import models
+import pandas as pd
 
 if __name__ == "__main__":
     
@@ -40,6 +41,14 @@ if __name__ == "__main__":
         dominio_frequencia = frequency_features_extraction.FrequencyFeaturesExtraction(dados_normalizados.Get())
         dominio_frequencia.PlotFrequencyDomain()
         ordens = 9
-        for i in range(ordens):
-            dominio_frequencia.JanelaFrequencia(models.frequency_outer_ring_defect*(i+1),50)
+        janela = 50
 
+    # Passo 6: Aplicar métricas do domínio do tempo nas janelas de frequência
+        metricas = []
+        
+        for i in range(ordens):
+            dados = dominio_frequencia.JanelaFrequencia(models.frequency_outer_ring_defect*(i+1),janela)
+            metricas_frequencia = time_features_extraction.TimeFeatures(dados)
+            metricas.append(metricas_frequencia.run())
+
+        print(pd.json_normalize(metricas))

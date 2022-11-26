@@ -26,6 +26,9 @@ class FrequencyFeaturesExtraction():
         primeiros_pontos = 2
         self.fourier[0:primeiros_pontos] = np.zeros(primeiros_pontos)
         self.freq = fftfreq(self.length,self.T)[0:self.length//2]
+        
+        self.fourier = np.real(self.fourier)
+        self.freq = np.real(self.freq)
 
     def PlotFrequencyDomain(self):
         self.RunFFT()
@@ -65,10 +68,12 @@ class FrequencyFeaturesExtraction():
         self.janela_freq = self.freq[inicio_janela:fim_janela]
         self.janela_fourier = self.fourier[inicio_janela:fim_janela]
 
-        plt.plot(self.janela_freq,self.janela_fourier)
-        plt.vlines(freq_referencia,self.ymin,self.ymax,'red','dashed')
-        plt.ylim((self.ymin,self.ymax))
-        plt.show()
+        return self.janela_fourier
+
+        # plt.plot(self.janela_freq,self.janela_fourier)
+        # plt.vlines(freq_referencia,self.ymin,self.ymax,'red','dashed')
+        # plt.ylim((self.ymin,self.ymax))
+        # plt.show()
 
     def PicosRPM(self):
         pass

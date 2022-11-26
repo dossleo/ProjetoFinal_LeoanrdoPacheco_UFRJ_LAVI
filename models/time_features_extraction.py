@@ -68,5 +68,5 @@ class TimeFeatures():
                 'crest_factor':self.crest_factor()
             }
 
-            
-            return pd.json_normalize(self.data_json)
+            return self.data_json
+            # return pd.json_normalize(self.data_json)
