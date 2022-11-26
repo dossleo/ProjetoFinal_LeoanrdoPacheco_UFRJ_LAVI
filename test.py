@@ -45,10 +45,14 @@ if __name__ == "__main__":
 
     # Passo 6: Aplicar métricas do domínio do tempo nas janelas de frequência
         metricas = []
-        
+
         for i in range(ordens):
             dados = dominio_frequencia.JanelaFrequencia(models.frequency_outer_ring_defect*(i+1),janela)
             metricas_frequencia = time_features_extraction.TimeFeatures(dados)
-            metricas.append(metricas_frequencia.run())
+            dicionario = metricas_frequencia.run()
+            dicionario['ordem'] = i+1
+            dicionario['frequencia_analisada'] = 'frequency_outer_ring_defect'
+            metricas.append(dicionario)
+
 
         print(pd.json_normalize(metricas))
