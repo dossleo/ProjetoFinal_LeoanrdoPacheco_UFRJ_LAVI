@@ -7,13 +7,12 @@ import os
 import glob
 from math import *
 import scipy.fftpack
+import models
 
 class DataNormalized():
-    def __init__(self,
-                data,
-                fs = 20480):
+    def __init__(self,data):
 
-        self.fs = fs
+        self.fs = models.freq_sample
         self.data = data
         self.dt = int(len(data))/self.fs
 
