@@ -1,5 +1,3 @@
-# Importando bibliotecas 
-# %%
 from msilib.schema import SelfReg
 import matplotlib.pyplot as plt
 from scipy.signal import hilbert, chirp
@@ -12,22 +10,15 @@ import scipy.fftpack
 
 class DataNormalized():
     def __init__(self,
-                path='C:/Users/leona/Documents/ProjetoFinal_LeonardoPacheco_UFRJ_LAVI/database/brutos/2nd_test',
-                file='2004.02.12.11.02.39',
-                column=-1,
-                dt = 1,
+                data,
                 fs = 20480):
 
-        self.path = path
-        self.file = file
-        self.column = column
-        self.dt = dt
         self.fs = fs
-        self.dataset=pd.read_csv(os.path.join(self.path, self.file), sep='\t',header=None)
+        self.data = data
+        self.dt = int(len(data))/self.fs
 
     def SignalSquared(self):
-        self.y = self.dataset.iloc[:,self.column]
-        self.signal = np.power(self.y,2)
+        self.signal = np.power(self.data,2)
 
     def TemporalWindow(self):
 
@@ -50,11 +41,14 @@ class DataNormalized():
 
         self.mediana = sqrt(np.median(self.amplitude_envelope))
 
-    def NormalizedData(self):
+    def Get(self):
 
         self.MovingMedian()
 
         self.x = self.signal/self.mediana
+
+        #Tentativa de passar a raiz quadrada no sinal
+        # self.x = np.power(self.x,0.5)
 
         self.d = {'x': self.x, 't': self.t}
         self.df = pd.DataFrame(self.d)
@@ -71,32 +65,7 @@ class DataNormalized():
 
     def PlotNormalData(self):
 
-        self.DataNormalized()
+        self.Get()
 
         plt.plot(self.t,self.x)
         plt.show()
-
-# %%
-# path = 'C:/Users/leona/Documents/ProjetoFinal_LeonardoPacheco_UFRJ_LAVI/database/brutos/2nd_test'
-# file = '2004.02.12.11.02.39'
-# column = -1
-
-test = DataNormalized()
-normalizados = test.NormalizedData()
-
-print(test.dataset)
-
-# %%]
-
-brutos = test.RawData()
-
-# %%
-
-plt.plot(test.t,normalizados["x"])
-plt.show
-# %%
-
-# %%
-plt.plot(test.t,brutos["y"])
-plt.show
-# %%
