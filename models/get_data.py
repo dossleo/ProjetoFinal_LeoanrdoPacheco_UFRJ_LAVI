@@ -6,6 +6,7 @@ import pandas as pd
 import os
 import glob
 from math import sqrt
+import models
 
 path=r'database/brutos/2nd_test'
 filename = '2004.02.12.10.32.39'

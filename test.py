@@ -21,7 +21,7 @@ if __name__ == "__main__":
     cutoff = maior_freq_defeito*4
 
     dados_filtrados = low_pass_filter.LowPassFilter(raw_data,cutoff,order)
-    # dados_filtrados.PlotTimeDomain(plot_raw_data = False)
+    dados_filtrados.PlotTimeDomain(plot_raw_data = False)
 
     dados_filtrados = dados_filtrados.lowpass_filter()
 
