@@ -1,25 +1,26 @@
 from models import _data_normalization, _frequency_features_extraction, _get_data, _low_pass_filter, _time_features_extraction, generate_rpm, get_rpm
 import models
 import pandas as pd
+import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
+    dataframe = []
+    # Definição de frequência de aquisição
+    fs = models.freq_sample
     
+    # Gerar RPM
+    gerar_rpm = generate_rpm.GenerateRPM(2000,20480)
+    df_rpm = gerar_rpm.generate_array()
+
+    pegar_rpm = get_rpm.GetRPM(df_rpm,models.freq_sample)
+    rpm_pontos = pegar_rpm.get_rpm_ponto_a_ponto()
+    rpm_medio = pegar_rpm.get_rpm_medio()
+    # pegar_rpm.plot_rpm()
+
+
+# Passo 1: Descobrir maior frequência de defeito do rolamento
+    maior_freq_defeito = max(models.fault_frequency)
     for file in models.filenames:
-        # Definição de frequência de aquisição
-        fs = models.freq_sample
-        
-        # Gerar RPM
-        gerar_rpm = generate_rpm.GenerateRPM(2000,20480)
-        df_rpm = gerar_rpm.generate_array()
-
-        pegar_rpm = get_rpm.GetRPM(df_rpm,models.freq_sample)
-        rpm_pontos = pegar_rpm.get_rpm_ponto_a_ponto()
-        rpm_medio = pegar_rpm.get_rpm_medio()
-        pegar_rpm.plot_rpm()
-
-
-    # Passo 1: Descobrir maior frequência de defeito do rolamento
-        maior_freq_defeito = max(models.fault_frequency)
 
     # Passo 2: Passar filtro passa baixa um pouco acima dessa frequência
         
@@ -48,27 +49,31 @@ if __name__ == "__main__":
 
     # Passo 5: Aplicar FFT
 
-        dominio_frequencia = _frequency_features_extraction.FrequencyFeaturesExtraction(dados_normalizados.Get())
+        dominio_frequencia = _frequency_features_extraction.FrequencyFeaturesExtraction(dados_normalizados.Get(),rpm_medio)
         frequencia_referencia = models.frequency_outer_ring_defect
-        ordens = 9
+        ordens = 5
         janela = 60
-        dominio_frequencia.PlotFrequencyDomain(frequencia_referencia,ordens)
-        dominio_frequencia.PlotJanela(frequencia_referencia,janela)
+        # dominio_frequencia.PlotFrequencyDomain(frequencia_referencia,ordens)
+        # dominio_frequencia.PlotJanela(frequencia_referencia,janela)
 
     # Passo 6: Aplicar métricas do domínio do tempo nas janelas de frequência
         media = dominio_frequencia.MediaOrdens(frequencia_referencia,janela,ordens)
         metricas = dominio_frequencia.metricas
 
-        print('-------------')
-        print('METRICAS')
-        print(metricas)
-        print('-------------')
-        print('Medias')
-        print(media)
-        print('-------------')
-        print('-------------')
-        print('-------------')
+        dataframe.append(media)
+
+        # print('-------------')
+        # print('METRICAS')
+        # print(metricas)
+        # print('-------------')
+        # print(media)
+        # print('-------------')
+
 
     # Get RPM
-
+dataframe = pd.json_normalize(dataframe)
+for feature in models.features:
+    plt.plot(range(len(models.filenames)),dataframe[feature])
+    plt.title(feature)
+    plt.show()
 breakpoint()
