@@ -8,6 +8,14 @@ if __name__ == "__main__":
         # Definição de frequência de aquisição
         fs = models.freq_sample
         
+        # Gerar RPM
+        gerar_rpm = generate_rpm.GenerateRPM(2000,20480)
+        df_rpm = gerar_rpm.generate_array()
+
+        pegar_rpm = get_rpm.GetRPM(df_rpm,models.freq_sample)
+        rpm_pontos = pegar_rpm.get_rpm_ponto_a_ponto()
+
+
     # Passo 1: Descobrir maior frequência de defeito do rolamento
         maior_freq_defeito = max(models.fault_frequency)
 
@@ -60,14 +68,4 @@ if __name__ == "__main__":
         # print('-------------')
 
     # Get RPM
-        gerar_rpm = generate_rpm.GenerateRPM(2000,20480)
-        df_rpm = gerar_rpm.generate_array()
-
-        pegar_rpm = get_rpm.GetRPM(df_rpm,models.freq_sample)
-        pegar_rpm.plot_rpm()
-        print(pegar_rpm.get_rpm_medio())
-        # breakpoint()
-        # pegar_rpm.picos
-        # pegar_rpm.rpms
-        print(pegar_rpm.get_rpm_ponto_a_ponto())
 

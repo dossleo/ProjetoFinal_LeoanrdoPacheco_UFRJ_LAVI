@@ -25,7 +25,7 @@ class GetRPM():
         self.data = self.cut_off()
         self.max = np.max(self.data)
 
-        janela = 6
+        janela = 8
         janela = int(janela)
 
         for i in range(len(self.data)):
