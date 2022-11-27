@@ -47,19 +47,29 @@ class GetRPM():
         for j in range(0,len(self.picos)-1):
             self.rpms.append(self.picos[j+1]-self.picos[j])
 
+        self.picos = self.picos
         return np.mean(self.rpms)
 
     def get_rpm_ponto_a_ponto(self):
         self.data = self.square_wave()
-        self.rpm_meio = self.get_rpm_medio()
+
+        self.picos = []
+        self.rpms = []
+            
+        for i in range(len(self.data)):
+            if self.data[i] > self.cutoff and self.data[i+1] == 0:
+                self.picos.append(i)
+
+        for j in range(0,len(self.picos)-1):
+            self.rpms.append(self.picos[j+1]-self.picos[j])
         
         self.rpm = np.zeros(len(self.data))
 
         self.rpm[0:self.picos[0]] = self.rpms[0]
         self.rpm[self.picos[-1]:len(self.rpm)] = self.rpms[-1]
 
-        for i in range(0,len(self.rpms)):
-            self.rpm[self.picos[i]:self.picos[i+1]] = self.rpms[i]
+        for k in range(0,len(self.rpms)):
+            self.rpm[self.picos[k]:self.picos[k+1]] = self.rpms[k]
 
         return self.rpm
 
