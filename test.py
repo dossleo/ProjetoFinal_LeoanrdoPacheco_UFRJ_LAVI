@@ -14,6 +14,7 @@ if __name__ == "__main__":
 
         pegar_rpm = get_rpm.GetRPM(df_rpm,models.freq_sample)
         rpm_pontos = pegar_rpm.get_rpm_ponto_a_ponto()
+        pegar_rpm.plot_rpm()
 
 
     # Passo 1: Descobrir maior frequência de defeito do rolamento
@@ -69,3 +70,4 @@ if __name__ == "__main__":
 
     # Get RPM
 
+breakpoint()

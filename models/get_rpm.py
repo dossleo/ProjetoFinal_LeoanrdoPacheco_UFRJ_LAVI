@@ -55,6 +55,9 @@ class GetRPM():
         
         self.rpm = np.zeros(len(self.data))
 
+        self.rpm[0:self.picos[0]] = self.rpms[0]
+        self.rpm[self.picos[-1]:len(self.rpm)] = self.rpms[-1]
+
         for i in range(0,len(self.rpms)):
             self.rpm[self.picos[i]:self.picos[i+1]] = self.rpms[i]
 
@@ -65,11 +68,13 @@ class GetRPM():
         self.data = self.square_wave()
 
         plt.plot(range(len(self.data)),self.data)
+        plt.ylim((0,np.max(self.data)*1.5))
         plt.show()
 
     def plot_rpm(self):
         self.data = self.get_rpm_ponto_a_ponto()
         plt.plot(range(len(self.data)),self.data)
+        plt.ylim((0,np.max(self.data)*1.5))
         plt.show()
 
 
