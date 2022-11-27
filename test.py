@@ -1,4 +1,4 @@
-from models import _data_normalization, _frequency_features_extraction, _get_data, _low_pass_filter, _time_features_extraction
+from models import _data_normalization, _frequency_features_extraction, _get_data, _low_pass_filter, _time_features_extraction, generate_rpm, get_rpm
 import models
 import pandas as pd
 
@@ -42,19 +42,32 @@ if __name__ == "__main__":
         frequencia_referencia = models.frequency_outer_ring_defect
         ordens = 9
         janela = 60
-        dominio_frequencia.PlotFrequencyDomain(frequencia_referencia,ordens)
-        dominio_frequencia.PlotJanela(frequencia_referencia,janela)
+        # dominio_frequencia.PlotFrequencyDomain(frequencia_referencia,ordens)
+        # dominio_frequencia.PlotJanela(frequencia_referencia,janela)
 
     # Passo 6: Aplicar métricas do domínio do tempo nas janelas de frequência
         media = dominio_frequencia.MediaOrdens(frequencia_referencia,janela,ordens)
         metricas = dominio_frequencia.metricas
 
-        print('-------------')
-        print('METRICAS')
-        print(metricas)
-        print('-------------')
-        print('Medias')
-        print(media)
-        print('-------------')
-        print('-------------')
-        print('-------------')
+        # print('-------------')
+        # print('METRICAS')
+        # print(metricas)
+        # print('-------------')
+        # print('Medias')
+        # print(media)
+        # print('-------------')
+        # print('-------------')
+        # print('-------------')
+
+    # Get RPM
+        gerar_rpm = generate_rpm.GenerateRPM(2000,20480)
+        df_rpm = gerar_rpm.generate_array()
+
+        pegar_rpm = get_rpm.GetRPM(df_rpm,models.freq_sample)
+        pegar_rpm.plot_rpm()
+        print(pegar_rpm.get_rpm_medio())
+        # breakpoint()
+        # pegar_rpm.picos
+        # pegar_rpm.rpms
+        print(pegar_rpm.get_rpm_ponto_a_ponto())
+
