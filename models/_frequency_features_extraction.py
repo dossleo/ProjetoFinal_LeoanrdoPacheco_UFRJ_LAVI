@@ -54,7 +54,7 @@ class FrequencyFeaturesExtraction():
         self.RunFFT()
         
         delta_f = (models.freq_sample/2)/len(self.freq)
-        tamanho_janela_samples = int((delta_f*tamanho_janela_hz))
+        tamanho_janela_samples = int((tamanho_janela_hz/delta_f))
 
         elemento_referencia = int(freq_referencia/delta_f)
 
