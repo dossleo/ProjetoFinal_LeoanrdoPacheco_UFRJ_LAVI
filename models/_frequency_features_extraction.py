@@ -8,6 +8,7 @@ import glob
 from math import sqrt
 from scipy.fft import fft, fftfreq
 import models
+from models import _time_features_extraction
 
 class FrequencyFeaturesExtraction():
     def __init__(self,data):
@@ -30,24 +31,17 @@ class FrequencyFeaturesExtraction():
         self.fourier = np.real(self.fourier)
         self.freq = np.real(self.freq)
 
-    def PlotFrequencyDomain(self):
+    def PlotFrequencyDomain(self,freq_referencia = models.rpm,no_ordens = 1):
+
         self.RunFFT()
-        # self.fourier = self.rms()
-        self.fig, self.ax = plt.subplots()
-        self.ax.plot(self.freq, self.fourier)
-        plt.title('Legenda')
+
+        plt.plot(self.freq, self.fourier)
+        plt.title('Domínio da Frequência')
         plt.xlabel('Frequency (Hz)')
         plt.ylabel('Amplitude')
 
-        freq1 = models.fault_frequency[0]
-        freq2 = models.fault_frequency[1]
-        freq3 = models.fault_frequency[2]
-        freq4 = models.fault_frequency[3]
-        freq_plot = freq3
-        ordens = 10
-
-        for i in range(ordens):
-            plt.vlines(freq_plot*(i+1),self.ymin,self.ymax,'red','dashed')
+        for i in range(no_ordens):
+            plt.vlines(freq_referencia*(i+1),self.ymin,self.ymax,'red','dashed')
 
         plt.grid(True)
         plt.show()
@@ -70,33 +64,32 @@ class FrequencyFeaturesExtraction():
 
         return self.janela_fourier
 
-        # plt.plot(self.janela_freq,self.janela_fourier)
-        # plt.vlines(freq_referencia,self.ymin,self.ymax,'red','dashed')
-        # plt.ylim((self.ymin,self.ymax))
-        # plt.show()
+    def PlotJanela(self,freq_referencia,tamanho_janela_hz = 40):
+        self.JanelaFrequencia(freq_referencia,tamanho_janela_hz)
 
-    def PicosRPM(self):
-        pass
-        # self.RunFFT()
-    
-    def PicosPistaExterna(self):
-        pass
-        # self.RunFFT()
+        plt.plot(self.janela_freq,self.janela_fourier)
+        plt.vlines(freq_referencia,self.ymin,self.ymax,'red','dashed')
+        plt.ylim((self.ymin,self.ymax))
+        plt.show()
 
-    def PicosPistaInterna(self):
-        pass
-        # self.RunFFT()
+    def MediaOrdens(self,freq_referencia = models.rpm,tamanho_janela_hz = 40,no_ordens = 1):
+        metricas = []
 
-    def PicosGaiola(self):
-        pass
-        # self.RunFFT()
+        for i in range(no_ordens):
+            dados = self.JanelaFrequencia(models.frequency_outer_ring_defect*(i+1),tamanho_janela_hz)
+            metricas_frequencia = _time_features_extraction.TimeFeatures(dados)
+            dicionario = metricas_frequencia.run()
+            dicionario['ordem'] = i+1
+            dicionario['frequencia_analisada'] = freq_referencia
+            metricas.append(dicionario)
 
-    def PicosRolo(self):
-        pass
-        # self.RunFFT()
+        self.metricas = pd.json_normalize(metricas)
 
-    def rms(self):
-        pass
-        # self.RunFFT()
-        # self.rms_value = sqrt(sum(n*n for n in self.data[0:int(len(self.data))//100])//self.length)        
-        # return self.rms_value 
+        return self.metricas.mean()
+
+
+
+
+
+        
+ 
