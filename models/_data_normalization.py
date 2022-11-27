@@ -46,9 +46,6 @@ class DataNormalized():
 
         self.x = np.array(self.signal/self.mediana)
 
-        #Tentativa de passar a raiz quadrada no sinal
-        # self.x = np.power(self.x,0.5)
-
         self.d = {'x': self.x, 't': self.t}
         self.df = pd.DataFrame(self.d)
 
