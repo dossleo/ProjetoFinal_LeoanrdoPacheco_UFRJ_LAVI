@@ -30,6 +30,7 @@ class FrequencyFeaturesExtraction():
         
         self.fourier = np.real(self.fourier)
         self.freq = np.real(self.freq)
+        self.freq = self.freq/models.rpm
 
     def PlotFrequencyDomain(self,freq_referencia = models.rpm,no_ordens = 1):
 
@@ -41,7 +42,7 @@ class FrequencyFeaturesExtraction():
         plt.ylabel('Amplitude')
 
         for i in range(no_ordens):
-            plt.vlines(freq_referencia*(i+1),self.ymin,self.ymax,'red','dashed')
+            plt.vlines(freq_referencia*(i+1)/models.rpm,self.ymin,self.ymax,'red','dashed')
 
         plt.grid(True)
         plt.show()
@@ -68,7 +69,7 @@ class FrequencyFeaturesExtraction():
         self.JanelaFrequencia(freq_referencia,tamanho_janela_hz)
 
         plt.plot(self.janela_freq,self.janela_fourier)
-        plt.vlines(freq_referencia,self.ymin,self.ymax,'red','dashed')
+        plt.vlines(freq_referencia/models.rpm,self.ymin,self.ymax,'red','dashed')
         plt.ylim((self.ymin,self.ymax))
         plt.show()
 
@@ -87,9 +88,4 @@ class FrequencyFeaturesExtraction():
 
         return self.metricas.mean()
 
-
-
-
-
-        
  

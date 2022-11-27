@@ -20,7 +20,7 @@ if __name__ == "__main__":
         order = 5
 
         # Definindo frequência de aplicação do filtro
-        cutoff = maior_freq_defeito*4
+        cutoff = models.rpm*2
 
         dados_filtrados = _low_pass_filter.LowPassFilter(raw_data,cutoff,order)
         # dados_filtrados.PlotTimeDomain(plot_raw_data = False)
@@ -42,7 +42,8 @@ if __name__ == "__main__":
         frequencia_referencia = models.frequency_outer_ring_defect
         ordens = 9
         janela = 60
-        # dominio_frequencia.PlotFrequencyDomain(frequencia_referencia,ordens)
+        dominio_frequencia.PlotFrequencyDomain(frequencia_referencia,ordens)
+        dominio_frequencia.PlotJanela(frequencia_referencia,janela)
 
     # Passo 6: Aplicar métricas do domínio do tempo nas janelas de frequência
         media = dominio_frequencia.MediaOrdens(frequencia_referencia,janela,ordens)
