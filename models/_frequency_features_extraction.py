@@ -53,10 +53,10 @@ class FrequencyFeaturesExtraction():
     def JanelaFrequencia(self,freq_referencia,tamanho_janela_hz = 40):
         self.RunFFT()
         
-        delta_f = (models.freq_sample/2)/len(self.freq)
-        tamanho_janela_samples = int((tamanho_janela_hz/delta_f))
+        self.delta_f = (self.freq[-1]-self.freq[0])/len(self.freq)
+        tamanho_janela_samples = int((tamanho_janela_hz/self.delta_f))
 
-        elemento_referencia = int(freq_referencia/delta_f)
+        elemento_referencia = int(freq_referencia/self.delta_f)
 
         inicio_janela = int(elemento_referencia-tamanho_janela_samples/2)
         fim_janela = int(elemento_referencia+tamanho_janela_samples/2)
@@ -82,7 +82,7 @@ class FrequencyFeaturesExtraction():
 
 
         for i in range(no_ordens):
-            dados = self.JanelaFrequencia(models.frequency_outer_ring_defect*(i+1),tamanho_janela_hz)
+            dados = self.JanelaFrequencia(freq_referencia*(i+1),tamanho_janela_hz)
             metricas_frequencia = _time_features_extraction.TimeFeatures(dados)
             dicionario = metricas_frequencia.run()
             dicionario['ordem'] = i+1

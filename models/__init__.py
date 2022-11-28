@@ -18,7 +18,8 @@ fault_frequency = [frequency_fundamental_train
 raw_data_path = os.path.join(os.getcwd(), "database", "brutos")
 
 path=r'database/brutos/2nd_test'
-filenames = os.listdir(path)
+# filenames = os.listdir(path)
+filenames = ['2004.02.19.05.52.39']
 
 # set number = {Bearing number : channel number}
 test1 = {"bearing1x":0,"bearint1y":1,

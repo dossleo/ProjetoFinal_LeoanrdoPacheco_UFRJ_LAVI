@@ -50,11 +50,13 @@ for fault in range(len(models.fault_frequency)):
     # Passo 5: Aplicar FFT
 
         dominio_frequencia = _frequency_features_extraction.FrequencyFeaturesExtraction(dados_normalizados.Get(),models.rpm)
-        frequencia_referencia = models.fault_frequency[fault]*15
-        ordens = 5
-        janela = 40
-        dominio_frequencia.PlotFrequencyDomain(frequencia_referencia,ordens)
-        dominio_frequencia.PlotJanela(frequencia_referencia,janela)
+        frequencia_referencia = models.fault_frequency[fault]
+        ordens = 9
+        janela = 50
+        # dominio_frequencia.PlotFrequencyDomain(frequencia_referencia,ordens)
+        # dominio_frequencia.PlotJanela(frequencia_referencia,janela)
+        dominio_frequencia.JanelaFrequencia(frequencia_referencia,janela)
+        breakpoint()
 
     # Passo 6: Aplicar métricas do domínio do tempo nas janelas de frequência
         media = dominio_frequencia.MediaOrdens(frequencia_referencia,janela,ordens)
@@ -72,8 +74,10 @@ for fault in range(len(models.fault_frequency)):
 
     # Get RPM
     dataframe = pd.json_normalize(dataframe)
-    for feature in models.features:
-        plt.plot(range(len(models.filenames)),dataframe[feature])
-        plt.title(feature + "-" + str(models.fault_frequency[fault]))
-        plt.show()
+    print(dataframe)
+    # for feature in models.features:
+        # plt.plot(range(len(models.filenames)),dataframe[feature])
+        # plt.title(feature + "-" + str(models.fault_frequency[fault]))
+        # plt.show()
+
 # breakpoint()
