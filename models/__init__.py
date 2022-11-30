@@ -5,10 +5,10 @@ freq_sample = 20480
 rpm = 2000
 
 # Dados encontrados em https://www.rexnord.com/products/za2115
-frequency_fundamental_train = 0.0072*rpm
-frequency_inner_ring_defect = 0.1617*rpm
-frequency_outer_ring_defect = 0.1217*rpm
-frequency_roller_spin = 0.0559*rpm
+frequency_fundamental_train = 0.0072
+frequency_inner_ring_defect = 0.1617
+frequency_outer_ring_defect = 0.1217
+frequency_roller_spin = 0.0559
 
 fault_frequency = [frequency_fundamental_train
                 ,frequency_inner_ring_defect

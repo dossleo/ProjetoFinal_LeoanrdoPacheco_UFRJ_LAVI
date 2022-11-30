@@ -18,6 +18,9 @@ class GetRPM():
         for i in range(len(self.data)):
             if self.data[i] < self.cutoff:
                 self.data[i] = 0
+
+        self.data = np.power(self.data,0.25)
+        self.cutoff = self.cutoff**(0.25)
      
         return self.data
 
