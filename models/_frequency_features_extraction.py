@@ -35,7 +35,7 @@ class FrequencyFeaturesExtraction():
         
         self.eixo_y_fourier = np.real(self.eixo_y_fourier)
         self.eixo_freq = np.real(self.eixo_freq)
-        self.eixo_freq = self.eixo_freq
+        self.eixo_freq = self.eixo_freq/self.rpm
 
     def plot_frequency_domain(self,freq_referencia,no_ordens = 1):
 
@@ -47,7 +47,7 @@ class FrequencyFeaturesExtraction():
         plt.ylabel('Amplitude')
 
         for i in range(no_ordens):
-            plt.vlines(freq_referencia*(i+1),self.ymin,self.ymax,'red','dashed')
+            plt.vlines(freq_referencia*(i+1)/self.rpm,self.ymin,self.ymax,'red','dashed')
 
         plt.grid(True)
         plt.show()
@@ -55,18 +55,18 @@ class FrequencyFeaturesExtraction():
     def window_around_frequency(self,freq_referencia,tamanho_janela_hz = 40):
         self.run_fft()
         
-        self.delta_f = (self.eixo_freq[-1]-self.eixo_freq[0])/len(self.eixo_freq)
-        tamanho_janela_samples = int((tamanho_janela_hz/self.delta_f))
+        self.delta_f = (self.rpm*self.eixo_freq[-1]-self.eixo_freq[0])/len(self.eixo_freq)
+        self.tamanho_janela_samples = int((tamanho_janela_hz/self.delta_f))
 
         elemento_referencia = int(freq_referencia/self.delta_f)
 
-        inicio_janela = int(elemento_referencia-tamanho_janela_samples/2)
-        fim_janela = int(elemento_referencia+tamanho_janela_samples/2)
+        self.inicio_janela = int(elemento_referencia-self.tamanho_janela_samples/2)
+        self.fim_janela = int(elemento_referencia+self.tamanho_janela_samples/2)
 
-        self.intervalo_janela = [inicio_janela,fim_janela]
+        self.intervalo_janela = [self.inicio_janela,self.fim_janela]
 
-        self.janela_freq = self.eixo_freq[inicio_janela:fim_janela]
-        self.janela_fourier = self.eixo_y_fourier[inicio_janela:fim_janela]
+        self.janela_freq = self.eixo_freq[self.inicio_janela:self.fim_janela]
+        self.janela_fourier = self.eixo_y_fourier[self.inicio_janela:self.fim_janela]
 
         return self.janela_fourier
 
@@ -74,7 +74,7 @@ class FrequencyFeaturesExtraction():
         self.window_around_frequency(freq_referencia,tamanho_janela_hz)
 
         plt.plot(self.janela_freq,self.janela_fourier)
-        plt.vlines(freq_referencia,self.ymin,self.ymax,'red','dashed')
+        plt.vlines(freq_referencia/self.rpm,self.ymin,self.ymax,'red','dashed')
         plt.ylim((self.ymin,self.ymax))
         plt.show()
 
