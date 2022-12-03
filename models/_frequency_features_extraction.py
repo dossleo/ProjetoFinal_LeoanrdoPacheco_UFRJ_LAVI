@@ -35,7 +35,7 @@ class FrequencyFeaturesExtraction():
         
         self.eixo_y_fourier = np.real(self.eixo_y_fourier)
         self.eixo_freq = np.real(self.eixo_freq)
-        self.eixo_freq = self.eixo_freq/self.rpm
+        self.eixo_freq = self.eixo_freq
 
     def plot_frequency_domain(self,freq_referencia,no_ordens = 1):
 
@@ -47,7 +47,7 @@ class FrequencyFeaturesExtraction():
         plt.ylabel('Amplitude')
 
         for i in range(no_ordens):
-            plt.vlines(freq_referencia*(i+1)/self.rpm,self.ymin,self.ymax,'red','dashed')
+            plt.vlines(freq_referencia*(i+1),self.ymin,self.ymax,'red','dashed')
 
         plt.grid(True)
         plt.show()
@@ -74,7 +74,7 @@ class FrequencyFeaturesExtraction():
         self.window_around_frequency(freq_referencia,tamanho_janela_hz)
 
         plt.plot(self.janela_freq,self.janela_fourier)
-        plt.vlines(freq_referencia/self.rpm,self.ymin,self.ymax,'red','dashed')
+        plt.vlines(freq_referencia,self.ymin,self.ymax,'red','dashed')
         plt.ylim((self.ymin,self.ymax))
         plt.show()
 
