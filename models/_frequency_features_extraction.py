@@ -11,72 +11,87 @@ import models
 from models import _time_features_extraction
 
 class FrequencyFeaturesExtraction():
-    def __init__(self,data):
+    def __init__(self,data,rpm):
         
         self.data = data
         self.length = len(self.data)
+        self.rpm = rpm
 
         t_final = self.length/models.freq_sample
+
         self.T = t_final/models.freq_sample
+
         self.time_vector = np.linspace(0.0, t_final, self.length, endpoint=False)
         self.ymin = -200
         self.ymax = 200
 
-    def RunFFT(self):
-        self.fourier = fft(self.data)[0:self.length//2]
+        self.features = models.features
+
+    def run_fft(self):
+        self.eixo_y_fourier = fft(self.data)[0:self.length//2]
         primeiros_pontos = 2
-        self.fourier[0:primeiros_pontos] = np.zeros(primeiros_pontos)
-        self.freq = fftfreq(self.length,self.T)[0:self.length//2]
+        self.eixo_y_fourier[0:primeiros_pontos] = np.zeros(primeiros_pontos)
+        self.eixo_freq = fftfreq(self.length,self.T)[0:self.length//2]
         
-        self.fourier = np.real(self.fourier)
-        self.freq = np.real(self.freq)
+        self.eixo_y_fourier = np.real(self.eixo_y_fourier)
+        self.eixo_freq = np.real(self.eixo_freq)
+        self.eixo_freq = self.eixo_freq/self.rpm
 
-    def PlotFrequencyDomain(self,freq_referencia = models.rpm,no_ordens = 1):
+    def plot_frequency_domain(self,freq_referencia,no_ordens = 1):
 
-        self.RunFFT()
+        self.run_fft()
 
-        plt.plot(self.freq, self.fourier)
+        plt.plot(self.eixo_freq, self.eixo_y_fourier)
         plt.title('Domínio da Frequência')
         plt.xlabel('Frequency (Hz)')
         plt.ylabel('Amplitude')
 
         for i in range(no_ordens):
-            plt.vlines(freq_referencia*(i+1),self.ymin,self.ymax,'red','dashed')
+            plt.vlines(freq_referencia*(i+1)/self.rpm,self.ymin,self.ymax,'red','dashed')
 
         plt.grid(True)
         plt.show()
 
-    def JanelaFrequencia(self,freq_referencia,tamanho_janela_hz = 40):
-        self.RunFFT()
+    def window_around_frequency(self,freq_referencia,tamanho_janela_hz = 40):
+        self.run_fft()
         
-        delta_f = (models.freq_sample/2)/len(self.freq)
-        tamanho_janela_samples = int((delta_f*tamanho_janela_hz))
+        self.delta_f = (self.rpm*self.eixo_freq[-1]-self.eixo_freq[0])/len(self.eixo_freq)
+        self.tamanho_janela_samples = int((tamanho_janela_hz/self.delta_f))
 
-        elemento_referencia = int(freq_referencia/delta_f)
+        elemento_referencia = int(freq_referencia/self.delta_f)
 
-        inicio_janela = int(elemento_referencia-tamanho_janela_samples/2)
-        fim_janela = int(elemento_referencia+tamanho_janela_samples/2)
+        self.inicio_janela = int(elemento_referencia-self.tamanho_janela_samples/2)
+        self.fim_janela = int(elemento_referencia+self.tamanho_janela_samples/2)
 
-        self.intervalo_janela = [inicio_janela,fim_janela]
+        if self.eixo_freq[0] > self.eixo_freq[self.inicio_janela]:
 
-        self.janela_freq = self.freq[inicio_janela:fim_janela]
-        self.janela_fourier = self.fourier[inicio_janela:fim_janela]
+            self.intervalo_janela = [self.inicio_janela,self.fim_janela]
+            self.janela_freq = self.eixo_freq[self.inicio_janela:self.fim_janela]
+            self.janela_fourier = self.eixo_y_fourier[self.inicio_janela:self.fim_janela]
+
+        else:
+            
+            self.intervalo_janela = [0,self.fim_janela]
+            self.janela_freq = self.eixo_freq[0:self.fim_janela]
+            self.janela_fourier = self.eixo_y_fourier[0:self.fim_janela]
 
         return self.janela_fourier
 
-    def PlotJanela(self,freq_referencia,tamanho_janela_hz = 40):
-        self.JanelaFrequencia(freq_referencia,tamanho_janela_hz)
+    def plot_window(self,freq_referencia,tamanho_janela_hz = 40):
+        self.window_around_frequency(freq_referencia,tamanho_janela_hz)
 
         plt.plot(self.janela_freq,self.janela_fourier)
-        plt.vlines(freq_referencia,self.ymin,self.ymax,'red','dashed')
+        plt.vlines(freq_referencia/self.rpm,self.ymin,self.ymax,'red','dashed')
         plt.ylim((self.ymin,self.ymax))
         plt.show()
 
-    def MediaOrdens(self,freq_referencia = models.rpm,tamanho_janela_hz = 40,no_ordens = 1):
+    def get_features(self,freq_referencia,tamanho_janela_hz = 40,no_ordens = 1):
         metricas = []
+        data_jason={}
+
 
         for i in range(no_ordens):
-            dados = self.JanelaFrequencia(models.frequency_outer_ring_defect*(i+1),tamanho_janela_hz)
+            dados = self.window_around_frequency(freq_referencia*(i+1),tamanho_janela_hz)
             metricas_frequencia = _time_features_extraction.TimeFeatures(dados)
             dicionario = metricas_frequencia.run()
             dicionario['ordem'] = i+1
@@ -84,12 +99,10 @@ class FrequencyFeaturesExtraction():
             metricas.append(dicionario)
 
         self.metricas = pd.json_normalize(metricas)
+        self.media = self.metricas.mean()
 
-        return self.metricas.mean()
+        for i in range(len(self.features)):
+            data_jason[self.features[i]] = self.media[i]
 
-
-
-
-
-        
+        return data_jason
  

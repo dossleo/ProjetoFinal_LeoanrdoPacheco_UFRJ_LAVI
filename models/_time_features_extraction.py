@@ -57,15 +57,15 @@ class TimeFeatures():
     def run(self):
 
             self.data_json = {
-                'maximum':self.maximum(),
-                'minimum':self.minimum(),
-                'mean':self.mean(),
-                'standard_deviation':self.standard_deviation(),
-                'rms':self.rms(),
-                'skewness':self.skewness(),
-                'kurtosis':self.kurtosis(),
-                'form_factor':self.form_factor(),
-                'crest_factor':self.crest_factor()
+                'maximum':np.abs(self.maximum()),
+                'minimum':np.abs(self.minimum()),
+                'mean':np.abs(self.mean()),
+                'standard_deviation':np.abs(self.standard_deviation()),
+                'rms':np.abs(self.rms()),
+                'skewness':np.abs(self.skewness()),
+                'kurtosis':np.abs(self.kurtosis()),
+                'form_factor':np.abs(self.form_factor()),
+                'crest_factor':np.abs(self.crest_factor())
             }
 
             return self.data_json

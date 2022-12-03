@@ -16,33 +16,33 @@ class DataNormalized():
         self.data = data
         self.dt = int(len(data))/self.fs
 
-    def SignalSquared(self):
+    def signal_squared(self):
         self.signal = np.power(self.data,2)
 
-    def TemporalWindow(self):
+    def temporal_window(self):
 
-        self.SignalSquared()
+        self.signal_squared()
 
         self.duration = 1.0
         self.samples = int(self.fs*self.duration)
         self.t = np.arange(self.samples) / self.fs
 
-    def AmplitudeEnvelope(self):
+    def amplitude_envelope(self):
         
-        self.TemporalWindow()
+        self.temporal_window()
 
         self.analytic_signal = hilbert(self.signal)
-        self.amplitude_envelope = abs(self.analytic_signal)
+        self.envelope = abs(self.analytic_signal)
     
-    def MovingMedian(self):
+    def moving_median(self):
 
-        self.AmplitudeEnvelope()
+        self.amplitude_envelope()
 
-        self.mediana = sqrt(np.median(self.amplitude_envelope))
+        self.mediana = sqrt(np.median(self.envelope))
 
-    def Get(self):
+    def get(self):
 
-        self.MovingMedian()
+        self.moving_median()
 
         self.x = np.array(self.signal/self.mediana)
 
@@ -51,17 +51,17 @@ class DataNormalized():
 
         return self.x
 
-    def RawData(self):
-        self.MovingMedian()
+    def raw_data(self):
+        self.moving_median()
 
         self.d = {'y': self.y, 't': self.t}
         self.df = pd.DataFrame(self.d)
 
         return self.df
 
-    def PlotNormalData(self):
+    def plot_normal_data(self):
 
-        self.Get()
+        self.get()
 
         plt.plot(self.t,self.x)
         plt.show()

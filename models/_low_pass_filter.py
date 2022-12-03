@@ -42,7 +42,7 @@ class LowPassFilter():
                     ))
         fig.show()
     
-    def PlotTimeDomain(self,plot_raw_data = False):
+    def plot_time_domain(self,plot_raw_data = False):
 
         y = self.lowpass_filter()
 
