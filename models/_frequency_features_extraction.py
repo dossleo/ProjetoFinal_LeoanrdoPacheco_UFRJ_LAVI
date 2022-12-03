@@ -63,10 +63,17 @@ class FrequencyFeaturesExtraction():
         self.inicio_janela = int(elemento_referencia-self.tamanho_janela_samples/2)
         self.fim_janela = int(elemento_referencia+self.tamanho_janela_samples/2)
 
-        self.intervalo_janela = [self.inicio_janela,self.fim_janela]
+        if self.eixo_freq[0] > self.eixo_freq[self.inicio_janela]:
 
-        self.janela_freq = self.eixo_freq[self.inicio_janela:self.fim_janela]
-        self.janela_fourier = self.eixo_y_fourier[self.inicio_janela:self.fim_janela]
+            self.intervalo_janela = [self.inicio_janela,self.fim_janela]
+            self.janela_freq = self.eixo_freq[self.inicio_janela:self.fim_janela]
+            self.janela_fourier = self.eixo_y_fourier[self.inicio_janela:self.fim_janela]
+
+        else:
+            
+            self.intervalo_janela = [0,self.fim_janela]
+            self.janela_freq = self.eixo_freq[0:self.fim_janela]
+            self.janela_fourier = self.eixo_y_fourier[0:self.fim_janela]
 
         return self.janela_fourier
 

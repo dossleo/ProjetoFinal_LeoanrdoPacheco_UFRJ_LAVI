@@ -10,13 +10,13 @@ if __name__ == "__main__":
     # Gerar RPM
     gerar_rpm = generate_rpm.GenerateRPM(2000,20480)
     df_rpm = gerar_rpm.generate_array()
-    # gerar_rpm.plot_array()
+    # # gerar_rpm.plot_array()
 
     pegar_rpm = get_rpm.GetRPM(df_rpm,models.freq_sample)
     rpm_pontos = pegar_rpm.get_rpm_ponto_a_ponto()
     rpm_medio = pegar_rpm.get_rpm_medio()
-    # pegar_rpm.plot_picos()
-    # pegar_rpm.plot_rpm()
+    # # pegar_rpm.plot_picos()
+    # # pegar_rpm.plot_rpm()
 
     # breakpoint()
 
@@ -38,7 +38,7 @@ for fault in range(len(models.fault_frequency)):
         cutoff = rpm_medio*2
 
         dados_filtrados = _low_pass_filter.LowPassFilter(raw_data,cutoff,order)
-        dados_filtrados.plot_time_domain(plot_raw_data = False)
+        # dados_filtrados.plot_time_domain(plot_raw_data = False)
 
         # Dados brutos após aplicação do filtro
         dados_filtrados = dados_filtrados.lowpass_filter()
@@ -49,7 +49,7 @@ for fault in range(len(models.fault_frequency)):
 
         # Dados filtrados após aplicação da normalização da frequência
         dados_normalizados = _data_normalization.DataNormalized(dados_filtrados)
-        dados_normalizados.plot_normal_data()
+        # dados_normalizados.plot_normal_data()
 
         # breakpoint()
 
@@ -60,7 +60,7 @@ for fault in range(len(models.fault_frequency)):
     # Passo 5: Aplicar métricas no domínio da frequência
 
         dominio_frequencia = _frequency_features_extraction.FrequencyFeaturesExtraction(dados_normalizados.get(),rpm_medio)
-        frequencia_referencia = 2000 #models.fault_frequency[fault]*rpm_medio
+        frequencia_referencia = models.fault_frequency[fault]*rpm_medio
         ordens = 1
         janela = 50
         dominio_frequencia.plot_frequency_domain(frequencia_referencia,ordens)
@@ -85,6 +85,7 @@ for fault in range(len(models.fault_frequency)):
     # Get RPM
     dataframe = pd.json_normalize(dataframe)
     print(dataframe)
+    breakpoint()
     for feature in models.features:
         plt.plot(range(len(models.filenames)),dataframe[feature])
         plt.title(feature + "-" + str(models.fault_frequency[fault]))
