@@ -61,10 +61,10 @@ for fault in range(len(models.fault_frequency)):
 
         dominio_frequencia = _frequency_features_extraction.FrequencyFeaturesExtraction(dados_normalizados.get(),rpm_medio)
         frequencia_referencia = models.fault_frequency[fault]*rpm_medio
-        ordens = 1
+        ordens = 9
         janela = 50
-        dominio_frequencia.plot_frequency_domain(frequencia_referencia,ordens)
-        dominio_frequencia.plot_window(frequencia_referencia,janela)
+        # dominio_frequencia.plot_frequency_domain(frequencia_referencia,ordens)
+        # dominio_frequencia.plot_window(frequencia_referencia,janela)
         # breakpoint()
         dominio_frequencia.window_around_frequency(frequencia_referencia,janela)
 
@@ -85,7 +85,7 @@ for fault in range(len(models.fault_frequency)):
     # Get RPM
     dataframe = pd.json_normalize(dataframe)
     print(dataframe)
-    breakpoint()
+    # breakpoint()
     for feature in models.features:
         plt.plot(range(len(models.filenames)),dataframe[feature])
         plt.title(feature + "-" + str(models.fault_frequency[fault]))
