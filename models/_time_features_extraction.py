@@ -8,41 +8,41 @@ import pandas as pd
 class TimeFeatures():
 
     def __init__(self,data):
-        self.bearing_data = np.array(data)
-        self.length = len(self.bearing_data)
+        self.data = np.array(data)
+        self.length = len(self.data)
 
     def maximum(self):
-        self.max = np.max(self.bearing_data)        
+        self.max = np.max(self.data)        
         return self.max
 
     def minimum(self):
-        self.min = np.min(self.bearing_data)        
+        self.min = np.min(self.data)        
         return self.min
 
     def mean(self):
-        self.media = np.mean(self.bearing_data)        
+        self.media = np.mean(self.data)        
         return self.media
 
     def standard_deviation(self):
-        self.std = np.std(self.bearing_data, ddof = 1)        
+        self.std = np.std(self.data, ddof = 1)        
         return self.std
 
     def rms(self):
-        self.rms_value = sqrt(sum(n*n for n in self.bearing_data)/self.length)        
+        self.rms_value = sqrt(sum(n*n for n in self.data)/self.length)        
         return self.rms_value 
 
     def skewness(self):
-        self.n = len(self.bearing_data)
-        self.third_moment = np.sum((self.bearing_data - np.mean(self.bearing_data))**3) / self.length
-        self.s_3 = np.std(self.bearing_data, ddof = 1) ** 3
+        self.n = len(self.data)
+        self.third_moment = np.sum((self.data - np.mean(self.data))**3) / self.length
+        self.s_3 = np.std(self.data, ddof = 1) ** 3
         self.skew = self.third_moment/self.s_3
 
         return self.skew
 
     def kurtosis(self):
-        self.n = len(self.bearing_data)
-        self.fourth_moment = np.sum((self.bearing_data - np.mean(self.bearing_data))**4) / self.n
-        self.s_4 = np.std(self.bearing_data, ddof = 1) ** 4
+        self.n = len(self.data)
+        self.fourth_moment = np.sum((self.data - np.mean(self.data))**4) / self.n
+        self.s_4 = np.std(self.data, ddof = 1) ** 4
         self.kurt = self.fourth_moment / self.s_4 - 3
         return self.kurt
 
@@ -58,14 +58,14 @@ class TimeFeatures():
 
             self.data_json = {
                 'maximum':np.abs(self.maximum()),
-                'minimum':np.abs(self.minimum()),
-                'mean':np.abs(self.mean()),
-                'standard_deviation':np.abs(self.standard_deviation()),
+                # 'minimum':np.abs(self.minimum()),
+                # 'mean':np.abs(self.mean()),
+                # 'standard_deviation':np.abs(self.standard_deviation()),
                 'rms':np.abs(self.rms()),
                 'skewness':np.abs(self.skewness()),
-                'kurtosis':np.abs(self.kurtosis()),
-                'form_factor':np.abs(self.form_factor()),
-                'crest_factor':np.abs(self.crest_factor())
+                'kurtosis':np.abs(self.kurtosis())
+                # ,'form_factor':np.abs(self.form_factor()),
+                # 'crest_factor':np.abs(self.crest_factor())
             }
 
             return self.data_json

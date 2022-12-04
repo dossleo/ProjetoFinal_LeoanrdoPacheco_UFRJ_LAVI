@@ -21,6 +21,7 @@ if __name__ == "__main__":
     # breakpoint()
 
 for fault in range(len(models.fault_frequency)):
+    # breakpoint()
 # Passo 1: Descobrir maior frequência de defeito do rolamento
     maior_freq_defeito = max(models.fault_frequency)*rpm_medio
     dataframe = []
@@ -32,53 +33,53 @@ for fault in range(len(models.fault_frequency)):
         raw_data = _get_data.GetData(models.path,file).Get()
         
         # Definindo ordem do filtro
-        order = 7
+        filter_order = 5
 
         # Definindo frequência de aplicação do filtro
-        cutoff = rpm_medio*2
+        cutoff_filter = rpm_medio*2
 
-        dados_filtrados = _low_pass_filter.LowPassFilter(raw_data,cutoff,order)
-        # dados_filtrados.plot_time_domain(plot_raw_data = False)
+        filtered_data = _low_pass_filter.LowPassFilter(raw_data,cutoff_filter,filter_order)
+        # filtered_data.plot_time_domain(plot_raw_data = False)
 
         # Dados brutos após aplicação do filtro
-        dados_filtrados = dados_filtrados.lowpass_filter()
+        filtered_data = filtered_data.lowpass_filter()
 
         # breakpoint()
 
     # Passo 3: Normalizar os dados
 
         # Dados filtrados após aplicação da normalização da frequência
-        dados_normalizados = _data_normalization.DataNormalized(dados_filtrados)
-        # dados_normalizados.plot_normal_data()
+        normalized_data = _data_normalization.DataNormalized(filtered_data)
+        # normalized_data.plot_normal_data()
 
         # breakpoint()
 
     # Passo 4: Aplicar métricas no domínio do tempo
 
-        dominio_tempo = _time_features_extraction.TimeFeatures(dados_normalizados.get())
+        time_domain_data = _time_features_extraction.TimeFeatures(normalized_data.get())
 
     # Passo 5: Aplicar métricas no domínio da frequência
 
-        dominio_frequencia = _frequency_features_extraction.FrequencyFeaturesExtraction(dados_normalizados.get(),rpm_medio)
-        frequencia_referencia = models.fault_frequency[fault]*rpm_medio
-        ordens = 9
-        janela = 50
-        # dominio_frequencia.plot_frequency_domain(frequencia_referencia,ordens)
-        # dominio_frequencia.plot_window(frequencia_referencia,janela)
+        frequency_domain_data = _frequency_features_extraction.FrequencyFeaturesExtraction(normalized_data.get(),rpm_medio)
+        reference_frequency = models.fault_frequency[fault]*rpm_medio
+        order_frequency = 9
+        window_frequency = 50
+        # frequency_domain_data.plot_frequency_domain(reference_frequency,order_frequency)
+        # frequency_domain_data.plot_window(reference_frequency,window_frequency)
         # breakpoint()
-        dominio_frequencia.window_around_frequency(frequencia_referencia,janela)
+        frequency_domain_data.window_around_frequency(reference_frequency,window_frequency)
 
-    # Passo 6: Aplicar métricas do domínio do tempo nas janelas de frequência
-        media = dominio_frequencia.get_features(frequencia_referencia,janela,ordens)
-        metricas = dominio_frequencia.metricas
+    # Passo 6: Aplicar métricas do domínio do tempo nas window_frequencys de frequência
+        orders_mean = frequency_domain_data.get_features(reference_frequency,window_frequency,order_frequency)
+        metricas = frequency_domain_data.metricas
 
-        dataframe.append(media)
+        dataframe.append(orders_mean)
 
         # print('-------------')
         # print('METRICAS')
         # print(metricas)
         # print('-------------')
-        # print(media)
+        # print(orders_mean)
         # print('-------------')
 
 
@@ -86,9 +87,9 @@ for fault in range(len(models.fault_frequency)):
     dataframe = pd.json_normalize(dataframe)
     print(dataframe)
     # breakpoint()
-    for feature in models.features:
-        plt.plot(range(len(models.filenames)),dataframe[feature])
-        plt.title(feature + "-" + str(models.fault_frequency[fault]))
-        plt.show()
+    # for feature in models.features:
+    #     plt.plot(range(len(models.filenames)),dataframe[feature])
+    #     plt.title(feature + "-" + str(models.fault_frequency[fault]))
+    #     plt.show()
 
 # breakpoint()

@@ -38,11 +38,12 @@ test3 = {"bearing1":0,
         "bearint4":3}
 
 features = ['maximum',
-            'minimum',
-            'mean',
-            'standard_deviation',
+            # 'minimum',
+            # 'mean',
+            # 'standard_deviation',
             'rms',
             'skewness',
-            'kurtosis',
-            'form_factor',
-            'crest_factor']
+            'kurtosis'
+            # ,'form_factor',
+            # 'crest_factor'
+            ]
