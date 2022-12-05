@@ -1,10 +1,18 @@
 import models
 from models import (run)
 
-modelo = run.GenerateCSV(path = models.PATH_TEST["Test2"],
-                        column=models.test2["bearing1"],
-                        filter_order=5,
-                        order_frequency=4,
-                        window_frequency=40)
+teste = "Test2"
+rolamento = "bearing1"
+path =  models.PATH_TEST[teste]
+column = models.test2[rolamento]
+filter_order = 5
+order_frequency=4
+window_frequency=40
 
-modelo.save_as_csv(name = 'features_2nd_test_bearing1.csv')
+modelo = run.GenerateCSV(path =path,
+                        column=column,
+                        filter_order=filter_order,
+                        order_frequency=order_frequency,
+                        window_frequency = window_frequency)
+
+modelo.save_as_csv(name = f'features_{teste}_{rolamento}_filter{filter_order}_order_{order_frequency}_window_{window_frequency}.csv')
