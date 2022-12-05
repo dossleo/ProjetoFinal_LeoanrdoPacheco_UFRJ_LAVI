@@ -17,6 +17,7 @@ if __name__ == "__main__":
     rpm_medio = pegar_rpm.get_rpm_medio()
     # # pegar_rpm.plot_picos()
     # # pegar_rpm.plot_rpm()
+    df = pd.DataFrame()
 
     # breakpoint()
 
@@ -56,11 +57,11 @@ for fault in range(len(models.fault_frequency)):
 
     # Passo 4: Aplicar métricas no domínio do tempo
 
-        time_domain_data = _time_features_extraction.TimeFeatures(normalized_data.get())
+        # time_domain_data = _time_features_extraction.TimeFeatures(normalized_data.get())
 
     # Passo 5: Aplicar métricas no domínio da frequência
 
-        frequency_domain_data = _frequency_features_extraction.FrequencyFeaturesExtraction(normalized_data.get(),rpm_medio)
+        frequency_domain_data = _frequency_features_extraction.FrequencyFeaturesExtraction(normalized_data.get(),rpm_medio,models.fault_names[fault])
         reference_frequency = models.fault_frequency[fault]*rpm_medio
         order_frequency = 9
         window_frequency = 50
@@ -82,10 +83,13 @@ for fault in range(len(models.fault_frequency)):
         # print(orders_mean)
         # print('-------------')
 
-
+    # breakpoint()
     # Get RPM
     dataframe = pd.json_normalize(dataframe)
-    print(dataframe)
+    # breakpoint()
+    df = pd.concat([df,dataframe],ignore_index=True)
+    # dataframe.to_csv(f"features_{reference_frequency}hz.csv")
+    print(df)
     # breakpoint()
     # for feature in models.features:
     #     plt.plot(range(len(models.filenames)),dataframe[feature])

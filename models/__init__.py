@@ -15,6 +15,11 @@ fault_frequency = [frequency_fundamental_train
                 ,frequency_outer_ring_defect
                 ,frequency_roller_spin]
 
+fault_names = ['freq_train'
+                ,'freq_inner_race'
+                ,'freq_outer_race'
+                ,'freq_roller']
+
 raw_data_path = os.path.join(os.getcwd(), "database", "brutos")
 
 path=r'database/brutos/2nd_test'

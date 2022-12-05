@@ -11,9 +11,10 @@ import models
 from models import _time_features_extraction
 
 class FrequencyFeaturesExtraction():
-    def __init__(self,data,rpm):
+    def __init__(self,data,rpm,label):
         
         self.data = data
+        self.label = label
         self.length = len(self.data)
         self.rpm = rpm
 
@@ -92,17 +93,17 @@ class FrequencyFeaturesExtraction():
 
         for i in range(no_ordens):
             dados = self.window_around_frequency(freq_referencia*(i+1),tamanho_janela_hz)
-            metricas_frequencia = _time_features_extraction.TimeFeatures(dados)
+            metricas_frequencia = _time_features_extraction.TimeFeatures(dados,self.label)
             dicionario = metricas_frequencia.run()
             dicionario['ordem'] = i+1
-            dicionario['frequencia_analisada'] = freq_referencia
+            # dicionario['frequencia_analisada'] = freq_referencia
             metricas.append(dicionario)
 
         self.metricas = pd.json_normalize(metricas)
         self.media = self.metricas.mean()
 
         for i in range(len(self.features)):
-            data_jason[self.features[i]] = self.media[i]
+            data_jason[f'{self.features[i]}_{self.label}'] = self.media[i]
 
         return data_jason
  
