@@ -95,5 +95,5 @@ for fault in range(len(models.fault_frequency)):
     #     plt.plot(range(len(models.filenames)),dataframe[feature])
     #     plt.title(feature + "-" + str(models.fault_frequency[fault]))
     #     plt.show()
-
+# df.to_csv('Dados_Dominio_frequencia_2ndtest.csv')
 # breakpoint()
