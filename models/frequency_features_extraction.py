@@ -1,7 +1,6 @@
 import glob
 import os
 from math import sqrt
-from msilib.schema import SelfReg
 
 import matplotlib.pyplot as plt
 import numpy as np
