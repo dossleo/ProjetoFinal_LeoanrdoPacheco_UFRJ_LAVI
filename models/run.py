@@ -78,9 +78,9 @@ class GenerateCSV:
             for columns in self.df_loop.columns:
                 self.df_completo[columns] = self.df_loop[columns]
 
-    def save_as_csv(self,name = 'dataframe_completo'):
+    def save_as_csv(self,name = 'dataframe_completo',path_csv = 'database/tratados/frequency_domain'):
         self.generate_data()
-        self.df_completo.to_csv(f'{name}.csv')
+        self.df_completo.to_csv(f'{path_csv}/{name}.csv')
 
     def print_dataframe(self):
         self.generate_data()

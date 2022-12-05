@@ -5,6 +5,8 @@ PATH_1ST_DATABASE = 'database/brutos/1st_test'
 PATH_2ND_DATABASE = 'database/brutos/2nd_test'
 PATH_3RD_DATABASE = 'database/brutos/3rd_test'
 
+PATH_TEST = {"Test1": PATH_1ST_DATABASE,"Test2":PATH_2ND_DATABASE, "Test3":PATH_3RD_DATABASE}
+
 RPM_ARTIFICIAL_FILE = 'database/2000rpm_artificial_data.csv'
 
 # General configs
@@ -45,6 +47,8 @@ test3 = {"bearing1":0,
         "bearint2":1,
         "bearint3":2,
         "bearint4":3}
+
+bearings = [test1,test2,test3]
 
 features = ['maximum',
             # 'minimum',
