@@ -1,9 +1,12 @@
-import numpy as np
-from math import sqrt
 import os
-from scipy.io import loadmat
-import models
+from math import sqrt
+
+import numpy as np
 import pandas as pd
+from scipy.io import loadmat
+
+import models
+
 
 class TimeFeatures():
 

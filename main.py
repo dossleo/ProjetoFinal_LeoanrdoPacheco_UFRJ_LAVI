@@ -8,4 +8,3 @@ modelo = run.GenerateCSV(path = models.PATH_2ND_DATABASE,
                         window_frequency=50)
 
 modelo.print_dataframe()
-

@@ -1,11 +1,12 @@
-from scipy.signal import butter,filtfilt, lfilter, freqz
-import plotly.graph_objects as go
 from msilib.schema import SelfReg
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import models
+import plotly.graph_objects as go
+from scipy.signal import butter, filtfilt, freqz, lfilter
 
+import models
 
 class LowPassFilter():
     def __init__(self,data, cutoff, order = 5):
@@ -18,7 +19,6 @@ class LowPassFilter():
         n = int(len(self.data))
 
         self.vetor_tempo = np.linspace(0,t_final,n)
-
 
     def lowpass_filter(self):
         normal_cutoff = self.cutoff / self.nyq

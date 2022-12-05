@@ -1,7 +1,10 @@
-from numpy import array
-import pandas as pd
 import os
+
+import pandas as pd
+from numpy import array
+
 import models
+
 
 class GetData():
 

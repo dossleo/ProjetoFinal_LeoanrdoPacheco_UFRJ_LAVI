@@ -1,16 +1,13 @@
 import os
 
 import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 import models
-from models import (get_rpm, get_rpm)
-from models import data_normalization
-from models import frequency_features_extraction
-from models import get_data
-from models import low_pass_filter
-from models import time_features_extraction
+from models import (data_normalization, frequency_features_extraction,
+                    get_data, get_rpm, low_pass_filter,
+                    time_features_extraction)
 
 
 class GenerateCSV:

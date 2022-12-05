@@ -1,7 +1,9 @@
 import os
-import pandas as pd
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
 
 class GetRPM():
     def __init__(self,data,freq_aquisicao):
