@@ -30,9 +30,6 @@ fault_names = ['freq_train'
                 ,'freq_outer_race'
                 ,'freq_roller']
 
-
-# filenames = ['2004.02.19.05.52.39','2004.02.18.02.42.39']
-
 # set number = {Bearing number : channel number}
 test1 = {"bearing1x":0,"bearint1y":1,
         "bearing2x":2,"bearint2y":3,
