@@ -7,10 +7,9 @@ import pandas as pd
 
 class TimeFeatures():
 
-    def __init__(self,data,label):
+    def __init__(self,data):
         self.data = np.array(data)
         self.length = len(self.data)
-        self.label = label
 
     def maximum(self):
         self.max = np.max(self.data)        
@@ -60,13 +59,13 @@ class TimeFeatures():
         self.freatures = models.features
 
         self.data_json = {
-            f'maximum_{self.label}hz':np.abs(self.maximum()),
+            'maximum':np.abs(self.maximum()),
             # 'minimum':np.abs(self.minimum()),
             # 'mean':np.abs(self.mean()),
             # 'standard_deviation':np.abs(self.standard_deviation()),
-            f'rms_{self.label}hz':np.abs(self.rms()),
-            f'skewness_{self.label}hz':np.abs(self.skewness()),
-            f'kurtosis_{self.label}hz':np.abs(self.kurtosis())
+            'rms':np.abs(self.rms()),
+            'skewness':np.abs(self.skewness()),
+            'kurtosis':np.abs(self.kurtosis())
             # ,'form_factor':np.abs(self.form_factor()),
             # 'crest_factor':np.abs(self.crest_factor())
         }

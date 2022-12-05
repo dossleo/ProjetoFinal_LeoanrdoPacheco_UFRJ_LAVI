@@ -4,6 +4,8 @@ import os
 from scipy.io import loadmat
 import models
 import pandas as pd
+import models
+from models import _time_features_extraction
 
 
 class DataGenerator:
@@ -48,7 +50,7 @@ class DataGenerator:
 
     def increment_data_json(self, fault: str) -> pd.DataFrame:
         for data in self.data_list:
-            time_features = TimeFeatures(data)
+            time_features = _time_features_extraction.TimeFeatures(data)
             self.data_json.append({
                 'maximum':time_features.maximum(),
                 'minimum':time_features.minimum(),

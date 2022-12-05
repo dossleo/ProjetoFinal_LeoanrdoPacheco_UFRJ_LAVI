@@ -90,13 +90,11 @@ class FrequencyFeaturesExtraction():
         metricas = []
         data_jason={}
 
-
         for i in range(no_ordens):
             dados = self.window_around_frequency(freq_referencia*(i+1),tamanho_janela_hz)
-            metricas_frequencia = _time_features_extraction.TimeFeatures(dados,self.label)
+            metricas_frequencia = _time_features_extraction.TimeFeatures(dados)
             dicionario = metricas_frequencia.run()
             dicionario['ordem'] = i+1
-            # dicionario['frequencia_analisada'] = freq_referencia
             metricas.append(dicionario)
 
         self.metricas = pd.json_normalize(metricas)
