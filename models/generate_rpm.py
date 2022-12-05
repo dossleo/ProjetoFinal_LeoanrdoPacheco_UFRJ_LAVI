@@ -36,5 +36,5 @@ class GenerateRPM():
 if __name__ == "__main__":
     teste = GenerateRPM(2000,20480)
     print(teste.generate_array())
-    # teste.save_as_csv(path_save_csv)
+    teste.save_as_csv('2000rpm_artificial_data.csv')
     teste.plot_array()

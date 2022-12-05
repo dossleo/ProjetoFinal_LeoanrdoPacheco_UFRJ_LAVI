@@ -8,7 +8,7 @@ import glob
 from math import sqrt
 from scipy.fft import fft, fftfreq
 import models
-from models import _time_features_extraction
+from models import time_features_extraction
 
 class FrequencyFeaturesExtraction():
     def __init__(self,data,rpm,label):
@@ -92,7 +92,7 @@ class FrequencyFeaturesExtraction():
 
         for i in range(no_ordens):
             dados = self.window_around_frequency(freq_referencia*(i+1),tamanho_janela_hz)
-            metricas_frequencia = _time_features_extraction.TimeFeatures(dados)
+            metricas_frequencia = time_features_extraction.TimeFeatures(dados)
             dicionario = metricas_frequencia.run()
             dicionario['ordem'] = i+1
             metricas.append(dicionario)

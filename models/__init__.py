@@ -1,16 +1,15 @@
 import os
 import models
 
-PATH_1ND_DATABASE = 'database/brutos/1nd_test'
+PATH_1ST_DATABASE = 'database/brutos/1st_test'
 PATH_2ND_DATABASE = 'database/brutos/2nd_test'
-PATH_3ND_DATABASE = 'database/brutos/3nd_test'
+PATH_3RD_DATABASE = 'database/brutos/3rd_test'
+
+RPM_ARTIFICIAL_FILE = 'database/2000rpm_artificial_data.csv'
 
 # General configs
 DEBUG = True
 
-raw_data_path = os.path.join(os.getcwd(), "database", "brutos")
-path= [PATH_1ND_DATABASE,PATH_2ND_DATABASE,PATH_3ND_DATABASE]
-filenames = os.listdir(path[0])
 
 freq_sample = 20480
 rpm = 2000

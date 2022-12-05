@@ -5,7 +5,7 @@ import models
 
 class GetData():
 
-    def __init__(self,path = models.path,filename = models.filenames[0],column = 0):
+    def __init__(self,path,filename,column):
         
         self.path = path
         self.filename = filename
