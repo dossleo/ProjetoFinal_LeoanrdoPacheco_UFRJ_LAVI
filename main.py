@@ -15,4 +15,4 @@ modelo = run.GenerateCSV(path =path,
                         order_frequency=order_frequency,
                         window_frequency = window_frequency)
 
-modelo.save_as_csv(name = f'features_{teste}_{rolamento}_filter{filter_order}_order_{order_frequency}_window_{window_frequency}.csv')
+modelo.save_as_csv(name = f'features_{teste}_{rolamento}_filter{filter_order}_order_{order_frequency}_window_{window_frequency}')
