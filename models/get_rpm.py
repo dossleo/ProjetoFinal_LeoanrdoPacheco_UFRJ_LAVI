@@ -8,6 +8,7 @@ import pandas as pd
 class GetRPM():
     def __init__(self,data,freq_aquisicao):
         self.data = np.array(data)
+        self.data = np.abs(self.data-np.mean(self.data))
         self.freq_aquisicao = freq_aquisicao
 
     def generate_impulse(self):
