@@ -7,7 +7,7 @@ import pandas as pd
 import models
 from models import (data_normalization, frequency_features_extraction,
                     get_data, get_rpm, low_pass_filter,
-                    time_features_extraction)
+                    time_features_extraction, logger)
 
 
 class GenerateCSV:
@@ -78,6 +78,7 @@ class GenerateCSV:
             for columns in self.df_loop.columns:
                 self.df_completo[columns] = self.df_loop[columns]
 
+    @logger
     def save_as_csv(self,name = 'dataframe_completo',path_csv = 'database/tratados/frequency_domain'):
         self.generate_data()
         self.df_completo.to_csv(f'{path_csv}/{name}.csv')
