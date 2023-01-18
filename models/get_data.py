@@ -33,7 +33,8 @@ class GetData():
     
     def Get(self):
         """
-        Get() é um método que tem por objetivo extrair os dados do sensor de interesse
+        Get() é um método da Classe GetData()
+        que tem por objetivo extrair os dados do sensor de interesse
 
         Parameters
         ----------

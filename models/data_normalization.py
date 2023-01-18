@@ -36,14 +36,16 @@ class DataNormalized():
 
     def signal_squared(self):
         """
-        signal_squared() aplica a potência de 2 no input data
+        signal_squared() é um método da Classe DataNormalized() 
+        que aplica a potência de 2 no input data
         """
 
         self.signal = np.power(self.data,2)
 
     def temporal_window(self):
         """
-        temporal_window() define uma janela temporal em que a normalização será aplicada.
+        temporal_window() é um método da Classe DataNormalized() que 
+        define uma janela temporal em que a normalização será aplicada.
         """
 
         self.signal_squared()
@@ -54,7 +56,8 @@ class DataNormalized():
 
     def amplitude_envelope(self):
         """
-        amplitude_envelope() cria, a partir da janela temporal, um envelope para o sinal ao quadrado.
+        amplitude_envelope() é um método da Classe DataNormalized() que 
+        cria, a partir da janela temporal, um envelope para o sinal ao quadrado.
         Este envelope é obtido pela transofrmada de hilbert.
         """
 
@@ -65,7 +68,8 @@ class DataNormalized():
     
     def moving_median(self):
         """
-        moving_median() aplica a média móvel
+        moving_median() é um método da Classe DataNormalized() 
+        que aplica a média móvel
         """
 
         #Todo: verificar se este método está correto
@@ -76,7 +80,8 @@ class DataNormalized():
 
     def get(self):
         """
-        get() aplica todos os métodos da classe para calcular a amplitude normalizada.
+        get() é um método da Classe DataNormalized() que 
+        aplica todos os métodos da classe para calcular a amplitude normalizada.
         Retorna a amplitude normalizada
         """
 
@@ -91,7 +96,8 @@ class DataNormalized():
 
     def plot_normal_data(self):
         """
-        plot_normal_data calcula() a amplitude normalizada.
+        plot_normal_data é um método da Classe DataNormalized() 
+        que calcula() a amplitude normalizada.
         Depois cria um plot dessa amplitude no domínio do tempo.
         """
 

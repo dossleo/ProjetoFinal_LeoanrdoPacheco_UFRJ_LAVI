@@ -28,7 +28,8 @@ class GenerateRPM():
 
     def generate_array(self):
         """
-        generate_array() é um método que cria um array a partir dos dados de entrada.
+        generate_array() é um método da Classe GenerateRPM() 
+        que cria um array a partir dos dados de entrada.
 
         Parameters
         ----------
@@ -52,7 +53,8 @@ class GenerateRPM():
 
     def save_as_csv(self,path):
         """
-        save_as_csv() é um método que tem por objetivo salvar os dados simulados em um arquivo .csv
+        save_as_csv() é um método da Classe GenerateRPM() 
+        que tem por objetivo salvar os dados simulados em um arquivo .csv
 
         Parameters
         ----------

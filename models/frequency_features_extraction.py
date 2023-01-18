@@ -47,7 +47,8 @@ class FrequencyFeaturesExtraction():
 
     def run_fft(self):
         """
-        run_fft() é o método que aplica a fft nos dados de entrada.
+        run_fft() é um método da Classe FrequencyFeaturesExtraction() 
+        que aplica a fft nos dados de entrada.
         A aplicação da fft segue o seguinte princípio:
 
         S(f) : transformada de fourier -> a + bi
@@ -84,7 +85,8 @@ class FrequencyFeaturesExtraction():
 
     def plot_frequency_domain(self,freq_referencia,no_ordens = 1):
         """
-        plot_frequency_domain() é um método que tem por objetivo plotar o gráfico da FFT.
+        plot_frequency_domain() é um método da Classe FrequencyFeaturesExtraction() 
+        que tem por objetivo plotar o gráfico da FFT.
 
         Parameters
         ----------
@@ -113,7 +115,8 @@ class FrequencyFeaturesExtraction():
 
     def window_around_frequency(self,freq_referencia,tamanho_janela_hz = 4):
         """
-        window_around_frequency() é um método que tem por objetivo criar uma banda em torno de uma frequência.
+        window_around_frequency() é um método da Classe FrequencyFeaturesExtraction() 
+        que tem por objetivo criar uma banda em torno de uma frequência.
         Esta banda tem uma largura definida.
 
         Parameters
@@ -121,6 +124,7 @@ class FrequencyFeaturesExtraction():
 
         freq_referencia : float -> frequência a qual a janela / banda será centrada
         tamanho_janela_hz : float -> largura da banda
+        
         Returns
         -------
         janela_fourier : data : (N,) array_like -> array do intervalo da janela
@@ -156,7 +160,8 @@ class FrequencyFeaturesExtraction():
     def plot_window(self,freq_referencia,tamanho_janela_hz = 4):
 
         """
-        plot_window() é um método que tem por objetivo criar um gráfico da banda centrada na frequência de referência
+        plot_window() é um método da Classe FrequencyFeaturesExtraction() 
+        que tem por objetivo criar um gráfico da banda centrada na frequência de referência
 
         Parameters
         ----------
@@ -178,7 +183,8 @@ class FrequencyFeaturesExtraction():
 
     def get_features(self,freq_referencia,tamanho_janela_hz = 4,no_ordens = 1):
         """
-        get_features() é um método que tem por objetivo extrair um indicador relevante dos dados de entrada.
+        get_features() é um método da Classe FrequencyFeaturesExtraction() 
+        que tem por objetivo extrair um indicador relevante dos dados de entrada.
         Este indicador é extraído no domínio da frequência, e sinaliza a energia contida dentro da banda.
 
         Parameters

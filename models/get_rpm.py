@@ -7,7 +7,8 @@ import pandas as pd
 
 class GetRPM():
     """
-    Classe GetRPM() é uma classe que tem por objetivo extrair o valor de rpm a partir de dados de um sinal de um sensor de rotação
+    Classe GetRPM() é uma classe que tem por objetivo extrair 
+    o valor de rpm a partir de dados de um sinal de um sensor de rotação
 
     Parameters
     ----------
@@ -27,7 +28,8 @@ class GetRPM():
 
     def generate_impulse(self):
         """
-        generate_impulse() é um método que tem por objetivo amplificar as diferenças entre um sinal 0 de um sinal 1
+        generate_impulse() é um método da Classe GetRPM() 
+        que tem por objetivo amplificar as diferenças entre um sinal 0 de um sinal 1
         Essa amplificação facilita a identificação da captação do sinal de rotação do eixo.
 
         Parameters
@@ -45,7 +47,8 @@ class GetRPM():
 
     def cut_off(self):
         """
-        cut_off() é um método que tem por objetivo definir uma amplitude mínima para se considerar uma ativação válida do sensor.
+        cut_off() é um método da Classe GetRPM() 
+        que tem por objetivo definir uma amplitude mínima para se considerar uma ativação válida do sensor.
         esta amplitude mínima servirá como filtro.
 
         Parameters
@@ -71,7 +74,8 @@ class GetRPM():
 
     def square_wave(self):
         """
-        square_wave() é um método que tem por objetivo filtrar os dados brutos do sensor, 
+        square_wave() é um método da Classe GetRPM() 
+        que tem por objetivo filtrar os dados brutos do sensor, 
         visando deixar mais evidente os pontos de contagem de rotação.
 
         Parameters
@@ -101,7 +105,8 @@ class GetRPM():
 
     def get_rpm_medio(self):
         """
-        get_rpm_medio() é um método que tem por objetivo extrair o rpm médio da máquina no intervalo medido
+        get_rpm_medio() é um método da Classe GetRPM() 
+        que tem por objetivo extrair o rpm médio da máquina no intervalo medido
 
         Parameters
         ----------
@@ -129,8 +134,10 @@ class GetRPM():
 
     def get_rpm_ponto_a_ponto(self):
         """
-        get_rpm_ponto_a_ponto() é um método que tem por objetivo identificar o valor de rpm em cada ponto.
-        Este valor contém aproximações entre os picos do sensor de rotação, visto que o sinal de rotação não é contínuo.
+        get_rpm_ponto_a_ponto() é um método da Classe GetRPM() 
+        que tem por objetivo identificar o valor de rpm em cada ponto.
+        Este valor contém aproximações entre os picos do sensor de rotação, 
+        visto que o sinal de rotação não é contínuo.
 
         Parameters
         ----------
@@ -167,7 +174,9 @@ class GetRPM():
 
     def plot_picos(self):
         """
-        plot_picos() é um método que tem por objetivo exibir graficamente o array extraído no método get_rpm_ponto_a_ponto
+        plot_picos() é um método da Classe GetRPM() 
+        que tem por objetivo exibir graficamente o array extraído 
+        no método get_rpm_ponto_a_ponto
 
         Parameters
         ----------
@@ -187,7 +196,9 @@ class GetRPM():
 
     def plot_rpm(self):
         """
-        plot_rpm() é um método que tem por objetivo exibir graficamente o valor constante do rpm médio utilizando o método get_rpm_medio
+        plot_rpm() é um método da Classe GetRPM() 
+        que tem por objetivo exibir graficamente o valor constante 
+        do rpm médio utilizando o método get_rpm_medio
 
         Parameters
         ----------
