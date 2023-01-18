@@ -9,7 +9,18 @@ import models
 
 
 class TimeFeatures():
+    """
+    TimeFeatures é uma classe que tem por objetivo extrair indicadores no domínio do tempo
 
+    Parameters
+    ----------
+
+    data : array like -> array coluna que representa os dados brutos no domínio do tempo
+
+    Returns
+    -------
+    None
+    """
     def __init__(self,data):
         self.data = np.array(data)
         self.length = len(self.data)
@@ -58,7 +69,19 @@ class TimeFeatures():
         return self.ff
 
     def run(self):
+        """
+        run é um método que executa todos os cálculos estatísticos do dado de entrada.
 
+        Parameters
+        ----------
+
+        None
+
+        Returns
+        -------
+        data_jason : dic -> dicionário que contém uma coluna para cada indicador extraído
+        """
+        
         self.freatures = models.features
 
         self.data_json = {

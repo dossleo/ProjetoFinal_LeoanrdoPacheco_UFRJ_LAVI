@@ -13,6 +13,17 @@ from models import faults, frequency_rate_dict, x_columns
 
 
 def create_images_dir():
+    """
+    Função que cria imagens de informações importantes para avaliar o algoritmo.
+    Parameters
+    ----------
+
+    None
+    
+    Returns
+    -------
+    create_images_dir()
+    """
     dir_path = os.path.join('data/images')
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
@@ -22,6 +33,7 @@ BASE_PATH = create_images_dir()
 
 
 class RawVisualization():
+    
     def __init__(self,raw_data,fault):
 
         self.raw_data = raw_data
