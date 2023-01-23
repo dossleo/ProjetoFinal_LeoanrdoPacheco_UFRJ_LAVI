@@ -1,5 +1,5 @@
 import models
-from models import (run)
+from models import (compilar_algoritmo)
 
 for test_number in range(len(models.PATH_TEST)):
     for bearing in models.bearings[test_number]:
@@ -12,7 +12,7 @@ for test_number in range(len(models.PATH_TEST)):
         for w in range(4):
             window_frequency=w
 
-            modelo = run.GenerateCSV(path =path,
+            modelo = compilar_algoritmo.GenerateCSV(path =path,
                                     column=column,
                                     filter_order=filter_order,
                                     order_frequency=order_frequency,
