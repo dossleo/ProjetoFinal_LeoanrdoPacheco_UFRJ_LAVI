@@ -30,7 +30,7 @@ class GenerateCSV:
     None
     """
 
-    def __init__(self,path = models.PATH_1ST_DATABASE,column = 0, filter_order = 5,order_frequency = 9,tamanho_janela_hz = 4):
+    def __init__(self,path = models.PATH_1ST_DATABASE,column = 0, filter_order = 5,order_frequency = 8,tamanho_janela_hz = 4):
         
         # Path and files
         self.path = path
@@ -117,17 +117,31 @@ class GenerateCSV:
                 self.raw_data = get_data.GetData(self.path,file,column = self.column).Get()
 
                 # Dados Filtrados
-                self.filtered_data = low_pass_filter.LowPassFilter(self.raw_data,self.cutoff_filter,self.filter_order)
+                self.input_filtered_data = self.raw_data
+
+                self.filtered_data = low_pass_filter.LowPassFilter(self.input_filtered_data,self.cutoff_filter,self.filter_order)
+                self.filtered_data.plot_time_domain()
                 self.filtered_data = self.filtered_data.lowpass_filter()
 
                 # Dados Normalizados
-                self.normalized_data = data_normalization.DataNormalized(self.filtered_data)
+                self.input_normalized_data = self.filtered_data
+
+                self.normalized_data = data_normalization.DataNormalized(self.input_normalized_data).get()
 
                 # Fourier
-                self.frequency_domain_data = frequency_features_extraction.FrequencyFeaturesExtraction(self.normalized_data.get(),self.rpm_medio,models.fault_names[fault])
+                self.input_fourier_data = self.filtered_data
+
+                self.frequency_domain_data = frequency_features_extraction.IndicadoresFrequencia(self.input_fourier_data,
+                                                                                                self.rpm_medio,models.fault_names[fault])
+
                 self.frequencia_referencia = models.fault_frequency[fault]*self.rpm_medio
-                self.frequency_domain_data.window_around_frequency(self.frequencia_referencia,self.tamanho_janela_hz)
-                self.orders_mean = self.frequency_domain_data.get_features(self.frequencia_referencia,self.tamanho_janela_hz,self.order_frequency)
+
+                self.frequency_domain_data.banda_de_frequencia(self.frequencia_referencia,self.tamanho_janela_hz)
+                
+                self.frequency_domain_data.plot_dominio_frequencia(self.frequencia_referencia,1)
+                self.frequency_domain_data.plot_banda(self.frequencia_referencia,4)
+                
+                self.orders_mean = self.frequency_domain_data.pegar_indicadores(self.frequencia_referencia,self.tamanho_janela_hz,self.order_frequency)
 
                 # Dataframe com os features extraídos na frequência
                 self.df_loop.append(self.orders_mean)
