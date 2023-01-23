@@ -1,8 +1,20 @@
 import os
 import models
 
-freq_sample = 20480
-rpm = 2000
+PATH_1ST_DATABASE = 'database/brutos/1st_test'
+PATH_2ND_DATABASE = 'database/brutos/2nd_test'
+PATH_3RD_DATABASE = 'database/brutos/3rd_test'
+
+PATH_TEST = [PATH_1ST_DATABASE,PATH_2ND_DATABASE,PATH_3RD_DATABASE]
+
+RPM_ARTIFICIAL_FILE = 'database/2000rpm_artificial_data.csv'
+
+# General configs
+DEBUG = True
+
+
+freq_sample = 20480 #Hz
+rpm = 2000 #rpm
 
 # Dados encontrados em https://www.rexnord.com/products/za2115
 frequency_fundamental_train = 0.0072
@@ -15,27 +27,28 @@ fault_frequency = [frequency_fundamental_train
                 ,frequency_outer_ring_defect
                 ,frequency_roller_spin]
 
-raw_data_path = os.path.join(os.getcwd(), "database", "brutos")
-
-path=r'database/brutos/2nd_test'
-filenames = os.listdir(path)
-# filenames = ['2004.02.19.05.52.39','2004.02.18.02.42.39']
+fault_names = ['freq_train'
+                ,'freq_inner_race'
+                ,'freq_outer_race'
+                ,'freq_roller']
 
 # set number = {Bearing number : channel number}
-test1 = {"bearing1x":0,"bearint1y":1,
-        "bearing2x":2,"bearint2y":3,
-        "bearing3x":4,"bearint3y":5,
-        "bearing4x":6,"bearint4y":7}
+test1 = {"bearing1x":0,"bearing1y":1,
+        "bearing2x":2,"bearing2y":3,
+        "bearing3x":4,"bearing3y":5,
+        "bearing4x":6,"bearing4y":7}
 
 test2 = {"bearing1":0,
-        "bearint2":1,
-        "bearint3":2,
-        "bearint4":3}
+        "bearing2":1,
+        "bearing3":2,
+        "bearing4":3}
 
 test3 = {"bearing1":0,
-        "bearint2":1,
-        "bearint3":2,
-        "bearint4":3}
+        "bearing2":1,
+        "bearing3":2,
+        "bearing4":3}
+
+bearings = [test1,test2,test3]
 
 features = ['maximum',
             # 'minimum',

@@ -1,12 +1,26 @@
-import numpy as np
-from math import sqrt
 import os
-from scipy.io import loadmat
-import models
+from math import sqrt
+
+import numpy as np
 import pandas as pd
+from scipy.io import loadmat
+
+import models
+
 
 class TimeFeatures():
+    """
+    TimeFeatures é uma classe que tem por objetivo extrair indicadores no domínio do tempo
 
+    Parameters
+    ----------
+
+    data : array like -> array coluna que representa os dados brutos no domínio do tempo
+
+    Returns
+    -------
+    None
+    """
     def __init__(self,data):
         self.data = np.array(data)
         self.length = len(self.data)
@@ -55,18 +69,32 @@ class TimeFeatures():
         return self.ff
 
     def run(self):
+        """
+        run é um método que executa todos os cálculos estatísticos do dado de entrada.
 
-            self.data_json = {
-                'maximum':np.abs(self.maximum()),
-                # 'minimum':np.abs(self.minimum()),
-                # 'mean':np.abs(self.mean()),
-                # 'standard_deviation':np.abs(self.standard_deviation()),
-                'rms':np.abs(self.rms()),
-                'skewness':np.abs(self.skewness()),
-                'kurtosis':np.abs(self.kurtosis())
-                # ,'form_factor':np.abs(self.form_factor()),
-                # 'crest_factor':np.abs(self.crest_factor())
-            }
+        Parameters
+        ----------
 
-            return self.data_json
-            # return pd.json_normalize(self.data_json)
+        None
+
+        Returns
+        -------
+        data_jason : dic -> dicionário que contém uma coluna para cada indicador extraído
+        """
+        
+        self.freatures = models.features
+
+        self.data_json = {
+            'maximum':np.abs(self.maximum()),
+            # 'minimum':np.abs(self.minimum()),
+            # 'mean':np.abs(self.mean()),
+            # 'standard_deviation':np.abs(self.standard_deviation()),
+            'rms':np.abs(self.rms()),
+            'skewness':np.abs(self.skewness()),
+            'kurtosis':np.abs(self.kurtosis())
+            # ,'form_factor':np.abs(self.form_factor()),
+            # 'crest_factor':np.abs(self.crest_factor())
+        }
+
+        return self.data_json
+        # return pd.json_normalize(self.data_json)

@@ -1,60 +1,22 @@
-from models import _data_normalization, _frequency_features_extraction, _get_data, _low_pass_filter, _time_features_extraction
 import models
-import pandas as pd
+from models import (run)
 
-if __name__ == "__main__":
-    
-    for file in models.filenames:
-        # Definição de frequência de aquisição
-        fs = models.freq_sample
-        
-    # Passo 1: Descobrir maior frequência de defeito do rolamento
-        maior_freq_defeito = max(models.fault_frequency)
+for test_number in range(len(models.PATH_TEST)):
+    for bearing in models.bearings[test_number]:
+        nome_teste = f'test{test_number+1}'
+        rolamento = bearing
+        path =  models.PATH_TEST[test_number]
+        column = models.bearings[test_number][bearing]
+        filter_order = 5
+        order_frequency=1
+        for w in range(4):
+            window_frequency=w
 
-    # Passo 2: Passar filtro passa baixa um pouco acima dessa frequência
-        
-        # Extraindo dados brutos
-        raw_data = _get_data.GetData(models.path,file).Get()
-        
-        # Definindo ordem do filtro
-        order = 5
+            modelo = run.GenerateCSV(path =path,
+                                    column=column,
+                                    filter_order=filter_order,
+                                    order_frequency=order_frequency,
+                                    window_frequency = window_frequency)
 
-        # Definindo frequência de aplicação do filtro
-        cutoff = models.rpm*2
-
-        dados_filtrados = _low_pass_filter.LowPassFilter(raw_data,cutoff,order)
-        # dados_filtrados.PlotTimeDomain(plot_raw_data = False)
-
-        dados_filtrados = dados_filtrados.lowpass_filter()
-
-
-    # Passo 3: Normalizar os dados
-
-        dados_normalizados = _data_normalization.DataNormalized(dados_filtrados)
-
-    # Passo 4: Aplicar métricas no domínio do tempo
-
-        dominio_tempo = _time_features_extraction.TimeFeatures(dados_normalizados.Get())
-
-    # Passo 5: Aplicar FFT
-
-        dominio_frequencia = _frequency_features_extraction.FrequencyFeaturesExtraction(dados_normalizados.Get())
-        frequencia_referencia = models.frequency_outer_ring_defect
-        ordens = 9
-        janela = 60
-        dominio_frequencia.PlotFrequencyDomain(frequencia_referencia,ordens)
-        dominio_frequencia.PlotJanela(frequencia_referencia,janela)
-
-    # Passo 6: Aplicar métricas do domínio do tempo nas janelas de frequência
-        media = dominio_frequencia.MediaOrdens(frequencia_referencia,janela,ordens)
-        metricas = dominio_frequencia.metricas
-
-        print('-------------')
-        print('METRICAS')
-        print(metricas)
-        print('-------------')
-        print('Medias')
-        print(media)
-        print('-------------')
-        print('-------------')
-        print('-------------')
+            modelo.print_dataframe()
+            # modelo.save_as_csv(name = f'features_{nome_teste}_{rolamento}_filter{filter_order}_order{order_frequency}_window{window_frequency}')
