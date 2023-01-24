@@ -15,6 +15,7 @@ DEBUG = True
 
 freq_sample = 20480 #Hz
 rpm = 2000 #rpm
+rotacao_hz = rpm/60
 
 # Dados encontrados em https://www.rexnord.com/products/za2115
 frequency_fundamental_train = 0.0072
@@ -59,4 +60,5 @@ features = ['maximum',
             'kurtosis'
             # ,'form_factor',
             # 'crest_factor'
-            ]
+            ,'potencia',
+            'soma']
