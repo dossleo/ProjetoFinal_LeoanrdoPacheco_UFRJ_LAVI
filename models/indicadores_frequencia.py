@@ -63,7 +63,7 @@ class DominioFrequencia():
 
         self.fft_frequencia = np.fft.fftfreq(len(self.sinal),d=1/self.freq_sample)
 
-        primeiros_pontos = 2
+        primeiros_pontos = 1
 
         self.fft_transform[0:primeiros_pontos] = np.zeros(primeiros_pontos)
 

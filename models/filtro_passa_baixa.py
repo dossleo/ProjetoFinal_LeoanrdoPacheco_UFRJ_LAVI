@@ -49,6 +49,9 @@ class LowPassFilter():
         # Get the filter coefficients 
         b, a = butter(self.order, normal_cutoff, btype='low', analog=False)
         y = filtfilt(b, a, self.data)
+
+
+        y = y - np.mean(y)
         return y
 
     def plot_plotly(self):

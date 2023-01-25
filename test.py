@@ -2,32 +2,52 @@ import models
 from models import indicadores_frequencia, indicadores_tempo, get_raw_data, extrair_indicadores, filtro_passa_baixa
 import os
 import pandas as pd
+import numpy as np
 
-for frequencia_funcamental in models.fault_frequency:
+from sklearn.preprocessing import MinMaxScaler
 
-    frequencia_de_referencia = frequencia_funcamental*models.rotacao_hz
-    sinal = get_raw_data.GetData(models.PATH_1ST_DATABASE,os.listdir(models.PATH_1ST_DATABASE)[0],0).Get()
+import matplotlib.pyplot as plt
 
-    Filtro = filtro_passa_baixa.LowPassFilter(sinal,cutoff=models.rpm*(20/60))
+#Path
+pasta = models.PATH_1ST_DATABASE
+lista_arquivos = os.listdir(pasta)
 
-    Filtro.plot_time_domain(plot_raw_data=False)
-    Filtro.plot_time_domain(plot_raw_data=True)
+# Setup de variáveis
+rotacao_da_maquina = models.rotacao_hz
+freq_passa_baixa = models.rotacao_hz*2
+ordem_filtro = 5
+rpm = models.rpm
+frequencia_de_aquisicao = models.freq_sample
+ordens_frequencia = 5
 
+# Criando o Dataframe
+dataframe = []
+
+rolamento = 0
+
+frequencia_de_referencia = models.fault_frequency
+
+for arquivo in lista_arquivos:
+    sinal = get_raw_data.GetData(pasta,arquivo,rolamento).Get()
+    Filtro = filtro_passa_baixa.LowPassFilter(sinal,cutoff=freq_passa_baixa,order=2)
     sinal_filtrado = Filtro.lowpass_filter()
 
-    Teste = indicadores_frequencia.DominioFrequencia(sinal_filtrado,models.rpm,models.freq_sample)
+    Objeto_Extrair = extrair_indicadores.ExtrairIndicadores(sinal_filtrado,frequencia_de_referencia,2)
+    dataframe.append(Objeto_Extrair.Get(ordens_frequencia))
 
-    Teste.plot_banda(frequencia_de_referencia,20000)
+dataframe = pd.json_normalize(dataframe)
+df_num = dataframe.select_dtypes(include=[np.number])
 
-    # Teste.pegar_indicador(505,5,4)
+# Instanciando o Scaler
+scaler = MinMaxScaler()
 
-    # sinal_fourier,sinal_frequencia = Teste.banda_frequencia(505,5)
+# Aplicando a normalização
+df_scaled = scaler.fit_transform(df_num)
 
-    # print(Teste.potencia_sinal(sinal_fourier*2))
+# Atualizando o DataFrame original
+df_num = pd.DataFrame(df_scaled, columns=df_num.columns)
 
-    for i in range(4):
-        Teste.plot_potencia_sinal(10*(i+1))
+print(df_num)
 
-    teste_extrair = extrair_indicadores.ExtrairIndicadores(sinal_filtrado,frequencia_de_referencia,20)
+plt.plot(range(len(df_num['rms'])),df_num['rms'])
 
-    print(pd.json_normalize(teste_extrair.Get(4)))
