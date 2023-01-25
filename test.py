@@ -9,7 +9,7 @@ from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 
 #Path
-pasta = models.PATH_1ST_DATABASE
+pasta = models.PATH_2ND_DATABASE
 lista_arquivos = os.listdir(pasta)
 
 # Setup de variáveis
@@ -49,5 +49,9 @@ df_num = pd.DataFrame(df_scaled, columns=df_num.columns)
 
 print(df_num)
 
-plt.plot(range(len(df_num['rms'])),df_num['rms'])
+for defeito in models.features:
+    plt.plot(range(len(df_num[defeito])),df_num[defeito])
+    plt.title(defeito)
+    plt.show()
 
+breakpoint()
