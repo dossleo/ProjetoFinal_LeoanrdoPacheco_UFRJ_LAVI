@@ -2,7 +2,7 @@ import models
 from models import indicadores_referencia
 import pandas as pd
 
-percentual_primeiras_medidas = 0.01
+percentual_primeiras_medidas = 0.005
 freq_referencia = 10
 no_ordens_frequencia = 1
 largura_banda = 2
@@ -16,7 +16,6 @@ Teste = indicadores_referencia.IndicadoresReferencia(percentual_primeiras_medida
                                                     freq_passa_baixa,
                                                     orden_filtro=5)
 
-dados = Teste.extrair()
-print(len(dados))
-print(dados)
+rms_teste0_rolamento0 = Teste.extrair_medias(0,0,'rms')
+print(rms_teste0_rolamento0)
 breakpoint()

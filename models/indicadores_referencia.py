@@ -56,11 +56,11 @@ class IndicadoresReferencia:
 
                 nome_json = f'teste{teste}_rolamento{col}'
 
-                df = pd.json_normalize(self.df_col)
-                df = pd.DataFrame(df)
-                json_medio = df.mean()
+                self.df = pd.json_normalize(self.df_col)
+                self.df = pd.DataFrame(self.df)
+                self.json_medio = self.df.mean()
 
-                self.df_pasta.append({nome_json:json_medio})
+                self.df_pasta.append({nome_json:self.json_medio})
             
             self.metricas_referencia.append(self.df_pasta)
 
@@ -71,16 +71,12 @@ class IndicadoresReferencia:
 
 
 
-    def extrair_medias(self,no_teste,no_rolamento):
+    def extrair_medias(self,no_teste,no_rolamento,indicador):
 
-        Objeto_Extrair = self.IndicadoresReferencia(self.porcentagem_primeiros_sinais,
-                                                    self.metricas_referencia,
-                                                    self.freq_referencia,
-                                                    self.largura_banda,
-                                                    self.freq_passa_baixa,
-                                                    self.ordem_filtro,
-                                                    self.no_ordens_frequencia)
+        dados = self.extrair()
 
-        dados = Objeto_Extrair.extrair()
+        nome_teste = f'teste{no_teste}_rolamento{no_rolamento}'
 
-        return dados[no_teste][no_rolamento]
+        indicador_medio = dados[no_teste][no_rolamento][nome_teste][indicador]
+        
+        return indicador_medio
