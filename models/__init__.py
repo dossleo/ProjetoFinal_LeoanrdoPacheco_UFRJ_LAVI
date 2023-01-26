@@ -60,8 +60,7 @@ features = ['maximum',
             'kurtosis'
             # ,'form_factor',
             # 'crest_factor'
-            ,'potencia',
-            'soma']
+            ]
 
 for defeito in fault_names:
             features.append(f'potencia_{defeito}')

@@ -29,10 +29,8 @@ frequencia_de_referencia = models.fault_frequency
 
 for arquivo in lista_arquivos:
     sinal = get_raw_data.GetData(pasta,arquivo,rolamento).Get()
-    Filtro = filtro_passa_baixa.LowPassFilter(sinal,cutoff=freq_passa_baixa,order=2)
-    sinal_filtrado = Filtro.lowpass_filter()
 
-    Objeto_Extrair = extrair_indicadores.ExtrairIndicadores(sinal_filtrado,frequencia_de_referencia,2)
+    Objeto_Extrair = extrair_indicadores.ExtrairIndicadores(sinal,frequencia_de_referencia,2,freq_passa_baixa,ordem_filtro)
     dataframe.append(Objeto_Extrair.Get(ordens_frequencia))
 
 dataframe = pd.json_normalize(dataframe)

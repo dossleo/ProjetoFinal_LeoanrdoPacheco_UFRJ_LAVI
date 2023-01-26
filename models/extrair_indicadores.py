@@ -1,18 +1,24 @@
 import models
-from models import indicadores_frequencia, indicadores_tempo
+from models import indicadores_frequencia, indicadores_tempo, filtro_passa_baixa
 import numpy as np
+import pandas as pd
 
 class ExtrairIndicadores:
-    def __init__(self,sinal_bruto,freq_referencia,largura_banda):
+    def __init__(self,sinal_bruto,freq_referencia,largura_banda,freq_passa_baixa=models.rotacao_hz,orden_filtro=5):
         self.sinal = sinal_bruto
         self.freq_referencia = []
 
         for freq in freq_referencia:
-            self.freq_referencia.append(int(freq*models.rotacao_hz))
+            self.freq_referencia.append(freq*models.rotacao_hz)
 
         self.largura = largura_banda
 
-        self.Objeto_Frequencia = indicadores_frequencia.DominioFrequencia(self.sinal,models.rpm,models.freq_sample)
+        # Criando o array no domínio da frequência
+        Filtro = filtro_passa_baixa.LowPassFilter(self.sinal,cutoff=freq_passa_baixa,order=orden_filtro)
+        sinal_filtrado = Filtro.lowpass_filter()
+        self.Objeto_Frequencia = indicadores_frequencia.DominioFrequencia(sinal_filtrado,models.rpm,models.freq_sample)
+
+        # Criando o array no domínio do tempo
         self.Objeto_Temporal = indicadores_tempo.DominioTempo(self.sinal)
         
 
@@ -51,3 +57,4 @@ class ExtrairIndicadores:
             data_json[f'soma_{defeito}'] = np.abs(self.som)
 
         return data_json
+
