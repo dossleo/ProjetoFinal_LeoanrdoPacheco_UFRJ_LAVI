@@ -34,6 +34,7 @@ for arquivo in lista_arquivos:
     dataframe.append(Objeto_Extrair.Get(ordens_frequencia))
 
 dataframe = pd.json_normalize(dataframe)
+
 df_num = dataframe.select_dtypes(include=[np.number])
 
 # Instanciando o Scaler

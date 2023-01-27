@@ -1,57 +1,53 @@
 import os
 import models
 
+# -----------------------------------------------
+# --------- Pasta dos Arquivos   ----------------
+# -----------------------------------------------
+
 PATH_1ST_DATABASE = 'database/brutos/1st_test'
 PATH_2ND_DATABASE = 'database/brutos/2nd_test'
 PATH_3RD_DATABASE = 'database/brutos/3rd_test'
 
 PATH_TEST = [PATH_1ST_DATABASE,PATH_2ND_DATABASE,PATH_3RD_DATABASE]
 
-RPM_ARTIFICIAL_FILE = 'database/2000rpm_artificial_data.csv'
-
 # General configs
 DEBUG = True
 
 
-freq_sample = 20480 #Hz
-rpm = 2000 #rpm
-rotacao_hz = rpm/60
+# -----------------------------------------------
+# --------- Informações do Experimento ----------
+# -----------------------------------------------
 
-# Dados encontrados em https://www.rexnord.com/products/za2115
-frequency_fundamental_train = 0.0072
-frequency_inner_ring_defect = 0.1617
-frequency_outer_ring_defect = 0.1217
-frequency_roller_spin = 0.0559
+# Aquisição de dados
+freq_aquisicao = 50000 # Hz
 
-fault_frequency = [frequency_fundamental_train
-                ,frequency_inner_ring_defect
-                ,frequency_outer_ring_defect
-                ,frequency_roller_spin]
+# Rolamento
+num_esferas = 8
+diametro_esfera = 0.07145 # mm
+diametro_gaiola = 2.8519 # mm
 
-fault_names = ['freq_train'
-                ,'freq_inner_race'
-                ,'freq_outer_race'
-                ,'freq_roller']
+frequencia_gaiola = 0.3750
+frequencia_pista_interna = 5.0020
+frequencia_pista_externa = 2.9980
+frequencia_esfera = 1.8710
 
-# set number = {Bearing number : channel number}
-test1 = {"bearing1x":0,"bearing1y":1,
-        "bearing2x":2,"bearing2y":3,
-        "bearing3x":4,"bearing3y":5,
-        "bearing4x":6,"bearing4y":7}
+frequencias_rolamento = [frequencia_gaiola
+                ,frequencia_pista_interna
+                ,frequencia_pista_externa
+                ,frequencia_esfera]
 
-test2 = {"bearing1":0,
-        "bearing2":1,
-        "bearing3":2,
-        "bearing4":3}
+fault_names = ['freq_gaiola'
+                ,'freq_pista_interna'
+                ,'freq_pista_externa'
+                ,'freq_esfera']
 
-test3 = {"bearing1":0,
-        "bearing2":1,
-        "bearing3":2,
-        "bearing4":3}
 
-bearings = [test1,test2,test3]
+# -----------------------------------------------
+# --------- Indicadores Analisados --------------
+# -----------------------------------------------
 
-features = ['maximum',
+indicadores = ['maximum',
             # 'minimum',
             # 'mean',
             # 'standard_deviation',
@@ -63,5 +59,5 @@ features = ['maximum',
             ]
 
 for defeito in fault_names:
-            features.append(f'potencia_{defeito}')
-            features.append(f'soma_{defeito}')
+            indicadores.append(f'potencia_{defeito}')
+            indicadores.append(f'soma_{defeito}')
