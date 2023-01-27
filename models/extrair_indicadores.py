@@ -38,15 +38,12 @@ class ExtrairIndicadores:
     def Get(self,no_ordens=1):
 
         data_json = {
-            'maximum':np.abs(self.Objeto_Temporal.maximum()),
-            # 'minimum':np.abs(self.Objeto_Temporal.minimum()),
-            # 'mean':np.abs(self.Objeto_Temporal.mean()),
-            # 'standard_deviation':np.abs(self.Objeto_Temporal.standard_deviation()),
+            'maximo':np.abs(self.Objeto_Temporal.maximum()),
             'rms':np.abs(self.Objeto_Temporal.rms()),
-            'skewness':np.abs(self.Objeto_Temporal.skewness()),
-            'kurtosis':np.abs(self.Objeto_Temporal.kurtosis())
-            # ,'form_factor':np.abs(self.Objeto_Temporal.form_factor()),
-            # 'crest_factor':np.abs(self.Objeto_Temporal.crest_factor())
+            'assimetria':np.abs(self.Objeto_Temporal.skewness()),
+            'curtose':np.abs(self.Objeto_Temporal.kurtosis())
+            # ,'fator_forma':np.abs(self.Objeto_Temporal.form_factor()),
+            # 'fator_crista':np.abs(self.Objeto_Temporal.crest_factor())
             }
         
         for index in range(len(self.freq_referencia)):
@@ -57,4 +54,3 @@ class ExtrairIndicadores:
             data_json[f'soma_{defeito}'] = np.abs(self.som)
 
         return data_json
-

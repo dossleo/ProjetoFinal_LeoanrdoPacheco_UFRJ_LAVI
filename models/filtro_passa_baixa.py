@@ -6,9 +6,9 @@ from scipy.signal import butter, filtfilt, freqz, lfilter
 
 import models
 
-class LowPassFilter():
+class Filtro():
     """
-    Classe LowPassFilter() tem por objetivo aplicar um filtro passa-baixa nos dados brutos
+    Classe Filtro() tem por objetivo aplicar um filtro passa-baixa nos dados brutos
 
     Parameters
     ----------
@@ -32,9 +32,9 @@ class LowPassFilter():
 
         self.vetor_tempo = np.linspace(0,t_final,n)
 
-    def lowpass_filter(self):
+    def filtro_passa_baixa(self):
         """
-        lowpass_filter() é um método que tem por objetivo aplicar o filtro passa-baixa e retornar o valor filtrado.
+        filtro_passa_baixa() é um método que tem por objetivo aplicar o filtro passa-baixa e retornar o valor filtrado.
 
         Parameters
         ----------
@@ -67,7 +67,7 @@ class LowPassFilter():
         -------
         None
         """
-        y = self.lowpass_filter()
+        y = self.filtro_passa_baixa()
         fig = go.Figure()
         fig.add_trace(go.Scatter(
                     y = self.data,
@@ -81,9 +81,9 @@ class LowPassFilter():
                     ))
         fig.show()
     
-    def plot_time_domain(self,plot_raw_data = False):
+    def plot_sinal_filtrado(self,plot_raw_data = False):
         """
-        plot_time_domain() é um método que tem por objetivo exibir os dados filtrados no domínio do tempo
+        plot_sinal_filtrado() é um método que tem por objetivo exibir os dados filtrados no domínio do tempo
 
         Parameters
         ----------
@@ -94,7 +94,7 @@ class LowPassFilter():
         -------
         None
         """
-        y = self.lowpass_filter()
+        y = self.filtro_passa_baixa()
 
         plt.plot(self.vetor_tempo,y)
         if plot_raw_data:

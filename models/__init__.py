@@ -22,6 +22,10 @@ DEBUG = True
 # Aquisição de dados
 freq_aquisicao = 50000 # Hz
 
+
+# -----------------------------------------------
+# --------- Frequencias Caracteristicas ---------
+# -----------------------------------------------
 # Rolamento
 num_esferas = 8
 diametro_esfera = 0.07145 # mm
@@ -37,27 +41,38 @@ frequencias_rolamento = [frequencia_gaiola
                 ,frequencia_pista_externa
                 ,frequencia_esfera]
 
-fault_names = ['freq_gaiola'
+
+
+# -----------------------------------------------
+# --------- Defeitos Impostos -------------------
+# -----------------------------------------------
+
+nomes_defeitos = ['normal','desalinhamento','desbalanceamento','freq_gaiola'
                 ,'freq_pista_interna'
                 ,'freq_pista_externa'
                 ,'freq_esfera']
+
+defeitos_desbalanceamento = [6,10,15,20,25,30,35] # gramas de desbalancemanto
+defeitos_desalinhamento_horizontal = [0.5,1.0,1.5,2.0] # mm de desalinhamento horizontal
+defeitos_desalinhamento_vertical = [0.51,0.63,1.27,1.40,1.78,1.90] # mm de desalinhamento vertical
+
+defeito_rolamento = [0,6,20,35] # gramas de desbalanceamento
+
+
 
 
 # -----------------------------------------------
 # --------- Indicadores Analisados --------------
 # -----------------------------------------------
 
-indicadores = ['maximum',
-            # 'minimum',
-            # 'mean',
-            # 'standard_deviation',
+indicadores = ['maximo',
             'rms',
-            'skewness',
-            'kurtosis'
-            # ,'form_factor',
-            # 'crest_factor'
+            'assimetria',
+            'curtose'
+            # ,'fator_forma',
+            # 'fator_crista'
             ]
 
-for defeito in fault_names:
+for defeito in nomes_defeitos:
             indicadores.append(f'potencia_{defeito}')
             indicadores.append(f'soma_{defeito}')

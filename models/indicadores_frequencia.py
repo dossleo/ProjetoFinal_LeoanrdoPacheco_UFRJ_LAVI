@@ -4,52 +4,22 @@ import matplotlib.pyplot as plt
 from models import filtro_passa_baixa
 
 class DominioFrequencia():
-    """
-    Classe DominioFrequencia() tem o objetivo de fazer a análise dos dados no domínio da frequência.
 
-    Parameters
-    ----------
 
-    data : (N,) array_like
-    rpm : integer
-    
-    Returns
-    -------
-    None
-    """
-
-    def __init__(self,data,rpm,freq_sample = models.freq_sample):
+    def __init__(self,sinal,rpm,freq_aquisicao = models.freq_aquisicao):
         
-        self.sinal = data # dados brutos
+        self.sinal = sinal # dados brutos
         self.n_points_dado_bruto = len(self.sinal) # npoints
         self.rpm = rpm #rpm
         self.rotacao_hz = self.rpm/60
-        self.freq_sample = freq_sample
+        self.freq_aquisicao = freq_aquisicao
 
-        duracao_seg = self.n_points_dado_bruto/self.freq_sample # duração em segundos
+        duracao_seg = self.n_points_dado_bruto/self.freq_aquisicao # duração em segundos
 
-        self.dt = duracao_seg/self.freq_sample # dt
+        self.dt = duracao_seg/self.freq_aquisicao # dt
 
     def run_fft(self):
-        """
-        run_fft() é um método da Classe DominioFrequencia() 
-        que aplica a fft nos dados de entrada.
-        A aplicação da fft segue o seguinte princípio:
 
-        S(f) : transformada de fourier -> a + bi
-        S(f)* : transformada de fourier conjugada -> a - bi
-
-        Saída : sqrt(S(f).S(f)*) -> sqrt(a² + b²)
-
-        Parameters
-        ----------
-
-        None
-        
-        Returns
-        -------
-        None
-        """
 
         # Todo: verificar unidades do dado de entrada e saída da FFT
 
@@ -61,7 +31,7 @@ class DominioFrequencia():
 
 
 
-        self.fft_frequencia = np.fft.fftfreq(len(self.sinal),d=1/self.freq_sample)
+        self.fft_frequencia = np.fft.fftfreq(len(self.sinal),d=1/self.freq_aquisicao)
 
         primeiros_pontos = 1
 
@@ -73,22 +43,7 @@ class DominioFrequencia():
 
 
     def banda_frequencia(self,freq_referencia,largura = 4):
-        """
-        banda_de_frequencia() é um método da Classe DominioFrequencia() 
-        que tem por objetivo criar uma banda em torno de uma frequência.
-        Esta banda tem uma largura definida.
 
-        Parameters
-        ----------
-
-        freq_referencia : float -> frequência a qual a janela / banda será centrada
-        largura : float -> largura da banda
-        
-        Returns
-        -------
-        self.fourier_banda : array_like -> seção da amplitude de fourier referente à banda
-        self.frequencia_banda : array_like -: pontos referente à banda
-        """
         self.run_fft()
 
         banda = np.logical_and(self.fft_frequencia >= int(freq_referencia) - largura/2, self.fft_frequencia <= int(freq_referencia) + largura/2)

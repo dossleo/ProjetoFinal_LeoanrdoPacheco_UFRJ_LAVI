@@ -10,23 +10,23 @@ class GetData():
     Parameters
     ----------
 
-    path : string -> caminho onde se encontra o arquivo de sinal do sensor
-    filename : string -> nome do arquivo do sinal de interesse
-    column : integer -> coluna dentro do arquivo csv onde se encontra o sinal de interesse
+    pasta : string -> caminho onde se encontra o arquivo de sinal do sensor
+    arquivo : string -> nome do arquivo do sinal de interesse
+    coluna : integer -> coluna dentro do arquivo csv onde se encontra o sinal de interesse
 
     Returns
     -------
     None
     """
 
-    def __init__(self,path,filename,column):
+    def __init__(self,pasta,arquivo,coluna):
         
-        self.path = path
-        self.filename = filename
-        self.dataset=pd.read_csv(os.path.join(path, self.filename), sep='\t',header=None)
+        self.pasta = pasta
+        self.arquivo = arquivo
+        self.dataset=pd.read_csv(os.path.join(pasta, self.arquivo), sep='\t',header=None)
 
-        self.bearing_no = column
-        self.bearing_data = np.array(self.dataset.iloc[:,self.bearing_no-1])
+        self.coluna = coluna
+        self.sinal = np.array(self.dataset.iloc[:,self.coluna-1])
     
     def Get(self):
         """
@@ -43,4 +43,4 @@ class GetData():
         bearing_data : (N,) Array like -> array coluna contendo o sinal do sensor
         """
 
-        return self.bearing_data
+        return self.sinal

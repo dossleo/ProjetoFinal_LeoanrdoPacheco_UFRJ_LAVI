@@ -9,17 +9,17 @@ class DominioTempo():
     Parameters
     ----------
 
-    data : array like -> array coluna que representa os dados brutos no domínio do tempo
+    sinal : array like -> array coluna que representa os dados brutos no domínio do tempo
 
     Returns
     -------
     None
     """
-    def __init__(self,data):
-        self.sinal = np.array(data)
+    def __init__(self,sinal):
+        self.sinal = np.array(sinal)
         self.length = len(self.sinal)
 
-        self.t_vector = np.linspace(0,1,models.freq_sample)
+        self.t_vector = np.linspace(0,1,models.freq_aquisicao)
 
     def plot_sinal_bruto(self):
         plt.plot(self.t_vector,self.sinal)

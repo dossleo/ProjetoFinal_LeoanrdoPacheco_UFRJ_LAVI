@@ -5,11 +5,11 @@ import os
 import pandas as pd
 
 class IndicadoresReferencia:
-    def __init__(self,porcentagem_primeiros_sinais,no_ordens_frequencia,largura_banda,freq_passa_baixa=models.rotacao_hz,orden_filtro=5):
+    def __init__(self,porcentagem_primeiros_sinais,no_ordens_frequencia,largura_banda,freq_passa_baixa,orden_filtro=5):
         self.porcentagem_primeiros_sinais = porcentagem_primeiros_sinais
         self.metricas_referencia = []
 
-        self.freq_referencia = models.fault_frequency
+        self.freq_referencia = models.frequencias_rolamento
         self.largura_banda = largura_banda
         self.freq_passa_baixa = freq_passa_baixa
         self.ordem_filtro = orden_filtro
