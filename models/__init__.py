@@ -5,11 +5,12 @@ import models
 # --------- Pasta dos Arquivos   ----------------
 # -----------------------------------------------
 
-PATH_1ST_DATABASE = 'database/brutos/1st_test'
-PATH_2ND_DATABASE = 'database/brutos/2nd_test'
-PATH_3RD_DATABASE = 'database/brutos/3rd_test'
-
-PATH_TEST = [PATH_1ST_DATABASE,PATH_2ND_DATABASE,PATH_3RD_DATABASE]
+HORIZONTAL_MISALIGNMENT = 'database/horizontal-misalignment'
+IMBALANCE = 'database/imbalance'
+NORMAL = 'database/normal'
+OVERHANG = 'database/overhang'
+UNERHANG = 'database/underhang'
+VERTICAL_MISALIGNMENT = 'database/vertical-misalignment'
 
 # General configs
 DEBUG = True
@@ -47,18 +48,14 @@ frequencias_rolamento = [frequencia_gaiola
 # --------- Defeitos Impostos -------------------
 # -----------------------------------------------
 
-nomes_defeitos = ['normal','desalinhamento','desbalanceamento','freq_gaiola'
-                ,'freq_pista_interna'
-                ,'freq_pista_externa'
-                ,'freq_esfera']
+testes = ['horizontal-misalignment','imbalance','normal','overhang','underhang','vertical-misalignment']
 
-defeitos_desbalanceamento = [6,10,15,20,25,30,35] # gramas de desbalancemanto
-defeitos_desalinhamento_horizontal = [0.5,1.0,1.5,2.0] # mm de desalinhamento horizontal
-defeitos_desalinhamento_vertical = [0.51,0.63,1.27,1.40,1.78,1.90] # mm de desalinhamento vertical
+defeitos_desbalanceamento = ['6g','10g','15g','20g','25g','30g','35g'] # g gramas de desbalancemanto
+defeitos_desalinhamento_horizontal = ['0.5mm','1.0mm','1.5mm','2.0mm'] # mm de desalinhamento horizontal
+defeitos_desalinhamento_vertical = ['0.51mm','0.63mm','1.27mm','1.40mm','1.78mm','1.90mm'] # mm de desalinhamento vertical
 
-defeito_rolamento = [0,6,20,35] # gramas de desbalanceamento
-
-
+defeito_rolamento = ['ball_fault','cage_fault','outer_race']
+desbalanceamento_rolamento = ['0g','6g','20g','35g']
 
 
 # -----------------------------------------------
@@ -73,6 +70,6 @@ indicadores = ['maximo',
             # 'fator_crista'
             ]
 
-for defeito in nomes_defeitos:
+for defeito in defeito_rolamento:
             indicadores.append(f'potencia_{defeito}')
             indicadores.append(f'soma_{defeito}')
