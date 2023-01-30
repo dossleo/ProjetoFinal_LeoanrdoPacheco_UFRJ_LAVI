@@ -26,7 +26,16 @@ class GetData():
         self.dataset=pd.read_csv(os.path.join(pasta, self.arquivo), sep='\t',header=None)
 
         self.coluna = coluna
-        self.sinal = np.array(self.dataset.iloc[:,self.coluna-1])
+        self.sinal = np.array(self.dataset.iloc[:,self.coluna])
+
+        # Split the string values into separate columns
+        cols = np.array([row.split(',') for row in self.sinal])
+
+        # Convert the columns to float values
+        cols = cols.astype(float)
+
+        # Reshape the array to have 8 columns and 2 rows
+        self.result = cols.reshape((8, len(self.sinal)))
     
     def Get(self):
         """
@@ -43,4 +52,4 @@ class GetData():
         bearing_data : (N,) Array like -> array coluna contendo o sinal do sensor
         """
 
-        return self.sinal
+        return self.result[self.coluna]
