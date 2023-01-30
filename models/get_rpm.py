@@ -106,35 +106,8 @@ class GetRPM():
         return self.data
 
 
-    def get_rpm_medio(self):
-        """
-        get_rpm_medio() é um método da Classe GetRPM() 
-        que tem por objetivo extrair o rpm médio da máquina no intervalo medido
 
-        Parameters
-        ----------
-
-        None
-
-        Returns
-        -------
-        np.mean(self.rpms) : float -> valor float do rpm médio
-        """
-
-        self.data = self.square_wave()
-        self.picos = []
-        self.rpms = []
-
-        for i in range(len(self.data)):
-            if self.data[i] > self.cutoff and self.data[i+1] == 0:
-                self.picos.append(i/self.freq_aquisicao)
-
-        for j in range(0,len(self.picos)-1):
-            self.rpms.append(self.picos[j+1]-self.picos[j])
-
-        return 1/np.mean(self.rpms)
-
-    def get_rpm_ponto_a_ponto(self):
+    def get_rpm_ponto_a_ponto(self,unidade = 'hz'):
         """
         get_rpm_ponto_a_ponto() é um método da Classe GetRPM() 
         que tem por objetivo identificar o valor de rpm em cada ponto.
@@ -173,9 +146,38 @@ class GetRPM():
 
         for n in range(len(self.rpm)):
             self.rpm[n] = self.freq_aquisicao/self.rpm[n]
+            # if self.rpm[n] > np.min(self.rpm)+2:
+            #     self.rpm[n] = np.min(self.rpm)
+
+        if unidade == 'rpm':
+            self.rpm = self.rpm*60
 
         return self.rpm
 
+
+    def get_rpm_medio(self,unidade = 'hz'):
+        """
+        get_rpm_medio() é um método da Classe GetRPM() 
+        que tem por objetivo extrair o rpm médio da máquina no intervalo medido
+
+        Parameters
+        ----------
+
+        None
+
+        Returns
+        -------
+        np.mean(self.rpms) : float -> valor float do rpm médio
+        """
+
+        self.rpm = self.get_rpm_ponto_a_ponto(unidade)
+
+        metade = len(self.rpm)//2
+        janela = len(self.rpm)//10000
+
+        self.rpm_medio = np.mean(self.rpm[metade-janela:metade+janela])
+
+        return self.rpm_medio
 
     def plot_picos(self):
         """
@@ -199,7 +201,7 @@ class GetRPM():
         plt.ylim((0,np.max(self.data)*1.5))
         plt.show()
 
-    def plot_rpm(self):
+    def plot_rpm(self,unidade = 'hz'):
         """
         plot_rpm() é um método da Classe GetRPM() 
         que tem por objetivo exibir graficamente o valor constante 
@@ -215,9 +217,10 @@ class GetRPM():
         None
         """
 
-        self.data = self.get_rpm_ponto_a_ponto()
-        plt.plot(self.vetor_tempo,self.data)
-        plt.ylim((0,np.max(self.data)*1.5))
+        rpm_ponto = self.get_rpm_ponto_a_ponto(unidade)
+        plt.plot(self.vetor_tempo,rpm_ponto)
+        plt.grid(True)
+        plt.ylim((0,np.max(rpm_ponto)*1.5))
         plt.show()
 
 
