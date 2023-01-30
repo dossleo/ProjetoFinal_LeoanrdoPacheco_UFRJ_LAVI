@@ -23,6 +23,10 @@ DEBUG = True
 # Aquisição de dados
 freq_aquisicao = 50000 # Hz
 
+rotacao = [0]
+rolamento_interno = [1,2,3]
+rolamento_externo = [4,5,6]
+microfone = [8]
 
 # -----------------------------------------------
 # --------- Frequencias Caracteristicas ---------
