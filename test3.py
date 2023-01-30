@@ -9,32 +9,28 @@ import numpy as np
 pasta = 'database/normal'
 
 arquivos = os.listdir(pasta)
-
-tamanho = 150000
-
-sinal = get_raw_data.GetData(pasta,arquivos[0],0)
-sinal = sinal.Get()
-# sinal = pd.json_normalize(sinal)
-
-
+rpms = []
 frequencia_aquisicao = models.freq_aquisicao
-n_points = len(sinal)
 
-t_total = n_points/frequencia_aquisicao
+for i in range(len(arquivos)):
+    sinal = get_raw_data.GetData(pasta,arquivos[i],models.colunas['rotacao'])
+    sinal = sinal.Get()
+    # sinal = pd.json_normalize(sinal)
 
-vetor_tempo = np.linspace(0,t_total,n_points)
 
-plt.plot(vetor_tempo,sinal)
-# plt.axis('off')
+    n_points = len(sinal)
+
+    t_total = n_points/frequencia_aquisicao
+
+    vetor_tempo = np.linspace(0,t_total,n_points)
+
+    rpm = get_rpm.GetRPM(sinal,frequencia_aquisicao)
+    rpm_medio = rpm.get_rpm_medio('rpm')
+    
+    rpms.append(rpm_medio)
+
+plt.plot(range(len(rpms)),rpms)
+plt.grid(True)
 plt.show()
-
-rpm = get_rpm.GetRPM(sinal,frequencia_aquisicao)
-rpm_medio = rpm.get_rpm_medio()
-print(rpm_medio)
-rpm.plot_picos()
-rpm.plot_rpm()
-
-print(rpm)
-
 
 breakpoint()

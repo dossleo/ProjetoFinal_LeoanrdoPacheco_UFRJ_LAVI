@@ -23,10 +23,12 @@ DEBUG = True
 # Aquisição de dados
 freq_aquisicao = 50000 # Hz
 
-rotacao = [0]
+rotacao = 0
 rolamento_interno = [1,2,3]
 rolamento_externo = [4,5,6]
-microfone = [8]
+microfone = 8
+
+colunas = {'rotacao':rotacao,'rolamento_interno':rolamento_interno,'rolamento_externo':rolamento_externo,'microfone':microfone}
 
 # -----------------------------------------------
 # --------- Frequencias Caracteristicas ---------
@@ -52,8 +54,8 @@ frequencias_rolamento = [frequencia_gaiola
 # --------- Defeitos Impostos -------------------
 # -----------------------------------------------
 
-testes = ['horizontal-misalignment','imbalance','normal','overhang','underhang','vertical-misalignment']
 
+testes = ['horizontal-misalignment','imbalance','normal','overhang','underhang','vertical-misalignment']
 defeitos_desbalanceamento = ['6g','10g','15g','20g','25g','30g','35g'] # g gramas de desbalancemanto
 defeitos_desalinhamento_horizontal = ['0.5mm','1.0mm','1.5mm','2.0mm'] # mm de desalinhamento horizontal
 defeitos_desalinhamento_vertical = ['0.51mm','0.63mm','1.27mm','1.40mm','1.78mm','1.90mm'] # mm de desalinhamento vertical
