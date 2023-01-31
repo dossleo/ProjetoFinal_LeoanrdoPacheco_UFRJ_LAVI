@@ -46,7 +46,7 @@ class DominioFrequencia():
 
         self.run_fft()
 
-        banda = np.logical_and(self.fft_frequencia >= int(freq_referencia) - largura/2, self.fft_frequencia <= int(freq_referencia) + largura/2)
+        banda = np.logical_and(self.fft_frequencia >= int(freq_referencia - largura/2), self.fft_frequencia <= int(freq_referencia + largura/2))
 
         self.fourier_banda = self.fft_transform[banda]
         self.frequencia_banda = self.fft_frequencia[banda]

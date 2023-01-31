@@ -21,18 +21,18 @@ class Filtro():
     -------
     None
     """
-    def __init__(self,data, cutoff = models.rpm*(2/60), order = 5):
+    def __init__(self,data, cutoff, order = 5):
         self.data = data
         self.cutoff = cutoff
         self.order = order
-        self.nyq = models.freq_sample//2
+        self.nyq = models.freq_aquisicao//2
 
-        t_final = len(self.data)/models.freq_sample
+        t_final = len(self.data)/models.freq_aquisicao
         n = int(len(self.data))
 
         self.vetor_tempo = np.linspace(0,t_final,n)
 
-    def filtro_passa_baixa(self):
+    def FiltroPassaBaixa(self):
         """
         filtro_passa_baixa() é um método que tem por objetivo aplicar o filtro passa-baixa e retornar o valor filtrado.
 

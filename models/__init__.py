@@ -43,10 +43,10 @@ frequencia_pista_interna = 5.0020
 frequencia_pista_externa = 2.9980
 frequencia_esfera = 1.8710
 
-frequencias_rolamento = [frequencia_gaiola
-                ,frequencia_pista_interna
-                ,frequencia_pista_externa
-                ,frequencia_esfera]
+frequencias_rolamento = [frequencia_esfera,
+                        frequencia_gaiola,
+                        frequencia_pista_externa
+                        ,frequencia_pista_interna]
 
 
 
@@ -60,7 +60,7 @@ defeitos_desbalanceamento = ['6g','10g','15g','20g','25g','30g','35g'] # g grama
 defeitos_desalinhamento_horizontal = ['0.5mm','1.0mm','1.5mm','2.0mm'] # mm de desalinhamento horizontal
 defeitos_desalinhamento_vertical = ['0.51mm','0.63mm','1.27mm','1.40mm','1.78mm','1.90mm'] # mm de desalinhamento vertical
 
-defeito_rolamento = ['ball_fault','cage_fault','outer_race']
+defeito_rolamento = ['ball_fault','cage_fault','outer_race','inner_race']
 desbalanceamento_rolamento = ['0g','6g','20g','35g']
 
 
@@ -68,7 +68,9 @@ desbalanceamento_rolamento = ['0g','6g','20g','35g']
 # --------- Indicadores Analisados --------------
 # -----------------------------------------------
 
-indicadores = ['maximo',
+indicadores = [
+            'rotacao_hz',
+            'maximo',
             'rms',
             'assimetria',
             'curtose'

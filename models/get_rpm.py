@@ -3,6 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import models
 
 
 class GetRPM():
@@ -21,10 +22,10 @@ class GetRPM():
     None
     """
 
-    def __init__(self,data,freq_aquisicao):
+    def __init__(self,data):
         self.data = np.array(data)
         self.data = np.abs(self.data-np.mean(self.data))
-        self.freq_aquisicao = freq_aquisicao
+        self.freq_aquisicao = models.freq_aquisicao
 
         self.duracao_seg = len(self.data)/self.freq_aquisicao
         self.vetor_tempo = np.linspace(0,self.duracao_seg,len(self.data))
@@ -129,7 +130,7 @@ class GetRPM():
         self.picos = []
         self.rpms = []
             
-        for i in range(len(self.data)):
+        for i in range(len(self.data)-1):
             if self.data[i] > self.cutoff and self.data[i+1] == 0:
                 self.picos.append(i)
 
@@ -138,9 +139,12 @@ class GetRPM():
         
         self.rpm = np.zeros(len(self.data))
 
-        self.rpm[0:self.picos[0]] = self.rpms[0]
-        self.rpm[self.picos[-1]:len(self.rpm)] = self.rpms[-1]
-
+        if self.picos[0] > 0 and self.picos[0] < len(self.rpm):
+            self.rpm[0:self.picos[0]] = self.rpms[0]
+        
+        if self.picos[-1] < len(self.rpm):
+            self.rpm[self.picos[-1]:len(self.rpm)] = self.rpms[-1]
+        
         for k in range(0,len(self.rpms)):
             self.rpm[self.picos[k]:self.picos[k+1]] = self.rpms[k]
 
