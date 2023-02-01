@@ -96,7 +96,8 @@ class ExtrairIndicadores:
             # data_json[f'potencia_{local}'] = np.abs(self.pot)
             data_json[f'soma_{local}'] = np.abs(self.som)
 
-        data_json['defeito'] = self.defeito
         data_json['sensor'] = self.sensor
+        data_json['defeito'] = self.defeito
+        
         return data_json
 

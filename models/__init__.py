@@ -26,7 +26,7 @@ freq_aquisicao = 50000 # Hz
 rotacao = 0
 rolamento_interno = [1,2,3]
 rolamento_externo = [4,5,6]
-microfone = 8
+microfone = 7
 
 sensores = {
             # 'rotacao':0,
@@ -35,9 +35,9 @@ sensores = {
             'rolamento_interno_radial1':2,
             'rolamento_interno_radial2':3,
             
-            'rolamento_interno_axial':1,
-            'rolamento_interno_radial1':2,
-            'rolamento_interno_radial2':3,
+            'rolamento_externo_axial':4,
+            'rolamento_externo_radial1':5,
+            'rolamento_externo_radial2':6,
             
             # 'microfone':7
             }
