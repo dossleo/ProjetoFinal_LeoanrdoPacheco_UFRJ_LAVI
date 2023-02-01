@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-pasta = 'database/normal'
+pasta = 'database/dados_brutos/normal'
 
 arquivos = os.listdir(pasta)
 rpms = []

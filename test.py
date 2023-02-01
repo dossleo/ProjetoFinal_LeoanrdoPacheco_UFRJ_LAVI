@@ -9,7 +9,7 @@ from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 
 #Path
-pasta = 'database/normal'
+pasta = 'database/dados_brutos/normal'
 lista_arquivos = os.listdir(pasta)
 
 

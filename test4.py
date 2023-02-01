@@ -5,7 +5,7 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 
-pasta = 'database/normal'
+pasta = 'database/dados_brutos/normal'
 coluna = 1
 arquivos = os.listdir(pasta)
 frequencia_de_referencia = models.frequencias_rolamento

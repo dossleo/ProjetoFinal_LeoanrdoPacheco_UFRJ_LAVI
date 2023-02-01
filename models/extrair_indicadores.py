@@ -4,10 +4,12 @@ import numpy as np
 import pandas as pd
 
 class ExtrairIndicadores:
-    def __init__(self,pasta,arquivo,coluna,freq_referencia):
+    def __init__(self,pasta,arquivo,coluna,freq_referencia,defeito = 'normal',sensor = ''):
         self.pasta = pasta
         self.arquivo = arquivo
         self.coluna = coluna
+        self.defeito = defeito
+        self.sensor = sensor
 
         self.sinal = get_raw_data.GetData(self.pasta,self.arquivo,self.coluna).Get()
 
@@ -88,11 +90,13 @@ class ExtrairIndicadores:
             }
         
         for index in range(len(self.freq_referencia)):
-            defeito = models.defeito_rolamento[index]
+            local = models.defeito_rolamento[index]
             self.ExtrairOrdens(index,no_ordens)
 
-            # data_json[f'potencia_{defeito}'] = np.abs(self.pot)
-            data_json[f'soma_{defeito}'] = np.abs(self.som)
+            # data_json[f'potencia_{local}'] = np.abs(self.pot)
+            data_json[f'soma_{local}'] = np.abs(self.som)
 
+        data_json['defeito'] = self.defeito
+        data_json['sensor'] = self.sensor
         return data_json
 
