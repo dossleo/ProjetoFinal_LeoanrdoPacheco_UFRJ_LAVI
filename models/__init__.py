@@ -38,15 +38,15 @@ num_esferas = 8
 diametro_esfera = 0.07145 # mm
 diametro_gaiola = 2.8519 # mm
 
-frequencia_gaiola = 0.3750
-frequencia_pista_interna = 5.0020
-frequencia_pista_externa = 2.9980
-frequencia_esfera = 1.8710
+ball_fault = 1.8710
+cage_fault = 0.3750
+outer_race = 2.9980
+inner_race = 5.0020
 
-frequencias_rolamento = [frequencia_esfera,
-                        frequencia_gaiola,
-                        frequencia_pista_externa
-                        ,frequencia_pista_interna]
+frequencias_rolamento = [ball_fault,
+                        cage_fault,
+                        outer_race
+                        ,inner_race]
 
 
 
@@ -79,5 +79,5 @@ indicadores = [
             ]
 
 for defeito in defeito_rolamento:
-            indicadores.append(f'potencia_{defeito}')
+            # indicadores.append(f'potencia_{defeito}')
             indicadores.append(f'soma_{defeito}')
