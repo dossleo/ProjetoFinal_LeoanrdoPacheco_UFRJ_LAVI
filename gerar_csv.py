@@ -26,7 +26,7 @@ ordens = 10
 ordens = range(ordens)[1:ordens]
 
 for ordem in ordens:
-    cont = 0
+    # cont = 0++
     dataframe = []
     for sensor in sensores:
         for pasta in PATH: 
@@ -63,8 +63,8 @@ for ordem in ordens:
                                                                     sensor=sensor)
                                                                 
                 dataframe.append(Objeto_Extrair.Get(ordem))
-                cont+=1
-                print(cont)
+                # cont+=1
+                # print(cont)
 
             end = time.time()
             elapsed_time = end - start
