@@ -60,7 +60,7 @@ frequencias_rolamento = [ball_fault,
                         outer_race
                         ,inner_race]
 
-
+ordens = 10
 
 # -----------------------------------------------
 # --------- Defeitos Impostos -------------------
@@ -78,51 +78,51 @@ desbalanceamento_rolamento = ['0g','6g','20g','35g']
 
 path_dados_tratados = 'database/dados_tratados'
 
-PATH = {'database/dados_brutos/normal':'normal',
+PATH = {
+        'database/dados_brutos/normal':'normal',
 
-           'database/dados_brutos/horizontal-misalignment/0.5mm':'desalinhamento_horizontal_baixo',
-           'database/dados_brutos/horizontal-misalignment/1.0mm':'desalinhamento_horizontal_médio',
-           'database/dados_brutos/horizontal-misalignment/1.5mm':'desalinhamento_horizontal_alto',
-           'database/dados_brutos/horizontal-misalignment/2.0mm':'desalinhamento_horizontal_alto',
+        'database/dados_brutos/horizontal-misalignment/0.5mm':'desalinhamento_horizontal_baixo',
+        'database/dados_brutos/horizontal-misalignment/1.0mm':'desalinhamento_horizontal_médio',
+        'database/dados_brutos/horizontal-misalignment/1.5mm':'desalinhamento_horizontal_alto',
+        'database/dados_brutos/horizontal-misalignment/2.0mm':'desalinhamento_horizontal_alto',
            
-           'database/dados_brutos/imbalance/6g':'desbalanceamento_baixo',
-           'database/dados_brutos/imbalance/10g':'desbalanceamento_baixo',
-           'database/dados_brutos/imbalance/15g':'desbalanceamento_medio',
-           'database/dados_brutos/imbalance/20g':'desbalanceamento_medio',
-           'database/dados_brutos/imbalance/25g':'desbalanceamento_alto',
-           'database/dados_brutos/imbalance/30g':'desbalanceamento_alto',
-           'database/dados_brutos/imbalance/35g':'desbalanceamento_alto',
+        'database/dados_brutos/imbalance/6g':'desbalanceamento_baixo',
+        'database/dados_brutos/imbalance/10g':'desbalanceamento_baixo',
+        'database/dados_brutos/imbalance/15g':'desbalanceamento_medio',
+        'database/dados_brutos/imbalance/20g':'desbalanceamento_medio',
+        'database/dados_brutos/imbalance/25g':'desbalanceamento_alto',
+        'database/dados_brutos/imbalance/30g':'desbalanceamento_alto',
+        'database/dados_brutos/imbalance/35g':'desbalanceamento_alto',
+        
+        'database/dados_brutos/overhang/ball_fault/0g':'ball_fault_baixo',
+        'database/dados_brutos/overhang/ball_fault/6g':'ball_fault_medio',
+        'database/dados_brutos/overhang/ball_fault/20g':'ball_fault_alto',
+        'database/dados_brutos/overhang/ball_fault/35g':'ball_fault_alto',
+
+        'database/dados_brutos/overhang/cage_fault/0g':'cage_fault_baixo',
+        'database/dados_brutos/overhang/cage_fault/6g':'cage_fault_medio',
+        'database/dados_brutos/overhang/cage_fault/20g':'cage_fault_alto',
+        'database/dados_brutos/overhang/cage_fault/35g':'cage_fault_alto',
+
+        'database/dados_brutos/overhang/outer_race/0g':'outer_race_baixo',
+        'database/dados_brutos/overhang/outer_race/6g':'outer_race_medio',
+        'database/dados_brutos/overhang/outer_race/20g':'outer_race_alto',
+        'database/dados_brutos/overhang/outer_race/35g':'outer_race_alto',
            
-           'database/dados_brutos/overhang/ball_fault/0g':'ball_fault_baixo',
-           'database/dados_brutos/overhang/ball_fault/6g':'ball_fault_medio',
-           'database/dados_brutos/overhang/ball_fault/20g':'ball_fault_alto',
-           'database/dados_brutos/overhang/ball_fault/35g':'ball_fault_alto',
+        'database/dados_brutos/underhang/ball_fault/0g':'ball_fault_baixo',
+        'database/dados_brutos/underhang/ball_fault/6g':'ball_fault_medio',
+        'database/dados_brutos/underhang/ball_fault/20g':'ball_fault_alto',
+        'database/dados_brutos/underhang/ball_fault/35g':'ball_fault_alto',
 
-           'database/dados_brutos/overhang/cage_fault/0g':'cage_fault_baixo',
-           'database/dados_brutos/overhang/cage_fault/6g':'cage_fault_medio',
-           'database/dados_brutos/overhang/cage_fault/20g':'cage_fault_alto',
-           'database/dados_brutos/overhang/cage_fault/35g':'cage_fault_alto',
+        'database/dados_brutos/underhang/cage_fault/0g':'cage_fault_baixo',
+        'database/dados_brutos/underhang/cage_fault/6g':'cage_fault_medio',
+        'database/dados_brutos/underhang/cage_fault/20g':'cage_fault_alto',
+        'database/dados_brutos/underhang/cage_fault/35g':'cage_fault_alto',
 
-           'database/dados_brutos/overhang/outer_race/0g':'outer_race_baixo',
-           'database/dados_brutos/overhang/outer_race/6g':'outer_race_medio',
-           'database/dados_brutos/overhang/outer_race/20g':'outer_race_alto',
-           'database/dados_brutos/overhang/outer_race/35g':'outer_race_alto',
-           
-           'database/dados_brutos/underhang/ball_fault/0g':'ball_fault_baixo',
-           'database/dados_brutos/underhang/ball_fault/6g':'ball_fault_medio',
-           'database/dados_brutos/underhang/ball_fault/20g':'ball_fault_alto',
-           'database/dados_brutos/underhang/ball_fault/35g':'ball_fault_alto',
-
-           'database/dados_brutos/underhang/cage_fault/0g':'cage_fault_baixo',
-           'database/dados_brutos/underhang/cage_fault/6g':'cage_fault_medio',
-           'database/dados_brutos/underhang/cage_fault/20g':'cage_fault_alto',
-           'database/dados_brutos/underhang/cage_fault/35g':'cage_fault_alto',
-
-           'database/dados_brutos/underhang/outer_race/0g':'outer_race_baixo',
-           'database/dados_brutos/underhang/outer_race/6g':'outer_race_medio',
-           'database/dados_brutos/underhang/outer_race/20g':'outer_race_alto',
-           'database/dados_brutos/underhang/outer_race/35g':'outer_race_alto',
-
+        'database/dados_brutos/underhang/outer_race/0g':'outer_race_baixo',
+        'database/dados_brutos/underhang/outer_race/6g':'outer_race_medio',
+        'database/dados_brutos/underhang/outer_race/20g':'outer_race_alto',
+        'database/dados_brutos/underhang/outer_race/35g':'outer_race_alto',
            }
 
 defeitos = ['normal',

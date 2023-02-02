@@ -95,11 +95,11 @@ class GetRPM():
         self.data = self.cut_off()
         self.max = np.max(self.data)
 
-        janela = 8
+        janela = 90
         janela = int(janela)
 
         for i in range(len(self.data)):
-            if self.data[i] > self.cutoff:
+            if self.data[i] > self.cutoff and i-janela > 0:
                 self.data[i-janela:i] = self.max
             else:
                 self.data[i] = 0
@@ -131,7 +131,7 @@ class GetRPM():
         self.rpms = []
             
         for i in range(len(self.data)-1):
-            if self.data[i] > self.cutoff and self.data[i+1] == 0:
+            if self.data[i] > self.cutoff and self.data[i+1] < self.cutoff and self.data[i-1] > self.cutoff:
                 self.picos.append(i)
 
         for j in range(0,len(self.picos)-1):
