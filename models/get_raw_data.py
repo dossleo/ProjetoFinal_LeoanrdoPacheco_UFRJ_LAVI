@@ -19,11 +19,11 @@ class GetData():
     None
     """
 
-    def __init__(self,pasta,arquivo,coluna):
+    def __init__(self,pasta,arquivo,coluna=0):
         
         self.pasta = pasta
         self.arquivo = arquivo
-        self.dataset=pd.read_csv(os.path.join(pasta, self.arquivo), sep=',',header=None)
+        self.dataset=pd.read_csv(os.path.join(self.pasta, self.arquivo), sep=',',header=None)
 
         self.coluna = coluna
         # self.sinal = np.array(self.dataset)
@@ -52,4 +52,9 @@ class GetData():
         bearing_data : (N,) Array like -> array coluna contendo o sinal do sensor
         """
         self.result = np.array(self.dataset[self.coluna])
+        return self.result
+
+    def GetDataframe(self):
+        self.dataset = pd.read_csv(os.path.join(self.pasta, self.arquivo), sep=',', header=0, index_col=0)
+        self.result = pd.DataFrame(self.dataset)
         return self.result
