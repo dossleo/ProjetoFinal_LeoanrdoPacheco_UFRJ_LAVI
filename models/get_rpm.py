@@ -3,6 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import models
 
 
 class GetRPM():
@@ -21,10 +22,13 @@ class GetRPM():
     None
     """
 
-    def __init__(self,data,freq_aquisicao):
+    def __init__(self,data):
         self.data = np.array(data)
         self.data = np.abs(self.data-np.mean(self.data))
-        self.freq_aquisicao = freq_aquisicao
+        self.freq_aquisicao = models.freq_aquisicao
+
+        self.duracao_seg = len(self.data)/self.freq_aquisicao
+        self.vetor_tempo = np.linspace(0,self.duracao_seg,len(self.data))
 
     def generate_impulse(self):
         """
@@ -91,11 +95,11 @@ class GetRPM():
         self.data = self.cut_off()
         self.max = np.max(self.data)
 
-        janela = 8
+        janela = 90
         janela = int(janela)
 
         for i in range(len(self.data)):
-            if self.data[i] > self.cutoff:
+            if self.data[i] > self.cutoff and i-janela > 0:
                 self.data[i-janela:i] = self.max
             else:
                 self.data[i] = 0
@@ -103,36 +107,8 @@ class GetRPM():
         return self.data
 
 
-    def get_rpm_medio(self):
-        """
-        get_rpm_medio() é um método da Classe GetRPM() 
-        que tem por objetivo extrair o rpm médio da máquina no intervalo medido
 
-        Parameters
-        ----------
-
-        None
-
-        Returns
-        -------
-        np.mean(self.rpms) : float -> valor float do rpm médio
-        """
-
-        self.data = self.square_wave()
-        self.picos = []
-        self.rpms = []
-
-        for i in range(len(self.data)):
-            if self.data[i] > self.cutoff and self.data[i+1] == 0:
-                self.picos.append(i)
-
-        for j in range(0,len(self.picos)-1):
-            self.rpms.append(self.picos[j+1]-self.picos[j])
-
-        self.picos = self.picos
-        return np.mean(self.rpms)
-
-    def get_rpm_ponto_a_ponto(self):
+    def get_rpm_ponto_a_ponto(self,unidade = 'hz'):
         """
         get_rpm_ponto_a_ponto() é um método da Classe GetRPM() 
         que tem por objetivo identificar o valor de rpm em cada ponto.
@@ -154,8 +130,8 @@ class GetRPM():
         self.picos = []
         self.rpms = []
             
-        for i in range(len(self.data)):
-            if self.data[i] > self.cutoff and self.data[i+1] == 0:
+        for i in range(len(self.data)-1):
+            if self.data[i] > self.cutoff and self.data[i+1] < self.cutoff and self.data[i-1] > self.cutoff:
                 self.picos.append(i)
 
         for j in range(0,len(self.picos)-1):
@@ -163,14 +139,49 @@ class GetRPM():
         
         self.rpm = np.zeros(len(self.data))
 
-        self.rpm[0:self.picos[0]] = self.rpms[0]
-        self.rpm[self.picos[-1]:len(self.rpm)] = self.rpms[-1]
-
+        if self.picos[0] > 0 and self.picos[0] < len(self.rpm):
+            self.rpm[0:self.picos[0]] = self.rpms[0]
+        
+        if self.picos[-1] < len(self.rpm):
+            self.rpm[self.picos[-1]:len(self.rpm)] = self.rpms[-1]
+        
         for k in range(0,len(self.rpms)):
             self.rpm[self.picos[k]:self.picos[k+1]] = self.rpms[k]
 
+        for n in range(len(self.rpm)):
+            self.rpm[n] = self.freq_aquisicao/self.rpm[n]
+            # if self.rpm[n] > np.min(self.rpm)+2:
+            #     self.rpm[n] = np.min(self.rpm)
+
+        if unidade == 'rpm':
+            self.rpm = self.rpm*60
+
         return self.rpm
 
+
+    def get_rpm_medio(self,unidade = 'hz'):
+        """
+        get_rpm_medio() é um método da Classe GetRPM() 
+        que tem por objetivo extrair o rpm médio da máquina no intervalo medido
+
+        Parameters
+        ----------
+
+        None
+
+        Returns
+        -------
+        np.mean(self.rpms) : float -> valor float do rpm médio
+        """
+
+        self.rpm = self.get_rpm_ponto_a_ponto(unidade)
+
+        metade = len(self.rpm)//2
+        janela = len(self.rpm)//10000
+
+        self.rpm_medio = np.mean(self.rpm[metade-janela:metade+janela])
+
+        return self.rpm_medio
 
     def plot_picos(self):
         """
@@ -190,11 +201,11 @@ class GetRPM():
 
         self.data = self.square_wave()
 
-        plt.plot(range(len(self.data)),self.data)
+        plt.plot(self.vetor_tempo,self.data)
         plt.ylim((0,np.max(self.data)*1.5))
         plt.show()
 
-    def plot_rpm(self):
+    def plot_rpm(self,unidade = 'hz'):
         """
         plot_rpm() é um método da Classe GetRPM() 
         que tem por objetivo exibir graficamente o valor constante 
@@ -210,9 +221,10 @@ class GetRPM():
         None
         """
 
-        self.data = self.get_rpm_ponto_a_ponto()
-        plt.plot(range(len(self.data)),self.data)
-        plt.ylim((0,np.max(self.data)*1.5))
+        rpm_ponto = self.get_rpm_ponto_a_ponto(unidade)
+        plt.plot(self.vetor_tempo,rpm_ponto)
+        plt.grid(True)
+        plt.ylim((0,np.max(rpm_ponto)*1.5))
         plt.show()
 
 

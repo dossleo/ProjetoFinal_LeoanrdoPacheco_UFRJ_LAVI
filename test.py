@@ -1,103 +1,57 @@
-
-
-
-
-from models import data_normalization, frequency_features_extraction, generate_rpm, get_data, get_rpm, low_pass_filter, time_features_extraction
 import models
+from models import indicadores_frequencia, indicadores_tempo, get_raw_data, extrair_indicadores, filtro_passa_baixa, get_rpm
+import os
 import pandas as pd
+import numpy as np
+
+from sklearn.preprocessing import MinMaxScaler
+
 import matplotlib.pyplot as plt
 
-if __name__ == "__main__":
-    # Definição de frequência de aquisição
-    fs = models.freq_sample
-    
-    # Gerar RPM
-    gerar_rpm = generate_rpm.GenerateRPM(2000,20480)
-    df_rpm = gerar_rpm.generate_array()
-    # # gerar_rpm.plot_array()
+#Path
+pasta = 'database/dados_brutos/normal'
+lista_arquivos = os.listdir(pasta)
 
-    pegar_rpm = get_rpm.GetRPM(df_rpm,models.freq_sample)
-    rpm_pontos = pegar_rpm.get_rpm_ponto_a_ponto()
-    rpm_medio = pegar_rpm.get_rpm_medio()
-    # # pegar_rpm.plot_picos()
-    # # pegar_rpm.plot_rpm()
-    df = pd.DataFrame()
 
-    # breakpoint()
+# Criando o Dataframe
+dataframe = []
 
-for fault in range(len(models.fault_frequency)):
-    # breakpoint()
-# Passo 1: Descobrir maior frequência de defeito do rolamento
-    maior_freq_defeito = max(models.fault_frequency)*rpm_medio
-    dataframe = []
-    for file in models.filenames:
+coluna = 1
 
-    # Passo 2: Passar filtro passa baixa um pouco acima dessa frequência
-        
-        # Extraindo dados brutos
-        raw_data = get_data.GetData(models.path,file).Get()
-        
-        # Definindo ordem do filtro
-        filter_order = 5
+frequencia_de_referencia = models.frequencias_rolamento
 
-        # Definindo frequência de aplicação do filtro
-        cutoff_filter = rpm_medio*2
+for arquivo in lista_arquivos:
+    # Setup de variáveis
+    sinal = get_raw_data.GetData(pasta,arquivo,coluna).Get()
+    sinal_rotacao = get_raw_data.GetData(pasta,arquivo,0).Get()
+    rotacao_da_maquina = get_rpm.GetRPM(sinal_rotacao).get_rpm_medio()
+    freq_passa_baixa = rotacao_da_maquina*2
+    ordem_filtro = 5
+    rpm = rotacao_da_maquina
+    frequencia_de_aquisicao = models.freq_aquisicao
+    ordens_frequencia = 5
 
-        filtered_data = low_pass_filter.LowPassFilter(raw_data,cutoff_filter,filter_order)
-        # filtered_data.plot_time_domain(plot_raw_data = False)
+    Objeto_Extrair = extrair_indicadores.ExtrairIndicadores(pasta,arquivo,coluna,frequencia_de_referencia)
+    dataframe.append(Objeto_Extrair.Get(ordens_frequencia))
 
-        # Dados brutos após aplicação do filtro
-        filtered_data = filtered_data.lowpass_filter()
+dataframe = pd.json_normalize(dataframe)
 
-        # breakpoint()
+df_num = dataframe.select_dtypes(include=[np.number])
 
-    # Passo 3: Normalizar os dados
+# Instanciando o Scaler
+scaler = MinMaxScaler()
 
-        # Dados filtrados após aplicação da normalização da frequência
-        normalized_data = data_normalization.DataNormalized(filtered_data)
-        # normalized_data.plot_normal_data()
+# Aplicando a normalização
+df_scaled = scaler.fit_transform(df_num)
 
-        # breakpoint()
+# Atualizando o DataFrame original
+df_num = pd.DataFrame(df_scaled, columns=df_num.columns)
 
-    # Passo 4: Aplicar métricas no domínio do tempo
+print(df_num)
 
-        # time_domain_data = _time_features_extraction.TimeFeatures(normalized_data.get())
+for defeito in models.defeito_rolamento:
+    plt.plot(range(len(df_num[defeito])),df_num[defeito])
+    plt.title(defeito)
+    plt.show()
 
-    # Passo 5: Aplicar métricas no domínio da frequência
-
-        frequency_domain_data = frequency_features_extraction.FrequencyFeaturesExtraction(normalized_data.get(),rpm_medio,models.fault_names[fault])
-        reference_frequency = models.fault_frequency[fault]*rpm_medio
-        order_frequency = 9
-        window_frequency = 50
-        # frequency_domain_data.plot_frequency_domain(reference_frequency,order_frequency)
-        # frequency_domain_data.plot_window(reference_frequency,window_frequency)
-        # breakpoint()
-        frequency_domain_data.window_around_frequency(reference_frequency,window_frequency)
-
-    # Passo 6: Aplicar métricas do domínio do tempo nas window_frequencys de frequência
-        orders_mean = frequency_domain_data.get_features(reference_frequency,window_frequency,order_frequency)
-        metricas = frequency_domain_data.metricas
-
-        dataframe.append(orders_mean)
-
-        # print('-------------')
-        # print('METRICAS')
-        # print(metricas)
-        # print('-------------')
-        # print(orders_mean)
-        # print('-------------')
-
-    # breakpoint()
-    # Get RPM
-    dataframe = pd.json_normalize(dataframe)
-    # breakpoint()
-    df = pd.concat([df,dataframe],ignore_index=True)
-    # dataframe.to_csv(f"features_{reference_frequency}hz.csv")
-    print(df)
-    # breakpoint()
-    # for feature in models.features:
-    #     plt.plot(range(len(models.filenames)),dataframe[feature])
-    #     plt.title(feature + "-" + str(models.fault_frequency[fault]))
-    #     plt.show()
-# df.to_csv('Dados_Dominio_frequencia_2ndtest.csv')
-# breakpoint()
+breakpoint()
