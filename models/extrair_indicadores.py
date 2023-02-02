@@ -70,8 +70,8 @@ class ExtrairIndicadores:
             'rms':np.abs(self.Objeto_Temporal.rms()),
             'assimetria':np.abs(self.Objeto_Temporal.skewness()),
             'curtose':np.abs(self.Objeto_Temporal.kurtosis())
-            # ,'fator_forma':np.abs(self.Objeto_Temporal.form_factor()),
-            # 'fator_crista':np.abs(self.Objeto_Temporal.crest_factor())
+            ,'fator_forma':np.abs(self.Objeto_Temporal.form_factor()),
+            'fator_crista':np.abs(self.Objeto_Temporal.crest_factor())
             }
         
         for index in range(len(self.freq_referencia)):

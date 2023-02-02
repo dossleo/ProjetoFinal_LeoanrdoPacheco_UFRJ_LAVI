@@ -1,6 +1,7 @@
 import models
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.stats
 
 class DominioTempo():
     """
@@ -42,7 +43,9 @@ class DominioTempo():
         return self.std
 
     def rms(self):
-        self.rms_value = np.sqrt(np.sum(n*n for n in self.sinal)/self.length)        
+        # self.rms_value = np.sqrt(np.sum(n*n for n in self.sinal)/self.length)   
+        # self.rms_value = np.sqrt(np.mean(np.square(self.sinal)))    
+        self.rms_value = np.sqrt(np.mean(self.sinal**2)) 
         return self.rms_value 
 
     def skewness(self):
@@ -54,17 +57,20 @@ class DominioTempo():
         return self.skew
 
     def kurtosis(self):
-        self.n = len(self.sinal)
-        self.fourth_moment = np.sum((self.sinal - np.mean(self.sinal))**4) / self.n
-        self.s_4 = np.std(self.sinal, ddof = 1) ** 4
-        self.kurt = self.fourth_moment / self.s_4 - 3
+        # self.n = len(self.sinal)
+        # self.fourth_moment = np.sum((self.sinal - np.mean(self.sinal))**4) / self.n
+        # self.s_4 = np.std(self.sinal, ddof = 1) ** 4
+        # self.kurt = self.fourth_moment / self.s_4 - 3
+
+        self.kurt = scipy.stats.kurtosis(self.sinal,fisher=False)
+    
 
         return self.kurt
 
     def crest_factor(self):
-        self.cf = self.max/self.rms_value
+        self.cf = self.maximum()/self.rms()
         return self.cf
 
     def form_factor(self):
-        self.ff = self.rms_value/self.media
+        self.ff = self.rms()/self.mean()
         return self.ff

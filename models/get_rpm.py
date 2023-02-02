@@ -177,7 +177,7 @@ class GetRPM():
         self.rpm = self.get_rpm_ponto_a_ponto(unidade)
 
         metade = len(self.rpm)//2
-        janela = len(self.rpm)//10000
+        janela = len(self.rpm)//100
 
         self.rpm_medio = np.mean(self.rpm[metade-janela:metade+janela])
 

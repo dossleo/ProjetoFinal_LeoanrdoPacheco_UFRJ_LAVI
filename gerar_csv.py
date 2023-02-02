@@ -10,9 +10,11 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 import time
+import datetime
 
 start = time.time()
-print(f'start: {start}')
+print('___________________________')
+print(f'\nstart: {datetime.datetime.now()}\n')
 
 ball_fault = models.ball_fault
 cage_fault = models.cage_fault
@@ -28,6 +30,7 @@ ordens = range(ordens)[1:ordens]
 for ordem in ordens:
     # cont = 0++
     dataframe = []
+    dataframe_temp = []
     for sensor in sensores:
         for pasta in PATH: 
             
@@ -63,6 +66,7 @@ for ordem in ordens:
                                                                     sensor=sensor)
                                                                 
                 dataframe.append(Objeto_Extrair.Get(ordem))
+                dataframe_temp.append(Objeto_Extrair.Get(ordem))
                 # cont+=1
                 # print(cont)
 
@@ -70,19 +74,21 @@ for ordem in ordens:
             elapsed_time = end - start
             elapsed_minutes = elapsed_time / 60
 
-            print(f"Tempo de execução: {elapsed_minutes} minutos")
-            print(f'pasta {pasta} concluída')
+            print("\nTempo de execução: {:.2f} minutos".format(elapsed_minutes))
+            print(f'pasta {pasta} concluída\n')
 
         end = time.time()
         elapsed_time = end - start
         elapsed_minutes = elapsed_time / 60
 
-        df = pd.json_normalize(dataframe)
-        df.to_csv(f'{models.path_dados_tratados}/ordens_{ordem}/dados_extraidos_{sensor}.csv')
+        df_temp = pd.json_normalize(dataframe_temp)
+        df_temp.to_csv(f'{models.path_dados_tratados}/ordens_{ordem}/dados_extraidos_{sensor}.csv')
+        dataframe_temp = []
 
-        print(f"Tempo de execução: {elapsed_minutes} minutos")
+        print(df_temp)
+        print("\nTempo de execução: {:.2f} minutos".format(elapsed_minutes))
         print(f'sensor {sensor} concluído')
-        print(df)
+        print('\n___________________________\n')
 
     df = pd.json_normalize(dataframe)
     df.to_csv(f'{models.path_dados_tratados}/ordens_{ordem}/dados_extraidos_geral.csv')
@@ -96,6 +102,7 @@ for ordem in ordens:
 
     elapsed_minutes = elapsed_time / 60
 
+    print(f'\nOrdem n° {ordem} concluída')
     print("Tempo de execução: {:.2f} minutos".format(elapsed_minutes))
 
 end = time.time()
@@ -104,7 +111,8 @@ elapsed_time = end - start
 
 elapsed_minutes = elapsed_time / 60
 
-print("Tempo de execução: {:.2f} minutos".format(elapsed_minutes))
+print('Dados Extraídos com sucesso!!!')
+print("Tempo de execução TOTAL: {:.2f} minutos".format(elapsed_minutes))
 
 breakpoint()
 

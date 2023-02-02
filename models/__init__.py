@@ -75,61 +75,62 @@ defeitos_desalinhamento_vertical = ['0.51mm','0.63mm','1.27mm','1.40mm','1.78mm'
 defeito_rolamento = ['ball_fault','cage_fault','outer_race','inner_race','rotacao_hz']
 desbalanceamento_rolamento = ['0g','6g','20g','35g']
 
-
+path_dados_brutos = 'database/dados_brutos'
 path_dados_tratados = 'database/dados_tratados'
 
 PATH = {
-        'database/dados_brutos/normal':'normal',
+        # "Nome da pasta" : "classe do defeito"
+        f'{path_dados_brutos}/normal':'normal',
 
-        'database/dados_brutos/horizontal-misalignment/0.5mm':'desalinhamento_horizontal_baixo',
-        'database/dados_brutos/horizontal-misalignment/1.0mm':'desalinhamento_horizontal_médio',
-        'database/dados_brutos/horizontal-misalignment/1.5mm':'desalinhamento_horizontal_médio',
-        'database/dados_brutos/horizontal-misalignment/2.0mm':'desalinhamento_horizontal_alto',
+        f'{path_dados_brutos}/horizontal-misalignment/0.5mm':'desalinhamento_horizontal_baixo',
+        f'{path_dados_brutos}/horizontal-misalignment/1.0mm':'desalinhamento_horizontal_médio',
+        f'{path_dados_brutos}/horizontal-misalignment/1.5mm':'desalinhamento_horizontal_médio',
+        f'{path_dados_brutos}/horizontal-misalignment/2.0mm':'desalinhamento_horizontal_alto',
 
-        'database/dados_brutos/vertical-misalignment/0.51mm':'desalinhamento_vertical_baixo',
-        'database/dados_brutos/vertical-misalignment/0.63mm':'desalinhamento_vertical_baixo',
-        'database/dados_brutos/vertical-misalignment/1.27mm':'desalinhamento_vertical_médio',
-        'database/dados_brutos/vertical-misalignment/1.40mm':'desalinhamento_vertical_médio',
-        'database/dados_brutos/vertical-misalignment/1.78mm':'desalinhamento_vertical_alto',
-        'database/dados_brutos/vertical-misalignment/1.90mm':'desalinhamento_vertical_alto',
+        f'{path_dados_brutos}/vertical-misalignment/0.51mm':'desalinhamento_vertical_baixo',
+        f'{path_dados_brutos}/vertical-misalignment/0.63mm':'desalinhamento_vertical_baixo',
+        f'{path_dados_brutos}/vertical-misalignment/1.27mm':'desalinhamento_vertical_médio',
+        f'{path_dados_brutos}/vertical-misalignment/1.40mm':'desalinhamento_vertical_médio',
+        f'{path_dados_brutos}/vertical-misalignment/1.78mm':'desalinhamento_vertical_alto',
+        f'{path_dados_brutos}/vertical-misalignment/1.90mm':'desalinhamento_vertical_alto',
            
-        'database/dados_brutos/imbalance/6g':'desbalanceamento_baixo',
-        'database/dados_brutos/imbalance/10g':'desbalanceamento_baixo',
-        'database/dados_brutos/imbalance/15g':'desbalanceamento_medio',
-        'database/dados_brutos/imbalance/20g':'desbalanceamento_medio',
-        'database/dados_brutos/imbalance/25g':'desbalanceamento_alto',
-        'database/dados_brutos/imbalance/30g':'desbalanceamento_alto',
-        'database/dados_brutos/imbalance/35g':'desbalanceamento_alto',
+        f'{path_dados_brutos}/imbalance/6g':'desbalanceamento_baixo',
+        f'{path_dados_brutos}/imbalance/10g':'desbalanceamento_baixo',
+        f'{path_dados_brutos}/imbalance/15g':'desbalanceamento_medio',
+        f'{path_dados_brutos}/imbalance/20g':'desbalanceamento_medio',
+        f'{path_dados_brutos}/imbalance/25g':'desbalanceamento_alto',
+        f'{path_dados_brutos}/imbalance/30g':'desbalanceamento_alto',
+        f'{path_dados_brutos}/imbalance/35g':'desbalanceamento_alto',
         
-        'database/dados_brutos/overhang/ball_fault/0g':'ball_fault_baixo',
-        'database/dados_brutos/overhang/ball_fault/6g':'ball_fault_medio',
-        'database/dados_brutos/overhang/ball_fault/20g':'ball_fault_alto',
-        'database/dados_brutos/overhang/ball_fault/35g':'ball_fault_alto',
+        f'{path_dados_brutos}/overhang/ball_fault/0g':'ball_fault_baixo',
+        f'{path_dados_brutos}/overhang/ball_fault/6g':'ball_fault_medio',
+        f'{path_dados_brutos}/overhang/ball_fault/20g':'ball_fault_alto',
+        f'{path_dados_brutos}/overhang/ball_fault/35g':'ball_fault_alto',
 
-        'database/dados_brutos/overhang/cage_fault/0g':'cage_fault_baixo',
-        'database/dados_brutos/overhang/cage_fault/6g':'cage_fault_medio',
-        'database/dados_brutos/overhang/cage_fault/20g':'cage_fault_alto',
-        'database/dados_brutos/overhang/cage_fault/35g':'cage_fault_alto',
+        f'{path_dados_brutos}/overhang/cage_fault/0g':'cage_fault_baixo',
+        f'{path_dados_brutos}/overhang/cage_fault/6g':'cage_fault_medio',
+        f'{path_dados_brutos}/overhang/cage_fault/20g':'cage_fault_alto',
+        f'{path_dados_brutos}/overhang/cage_fault/35g':'cage_fault_alto',
 
-        'database/dados_brutos/overhang/outer_race/0g':'outer_race_baixo',
-        'database/dados_brutos/overhang/outer_race/6g':'outer_race_medio',
-        'database/dados_brutos/overhang/outer_race/20g':'outer_race_alto',
-        'database/dados_brutos/overhang/outer_race/35g':'outer_race_alto',
+        f'{path_dados_brutos}/overhang/outer_race/0g':'outer_race_baixo',
+        f'{path_dados_brutos}/overhang/outer_race/6g':'outer_race_medio',
+        f'{path_dados_brutos}/overhang/outer_race/20g':'outer_race_alto',
+        f'{path_dados_brutos}/overhang/outer_race/35g':'outer_race_alto',
            
-        'database/dados_brutos/underhang/ball_fault/0g':'ball_fault_baixo',
-        'database/dados_brutos/underhang/ball_fault/6g':'ball_fault_medio',
-        'database/dados_brutos/underhang/ball_fault/20g':'ball_fault_alto',
-        'database/dados_brutos/underhang/ball_fault/35g':'ball_fault_alto',
+        f'{path_dados_brutos}/underhang/ball_fault/0g':'ball_fault_baixo',
+        f'{path_dados_brutos}/underhang/ball_fault/6g':'ball_fault_medio',
+        f'{path_dados_brutos}/underhang/ball_fault/20g':'ball_fault_alto',
+        f'{path_dados_brutos}/underhang/ball_fault/35g':'ball_fault_alto',
 
-        'database/dados_brutos/underhang/cage_fault/0g':'cage_fault_baixo',
-        'database/dados_brutos/underhang/cage_fault/6g':'cage_fault_medio',
-        'database/dados_brutos/underhang/cage_fault/20g':'cage_fault_alto',
-        'database/dados_brutos/underhang/cage_fault/35g':'cage_fault_alto',
+        f'{path_dados_brutos}/underhang/cage_fault/0g':'cage_fault_baixo',
+        f'{path_dados_brutos}/underhang/cage_fault/6g':'cage_fault_medio',
+        f'{path_dados_brutos}/underhang/cage_fault/20g':'cage_fault_alto',
+        f'{path_dados_brutos}/underhang/cage_fault/35g':'cage_fault_alto',
 
-        'database/dados_brutos/underhang/outer_race/0g':'outer_race_baixo',
-        'database/dados_brutos/underhang/outer_race/6g':'outer_race_medio',
-        'database/dados_brutos/underhang/outer_race/20g':'outer_race_alto',
-        'database/dados_brutos/underhang/outer_race/35g':'outer_race_alto',
+        f'{path_dados_brutos}/underhang/outer_race/0g':'outer_race_baixo',
+        f'{path_dados_brutos}/underhang/outer_race/6g':'outer_race_medio',
+        f'{path_dados_brutos}/underhang/outer_race/20g':'outer_race_alto',
+        f'{path_dados_brutos}/underhang/outer_race/35g':'outer_race_alto',
            }
 
 defeitos = ['normal',
