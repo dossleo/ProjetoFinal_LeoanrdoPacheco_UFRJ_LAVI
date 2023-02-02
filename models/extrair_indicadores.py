@@ -4,35 +4,20 @@ import numpy as np
 import pandas as pd
 
 class ExtrairIndicadores:
-    def __init__(self,pasta,arquivo,coluna,freq_referencia,defeito = 'normal',sensor = ''):
+    def __init__(self,pasta,arquivo,coluna,freq_referencia,rpm,defeito = 'normal',sensor = ''):
         self.pasta = pasta
         self.arquivo = arquivo
         self.coluna = coluna
         self.defeito = defeito
         self.sensor = sensor
+        self.rpm_medio = rpm
 
         self.sinal = get_raw_data.GetData(self.pasta,self.arquivo,self.coluna).Get()
 
         self.freq_referencia = freq_referencia
-
-    def ExtrairRPM(self):
-        self.sinal_rpm = get_raw_data.GetData(self.pasta,self.arquivo,0).Get()
-        self.rpm = get_rpm.GetRPM(self.sinal_rpm)
-        self.rpm_medio = self.rpm.get_rpm_medio(unidade='hz')
-
-    def Filtrar(self):
-
-        self.ExtrairRPM()
-
-        # freq_passa_baixa = self.rpm_medio*5
-        # ordens_filtro = 5
-
-        # Criando o array no domínio da frequência
-        # Filtro = filtro_passa_baixa.Filtro(self.sinal,cutoff=freq_passa_baixa,order=ordens_filtro)
-        # sinal_filtrado = Filtro.FiltroPassaBaixa()
+        self.freq_referencia.append(self.rpm_medio)
 
     def CriarObjeto(self):
-        self.Filtrar()
 
         self.Objeto_Frequencia = indicadores_frequencia.DominioFrequencia(self.sinal,models.freq_aquisicao)
 
@@ -98,6 +83,6 @@ class ExtrairIndicadores:
 
         data_json['sensor'] = self.sensor
         data_json['defeito'] = self.defeito
-        
+
         return data_json
 

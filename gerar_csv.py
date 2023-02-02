@@ -2,7 +2,8 @@ import models
 
 from models import (get_raw_data,
                     extrair_indicadores,
-                    get_rpm)
+                    get_rpm,
+                    listar_rpms)
 
 import numpy as np
 import pandas as pd
@@ -22,40 +23,42 @@ PATH = models.PATH
 sensores = models.sensores
 ordens = 10
 
-ordens = range(ordens)[1:len(ordens)]
+ordens = range(ordens)[1:ordens]
 
 for ordem in ordens:
     cont = 0
     dataframe = []
     for sensor in sensores:
         for pasta in PATH: 
-
+            
             coluna = sensores[sensor]
 
             arquivos = []
             arquivos = os.listdir(pasta)
             defeito = PATH[pasta]
 
-            for arquivo in arquivos:
-                
+            rpms = listar_rpms.ListaRPM(pasta).Get()
+
+            for index in range(len(arquivos)):
+                arquivo = arquivos[index]
                 freq = [ball_fault,
                         cage_fault,
                         outer_race
                         ,inner_race]
                         
                 sinal = get_raw_data.GetData(pasta,arquivo,coluna).Get()
-                sinal_rpm = get_raw_data.GetData(pasta,arquivo,0).Get()
 
-                rpm = get_rpm.GetRPM(sinal_rpm).get_rpm_medio()
+                rpm_medio = rpms[index]
 
                 for i in range(len(freq)):
-                    freq[i] = freq[i]*rpm
+                    freq[i] = freq[i]*rpm_medio
 
 
                 Objeto_Extrair = extrair_indicadores.ExtrairIndicadores(pasta,
                                                                     arquivo,
                                                                     coluna,
                                                                     freq,
+                                                                    rpm=rpm_medio,
                                                                     defeito=defeito,
                                                                     sensor=sensor)
                                                                 

@@ -19,7 +19,10 @@ for arquivo in arquivos:
     Objeto_Extrair = extrair_indicadores.ExtrairIndicadores(pasta,
                                                             arquivo,
                                                             coluna,
-                                                            frequencia_de_referencia)
+                                                            frequencia_de_referencia,
+                                                            12,
+                                                            'normal',
+                                                            '-')
 
     dataframe.append(Objeto_Extrair.Get(ordens_frequencia))
 
