@@ -83,8 +83,15 @@ PATH = {
 
         'database/dados_brutos/horizontal-misalignment/0.5mm':'desalinhamento_horizontal_baixo',
         'database/dados_brutos/horizontal-misalignment/1.0mm':'desalinhamento_horizontal_médio',
-        'database/dados_brutos/horizontal-misalignment/1.5mm':'desalinhamento_horizontal_alto',
+        'database/dados_brutos/horizontal-misalignment/1.5mm':'desalinhamento_horizontal_médio',
         'database/dados_brutos/horizontal-misalignment/2.0mm':'desalinhamento_horizontal_alto',
+
+        'database/dados_brutos/vertical-misalignment/0.51mm':'desalinhamento_vertical_baixo',
+        'database/dados_brutos/vertical-misalignment/0.63mm':'desalinhamento_vertical_baixo',
+        'database/dados_brutos/vertical-misalignment/1.27mm':'desalinhamento_vertical_médio',
+        'database/dados_brutos/vertical-misalignment/1.40mm':'desalinhamento_vertical_médio',
+        'database/dados_brutos/vertical-misalignment/1.78mm':'desalinhamento_vertical_alto',
+        'database/dados_brutos/vertical-misalignment/1.90mm':'desalinhamento_vertical_alto',
            
         'database/dados_brutos/imbalance/6g':'desbalanceamento_baixo',
         'database/dados_brutos/imbalance/10g':'desbalanceamento_baixo',
