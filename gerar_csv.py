@@ -2,13 +2,12 @@ import models
 
 from models import (get_raw_data,
                     extrair_indicadores,
-                    get_rpm,
                     listar_rpms)
 
 import numpy as np
 import pandas as pd
 import os
-import matplotlib.pyplot as plt
+
 import time
 import datetime
 
@@ -23,9 +22,11 @@ inner_race = models.inner_race
 
 PATH = models.PATH
 sensores = models.sensores
-ordens = 10
 
-ordens = range(ordens)[1:ordens]
+ordens = 10 # Precisa ser >= 1
+ordem_inicial = 2 # Precisa ser >=1 e <= ordens
+
+ordens = range(ordens)[ordem_inicial:ordens]
 
 for ordem in ordens:
     # cont = 0++
@@ -64,9 +65,12 @@ for ordem in ordens:
                                                                     rpm=rpm_medio,
                                                                     defeito=defeito,
                                                                     sensor=sensor)
-                                                                
-                dataframe.append(Objeto_Extrair.Get(ordem))
-                dataframe_temp.append(Objeto_Extrair.Get(ordem))
+
+                dados = Objeto_Extrair.Get(ordem)   
+                dataframe.append(dados)
+                dataframe_temp.append(dados)
+
+                dados = 0
                 # cont+=1
                 # print(cont)
 
