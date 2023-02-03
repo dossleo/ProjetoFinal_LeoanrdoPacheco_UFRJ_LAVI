@@ -140,3 +140,19 @@ defeitos = ['normal',
             'cage_fault_baixo','cage_fault_médio','cage_fault_alto',
             'ball_fault_baixo','ball_fault_médio','ball_fault_alto',
             'ball_fault_baixo','ball_fault_médio','ball_fault_alto',]
+
+nome_padrao_de_arquivo = 'dados_extraidos'
+
+colunas_freq = ['soma_ball_fault',
+                'soma_cage_fault',
+                'soma_outer_race',
+                'soma_inner_race',
+                'soma_rotacao_hz']
+
+colunas_tempo = ['rotacao_hz',
+                 'maximo','rms',
+                 'assimetria',
+                 'curtose',
+                 'fator_crista']
+
+coluna_sensor = ['sensor']
