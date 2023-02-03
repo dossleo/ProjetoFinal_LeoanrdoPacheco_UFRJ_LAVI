@@ -1,25 +1,22 @@
-import models
-from models import get_raw_data
 import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import models
+from models import normalizar_sinal, get_raw_data
+import os
 
-pasta = 'database/dados_tratados/ordens_1'
+ordem = 1
+pasta = f'database/dados_tratados/ordens_{ordem}'
 arquivos = os.listdir(pasta)
 arquivo = arquivos[0]
-coluna = 1
 
-sinal = get_raw_data.GetData(pasta,arquivo,coluna).GetDataframe()
-print(sinal)
+sinal = get_raw_data.GetData(pasta,arquivo).GetDataframe()
 
-rms = sinal['rms']
+sinal_normalizado = normalizar_sinal.NormalizarSinal(sinal,ordem).save_as_csv()
 
-plt.plot(range(len(rms)),rms)
-plt.show()
 
-df_normal = sinal[sinal["defeito"] == "ball_fault_alto"]
-rms = df_normal['rms']
+# sinal_normalizado[sinal_normalizado['defeito']=='normal']
 
-plt.plot(range(len(rms)),rms)
-plt.show()
+print(sinal_normalizado)
+
