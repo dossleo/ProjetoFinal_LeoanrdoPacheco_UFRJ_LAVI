@@ -107,12 +107,10 @@ class GerarCSV():
             df.to_csv(f'{models.path_dados_tratados}/ordens_{ordem}/dados_extraidos_geral.csv')
             print(df)
 
-
+            self.lista_sensores = list(self.sensores)
 
             end = time.time()
-
             elapsed_time = end - self.start
-
             elapsed_minutes = elapsed_time / 60
 
             print(f'\nOrdem n° {ordem} concluída')
