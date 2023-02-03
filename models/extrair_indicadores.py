@@ -40,26 +40,6 @@ class ExtrairIndicadores:
 
         # self.pot = np.mean(self.potencia_list)
         self.som = np.mean(self.soma_list)
-    def ExtrairOrgens_test(self,index=0,no_ordens=1):
-        self.CriarObjeto()
-        
-        for i in range(len(self.freq_referencia)):
-            self.freq_referencia[i] = self.freq_referencia[i]*self.rpm_medio
-
-        self.erro = 0.1
-        self.largura = 2
-
-        # self.potencia_list = []
-        self.soma_list = []
-
-        # for i in range(0,no_ordens):
-        self.sinal_fourier,self.sinal_frequencia = self.Objeto_Frequencia.banda_frequencia(self.freq_referencia[index],self.largura)
-        # self.potencia_list.append(self.Objeto_Frequencia.potencia_sinal(self.sinal_fourier))
-        self.soma_list.append(self.Objeto_Frequencia.soma_sinal(np.real(self.sinal_fourier)))
-
-        # self.pot = np.mean(self.potencia_list)
-        self.som = np.mean(self.soma_list)
-        print(self.som)
 
     def Get(self,no_ordens=1):
         self.CriarObjeto()

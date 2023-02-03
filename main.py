@@ -1,10 +1,10 @@
 import models
 from models import gerar_csv
+from os import listdir
 
-Objeto_GerarCSV = gerar_csv.GerarCSV(
-                                    sensor_inicial=3,
-                                    no_ordens=10,
-                                    ordem_inicial=2
-                                    )
 
-Objeto_GerarCSV.run()
+numero_de_ordens = 10
+
+gerar = gerar_csv.RunCSV(numero_de_ordens)
+gerar.Run()
+
