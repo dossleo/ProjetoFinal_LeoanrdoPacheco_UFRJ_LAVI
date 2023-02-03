@@ -15,24 +15,29 @@ start = time.time()
 print('___________________________')
 print(f'\nstart: {datetime.datetime.now()}\n')
 
+
+PATH = models.PATH
+
 ball_fault = models.ball_fault
 cage_fault = models.cage_fault
 outer_race = models.outer_race
 inner_race = models.inner_race
 
-PATH = models.PATH
-sensores = models.sensores
-
 ordens = 10 # Precisa ser >= 1
 ordem_inicial = 2 # Precisa ser >=1 e <= ordens
-
 ordens = range(ordens)[ordem_inicial:ordens]
+
+
+sensores = models.sensores
+sensor_inicial = 0
+lista_sensores = list(sensores)[sensor_inicial:-1]
 
 for ordem in ordens:
     # cont = 0++
     dataframe = []
     dataframe_temp = []
-    for sensor in sensores:
+    for sensor in lista_sensores:
+        cont = 0
         for pasta in PATH: 
             
             coluna = sensores[sensor]
@@ -71,15 +76,16 @@ for ordem in ordens:
                 dataframe_temp.append(dados)
 
                 dados = 0
-                # cont+=1
-                # print(cont)
 
             end = time.time()
             elapsed_time = end - start
             elapsed_minutes = elapsed_time / 60
 
+            cont+=1
+            print(f'Andamento: {np.round(100*cont/len(arquivos),2)}%')
+
             print("\nTempo de execução: {:.2f} minutos".format(elapsed_minutes))
-            print(f'pasta {pasta} concluída\n')
+            print(f'Pasta: {pasta} concluída\n')
 
         end = time.time()
         elapsed_time = end - start
@@ -91,7 +97,7 @@ for ordem in ordens:
 
         print(df_temp)
         print("\nTempo de execução: {:.2f} minutos".format(elapsed_minutes))
-        print(f'sensor {sensor} concluído')
+        print(f'Sensor: {sensor} - concluído')
         print('\n___________________________\n')
 
     df = pd.json_normalize(dataframe)

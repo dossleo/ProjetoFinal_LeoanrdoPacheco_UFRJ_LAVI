@@ -140,22 +140,3 @@ defeitos = ['normal',
             'cage_fault_baixo','cage_fault_médio','cage_fault_alto',
             'ball_fault_baixo','ball_fault_médio','ball_fault_alto',
             'ball_fault_baixo','ball_fault_médio','ball_fault_alto',]
-
-
-# -----------------------------------------------
-# --------- Indicadores Analisados --------------
-# -----------------------------------------------
-
-indicadores = [
-            'rotacao_hz',
-            'maximo',
-            'rms',
-            'assimetria',
-            'curtose'
-            # ,'fator_forma',
-            # 'fator_crista'
-            ]
-
-for defeito in defeito_rolamento:
-            # indicadores.append(f'potencia_{defeito}')
-            indicadores.append(f'soma_{defeito}')
