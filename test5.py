@@ -13,7 +13,7 @@ arquivo = arquivos[0]
 
 sinal = get_raw_data.GetData(pasta,arquivo).GetDataframe()
 
-sinal_normalizado = normalizar_sinal.NormalizarSinal(sinal,ordem).save_as_csv()
+sinal_normalizado = normalizar_sinal.NormalizarSinal(sinal,ordem).Get()
 
 
 # sinal_normalizado[sinal_normalizado['defeito']=='normal']

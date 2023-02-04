@@ -135,6 +135,7 @@ PATH = {
 
 defeitos = ['normal',
             'desalinhamento_horizontal_baixo','desalinhamento_horizontal_médio','desalinhamento_horizontal_alto',
+            'desalinhamento_vertical_baixo','desalinhamento_vertical_médio','desalinhamento_vertical_alto',
             'desbalanceamento_baixo','desbalanceamento_médio','desbalanceamento_alto',
             'ball_fault_baixo','ball_fault_médio','ball_fault_alto',
             'cage_fault_baixo','cage_fault_médio','cage_fault_alto',

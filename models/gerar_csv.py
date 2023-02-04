@@ -2,7 +2,9 @@ import models
 
 from models import (
                     extrair_indicadores,
-                    listar_rpms
+                    listar_rpms,
+                    normalizar_sinal,
+                    get_raw_data
                     )
 
 import numpy as np
@@ -60,6 +62,14 @@ class GerarCSV():
                     # self.Percorrer_Arquivos(ordem,sensor,pasta)
 
             self.ConcatenaCSV(ordem=ordem)
+
+            pasta = f'database/dados_tratados/ordens_{ordem}'
+            arquivo = f'{self.nome_padrao_de_arquivo}_geral.csv'
+
+            df_completo = get_raw_data.GetData(pasta,arquivo).GetDataframe()
+
+            normalizar_sinal.NormalizarSinal(df_completo,ordem).save_as_csv()
+
 
             self.lista_sensores = list(self.sensores)
 
@@ -160,8 +170,8 @@ class GerarCSV():
 
     def Tempo_Decorrido(self):
         elapsed_time = time.time() - self.start
-
-        tempo_estimado = elapsed_time*((self.ciclos_totais/self.ciclo_atual)-1)
+        if self.ciclo_atual>0:
+            tempo_estimado = elapsed_time*((self.ciclos_totais/self.ciclo_atual)-1)
 
         print("Tempo decorrido: {:02}:{:02}:{:02}".format(int(elapsed_time // 3600), int(elapsed_time % 3600 // 60), int(elapsed_time % 60)))
         print("Tempo Estimado até o Fim: {:02}:{:02}:{:02}".format(int(tempo_estimado // 3600), int(tempo_estimado % 3600 // 60), int(tempo_estimado % 60)))
@@ -189,7 +199,7 @@ class RunCSV():
         for ordem in ordens:
             pasta = f'{models.path_dados_tratados}/{ordem}'
             num_arquivos = len(os.listdir(pasta))
-            if num_arquivos <7:
+            if num_arquivos <8:
                 ordem_inicial = int(ordem.split("_")[1])
                 break
             else:
