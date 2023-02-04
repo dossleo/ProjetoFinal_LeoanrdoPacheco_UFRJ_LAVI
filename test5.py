@@ -6,17 +6,18 @@ import models
 from models import normalizar_sinal, get_raw_data
 import os
 
-ordem = 1
-pasta = f'database/dados_tratados/ordens_{ordem}'
-arquivos = os.listdir(pasta)
-arquivo = arquivos[0]
+ordens = 7
 
-sinal = get_raw_data.GetData(pasta,arquivo).GetDataframe()
+for ordem in range(ordens)[1:ordens+1]:
+    pasta = f'database/dados_tratados/ordens_{ordem}'
+    arquivos = os.listdir(pasta)
+    arquivo = arquivos[0]
 
-sinal_normalizado = normalizar_sinal.NormalizarSinal(sinal,ordem).Get()
+    sinal = get_raw_data.GetData(pasta,arquivo).GetDataframe()
+
+    sinal_normalizado = normalizar_sinal.NormalizarSinal(sinal,ordem).Get()
+    print(sinal_normalizado)
+    normalizar_sinal.NormalizarSinal(sinal,ordem).save_as_csv()
 
 
-# sinal_normalizado[sinal_normalizado['defeito']=='normal']
-
-print(sinal_normalizado)
 
