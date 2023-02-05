@@ -149,11 +149,11 @@ colunas_tempo = ['rotacao_hz',
                  'fator_crista',
                  'defeito']
 
-colunas_freq = ['soma_ball_fault',
-                'soma_cage_fault',
-                'soma_outer_race',
-                'soma_inner_race',
-                'soma_rotacao_hz',
+colunas_freq = ['soma_relativa_ball_fault',
+                'soma_relativa_cage_fault',
+                'soma_relativa_outer_race',
+                'soma_relativa_inner_race',
+                'soma_relativa_rotacao_hz',
                 'defeito']
 
 coluna_sensor = ['sensor']
