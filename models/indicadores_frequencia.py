@@ -83,23 +83,13 @@ class DominioFrequencia():
         plt.vlines(freq_referencia,0,1.1*np.max(self.fft_transform),'green','dashed')
         plt.show()
 
-    def potencia_sinal(self,sinal_fourier):
-        
-        fourier_abs = np.abs(sinal_fourier)
-        self.potencia = np.sum(fourier_abs**2) / len(fourier_abs)
+    def soma_relativa_sinal(self,sinal_fourier):
+        self.run_fft(frequencia_de_corte=1000)
 
-        return self.potencia
+        fourier_abs = np.sum(np.abs(sinal_fourier))
+        self.soma_relativa = fourier_abs/np.sum(np.abs(self.fft_frequencia))
 
-    def plot_potencia_sinal(self,largura):
-        self.run_fft()
-        for sinal in range(0,len(self.fft_transform),largura):
-            potencia = self.potencia_sinal(self.fft_transform[sinal:sinal+largura])
-            plt.plot(self.fft_frequencia[sinal:sinal+largura],potencia*np.ones(len(self.fft_frequencia[sinal:sinal+largura])))
-        
-        plt.ylim(bottom=0,top=1000)
-        plt.title(f'Largura : {largura}')
-        plt.show()
-
+        return self.soma_relativa
 
     def soma_sinal(self,sinal):
         return np.sum(sinal)

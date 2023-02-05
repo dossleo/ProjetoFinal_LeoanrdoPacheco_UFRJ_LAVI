@@ -6,6 +6,8 @@ class NormalizarSinal():
     def __init__(self,dataframe,ordem) -> None:
         self.dataframe = pd.DataFrame(dataframe)
 
+        self.dataframe['rotacao_hz'] = 10*(self.dataframe['rotacao_hz']//20)
+
         self.colunas = models.colunas
         self.ordem = ordem
         defeito = 'defeito'
@@ -19,7 +21,7 @@ class NormalizarSinal():
         self.df_freq_sem_defeito = self.df_freq[self.df_freq[defeito]==normal]
         self.df_tempo_sem_defeito = self.df_tempo[self.df_tempo[defeito]==normal]
 
-        self.df_sensor = self.dataframe[models.coluna_sensor]
+        # self.df_sensor = self.dataframe[models.coluna_sensor]
 
         self.df_defeito = self.dataframe[defeito]
 
@@ -60,23 +62,23 @@ class NormalizarSinal():
         self.df_curtose_normalizado = ( (self.dataframe['curtose'] - self.ymin_curtose) / (self.ymax_curtose - self.ymin_curtose) ) * (self.xmax - self.xmin) + self.xmin
         self.df_fator_crista_normalizado = ( (self.dataframe['fator_crista'] - self.ymin_fator_crista) / (self.ymax_fator_crista - self.ymin_fator_crista) ) * (self.xmax - self.xmin) + self.xmin
 
-    def normalizar_sensor(self):
+    # def normalizar_sensor(self):
 
-        self.dataframe['sensor'] = self.dataframe['sensor'].replace(models.sensores)
+        # # # self.dataframe['sensor'] = self.dataframe['sensor'].replace(models.sensores)
 
-        self.ymax_sensor = np.max(np.array(self.dataframe['sensor']))
+        # # self.ymax_sensor = np.max(np.array(self.dataframe['sensor']))
 
-        self.ymin_sensor = np.min(np.array(self.dataframe['sensor']))
+        # # self.ymin_sensor = np.min(np.array(self.dataframe['sensor']))
 
-        self.dataframe['sensor'] = ( (self.dataframe['sensor'] - self.ymin_sensor) / (self.ymax_sensor - self.ymin_sensor) ) * (self.xmax - self.xmin) + self.xmin
+        # # # # # self.dataframe['sensor'] = ( (self.dataframe['sensor'] - self.ymin_sensor) / (self.ymax_sensor - self.ymin_sensor) ) * (self.xmax - self.xmin) + self.xmin
         
-        self.df_sensor = self.dataframe['sensor']
+        # # self.df_sensor = self.dataframe['sensor']
 
     def Get(self):
 
         self.normalizar_tempo()
         self.normalizar_freq()
-        self.normalizar_sensor()
+        # self.normalizar_sensor()
 
         lista_dataframes = [self.df_rotacao_normalizado,
                             self.df_maximo_normalizado,
@@ -85,9 +87,8 @@ class NormalizarSinal():
                             self.df_curtose_normalizado,
                             self.df_fator_crista_normalizado,
                             self.df_freq_normalizado,
-                            self.df_sensor,
+                            # self.df_sensor,
                             self.df_defeito]
-
 
         df = pd.concat(lista_dataframes,axis=1,ignore_index=False)
         df = pd.DataFrame(df.reset_index(drop=False))
