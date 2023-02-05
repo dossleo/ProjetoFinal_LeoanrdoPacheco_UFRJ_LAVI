@@ -172,7 +172,9 @@ class GerarCSV():
         elapsed_time = time.time() - self.start
         if self.ciclo_atual>0:
             tempo_estimado = elapsed_time*((self.ciclos_totais/self.ciclo_atual)-1)
-
+        else:
+            tempo_estimado = 0
+            
         print("Tempo decorrido: {:02}:{:02}:{:02}".format(int(elapsed_time // 3600), int(elapsed_time % 3600 // 60), int(elapsed_time % 60)))
         print("Tempo Estimado até o Fim: {:02}:{:02}:{:02}".format(int(tempo_estimado // 3600), int(tempo_estimado % 3600 // 60), int(tempo_estimado % 60)))
     
