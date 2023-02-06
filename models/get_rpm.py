@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import models
+from models import indicadores_frequencia, get_raw_data
 
 
 class GetRPM():
@@ -22,8 +23,15 @@ class GetRPM():
     None
     """
 
-    def __init__(self,data):
-        self.data = np.array(data)
+    def __init__(self,pasta,arquivo):
+        self.pasta = pasta
+        self.arquivo = arquivo
+
+        self.sinal_rpm = get_raw_data.GetData(pasta=self.pasta,arquivo=self.arquivo,coluna=0)
+        self.sinal_rpm = self.sinal_rpm.Get()
+
+        self.data = np.array(self.sinal_rpm)
+
         self.data = np.abs(self.data-np.mean(self.data))
         self.freq_aquisicao = models.freq_aquisicao
 
@@ -176,10 +184,32 @@ class GetRPM():
 
         self.rpm = self.get_rpm_ponto_a_ponto(unidade)
 
-        metade = len(self.rpm)//2
-        janela = len(self.rpm)//100
+        porcentagem_janela = 0.35
+        janela_inferior = int(porcentagem_janela*len(self.rpm))
+        janela_superior = int((1-porcentagem_janela)*len(self.rpm))
+        # metade = len(self.rpm)//2
+        # janela = len(self.rpm)//100
 
-        self.rpm_medio = np.mean(self.rpm[metade-janela:metade+janela])
+        self.rpm_medio = np.mean(self.rpm[janela_inferior:janela_superior])
+        
+
+
+        # sinal = get_raw_data.GetData(pasta=self.pasta,arquivo=self.arquivo,coluna=2).Get()
+        # self.Objeto_Frequencia = indicadores_frequencia.DominioFrequencia(sinal,self.freq_aquisicao)
+
+        # freq_referencia = 30
+        # ponto_referencia = freq_referencia*5
+
+        # self.Objeto_Frequencia.run_fft()
+
+
+        # # self.fourier_banda, self.frequencia_banda = self.Objeto_Frequencia.banda_frequencia(self.rpm_medio,20)
+        # # indice_rpm_correto = list(self.fourier_banda).index(np.max(self.fourier_banda),0,-1)
+
+        # indice_rpm_correto = list(self.Objeto_Frequencia.fft_transform[0:ponto_referencia]).index(np.max(self.Objeto_Frequencia.fft_transform[0:ponto_referencia]),0,-1)
+
+        # self.rpm_medio = np.abs(self.Objeto_Frequencia.fft_frequencia[indice_rpm_correto])
+
 
         return self.rpm_medio
 

@@ -14,7 +14,7 @@ class ListaRPM():
         sinal_rpm = get_raw_data.GetData(self.pasta,arquivos[0],0)
         sinal_rpm = sinal_rpm.Get()
 
-        rpm = get_rpm.GetRPM(sinal_rpm)
+        rpm = get_rpm.GetRPM(self.pasta,arquivos[0])
         rpm_medio = rpm.get_rpm_medio('hz')
 
         self.rpms = [rpm_medio]
@@ -23,7 +23,7 @@ class ListaRPM():
             sinal_rpm = get_raw_data.GetData(self.pasta,arquivos[i],0)
             sinal_rpm = sinal_rpm.Get()
 
-            rpm = get_rpm.GetRPM(sinal_rpm)
+            rpm = get_rpm.GetRPM(self.pasta,arquivos[i])
             rpm_medio = rpm.get_rpm_medio('hz')
             
             if np.abs(rpm_medio) > np.abs(self.rpms[-1])+3:

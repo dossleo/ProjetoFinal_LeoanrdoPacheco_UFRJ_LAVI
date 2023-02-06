@@ -34,34 +34,34 @@ PATH = {
         f'{path_dados_brutos}/imbalance/30g':'desbalanceamento_alto',
         f'{path_dados_brutos}/imbalance/35g':'desbalanceamento_alto',
         
-        f'{path_dados_brutos}/overhang/ball_fault/0g':'ball_fault_baixo',
-        f'{path_dados_brutos}/overhang/ball_fault/6g':'ball_fault_medio',
-        f'{path_dados_brutos}/overhang/ball_fault/20g':'ball_fault_alto',
+        # f'{path_dados_brutos}/overhang/ball_fault/0g':'ball_fault_baixo',
+        f'{path_dados_brutos}/overhang/ball_fault/6g':'ball_fault_baixo',
+        f'{path_dados_brutos}/overhang/ball_fault/20g':'ball_fault_medio',
         f'{path_dados_brutos}/overhang/ball_fault/35g':'ball_fault_alto',
 
-        f'{path_dados_brutos}/overhang/cage_fault/0g':'cage_fault_baixo',
-        f'{path_dados_brutos}/overhang/cage_fault/6g':'cage_fault_medio',
-        f'{path_dados_brutos}/overhang/cage_fault/20g':'cage_fault_alto',
-        f'{path_dados_brutos}/overhang/cage_fault/35g':'cage_fault_alto',
+        # f'{path_dados_brutos}/overhang/cage_fault/0g':'cage_fault_baixo',
+        # f'{path_dados_brutos}/overhang/cage_fault/6g':'cage_fault_baixo',
+        # f'{path_dados_brutos}/overhang/cage_fault/20g':'cage_fault_medio',
+        # f'{path_dados_brutos}/overhang/cage_fault/35g':'cage_fault_alto',
 
-        f'{path_dados_brutos}/overhang/outer_race/0g':'outer_race_baixo',
-        f'{path_dados_brutos}/overhang/outer_race/6g':'outer_race_medio',
-        f'{path_dados_brutos}/overhang/outer_race/20g':'outer_race_alto',
+        # f'{path_dados_brutos}/overhang/outer_race/0g':'outer_race_baixo',
+        f'{path_dados_brutos}/overhang/outer_race/6g':'outer_race_baixo',
+        f'{path_dados_brutos}/overhang/outer_race/20g':'outer_race_medio',
         f'{path_dados_brutos}/overhang/outer_race/35g':'outer_race_alto',
            
-        f'{path_dados_brutos}/underhang/ball_fault/0g':'ball_fault_baixo',
-        f'{path_dados_brutos}/underhang/ball_fault/6g':'ball_fault_medio',
-        f'{path_dados_brutos}/underhang/ball_fault/20g':'ball_fault_alto',
+        # f'{path_dados_brutos}/underhang/ball_fault/0g':'ball_fault_baixo',
+        f'{path_dados_brutos}/underhang/ball_fault/6g':'ball_fault_baixo',
+        f'{path_dados_brutos}/underhang/ball_fault/20g':'ball_fault_medio',
         f'{path_dados_brutos}/underhang/ball_fault/35g':'ball_fault_alto',
 
-        f'{path_dados_brutos}/underhang/cage_fault/0g':'cage_fault_baixo',
-        f'{path_dados_brutos}/underhang/cage_fault/6g':'cage_fault_medio',
-        f'{path_dados_brutos}/underhang/cage_fault/20g':'cage_fault_alto',
-        f'{path_dados_brutos}/underhang/cage_fault/35g':'cage_fault_alto',
+        # f'{path_dados_brutos}/underhang/cage_fault/0g':'cage_fault_baixo',
+        # f'{path_dados_brutos}/underhang/cage_fault/6g':'cage_fault_baixo',
+        # f'{path_dados_brutos}/underhang/cage_fault/20g':'cage_fault_medio',
+        # f'{path_dados_brutos}/underhang/cage_fault/35g':'cage_fault_alto',
 
-        f'{path_dados_brutos}/underhang/outer_race/0g':'outer_race_baixo',
-        f'{path_dados_brutos}/underhang/outer_race/6g':'outer_race_medio',
-        f'{path_dados_brutos}/underhang/outer_race/20g':'outer_race_alto',
+        # f'{path_dados_brutos}/underhang/outer_race/0g':'outer_race_baixo',
+        f'{path_dados_brutos}/underhang/outer_race/6g':'outer_race_baixo',
+        f'{path_dados_brutos}/underhang/outer_race/20g':'outer_race_medio',
         f'{path_dados_brutos}/underhang/outer_race/35g':'outer_race_alto',
            }
 
@@ -84,11 +84,11 @@ microfone = 7
 sensores = {
             # 'rotacao':0,
 
-            'rolamento_interno_axial':1,
+        #     'rolamento_interno_axial':1,
             'rolamento_interno_radial1':2,
             'rolamento_interno_radial2':3,
             
-            'rolamento_externo_axial':4,
+        #     'rolamento_externo_axial':4,
             'rolamento_externo_radial1':5,
             'rolamento_externo_radial2':6,
             
@@ -103,15 +103,37 @@ num_esferas = 8
 diametro_esfera = 0.07145 # mm
 diametro_gaiola = 2.8519 # mm
 
-ball_fault = 1.8710
-cage_fault = 0.3750
-outer_race = 2.9980
-inner_race = 5.0020
+# ball_fault = 1.8710 # Original
+ball_fault_overhang = 1.9860 # Adequado para pasta ='database/dados_brutos/overhang/ball_fault/35g'
+ball_fault_underhang = 1.9558 # Adequado para pasta ='database/dados_brutos/underhang/ball_fault/35g'
 
-frequencias_rolamento = [ball_fault,
-                        cage_fault,
-                        outer_race
-                        ,inner_race]
+
+# cage_fault = 0.3750 # Original
+# cage_fault_overhang = 0.3750
+# cage_fault_underhang = 0.3750
+
+# outer_race = 2.9980 # Original
+outer_race_overhang = 2.9780
+outer_race_underhang = 3.0000
+
+# inner_race = 5.0020 # Original
+# inner_race_overhang = 5.0020
+# inner_race_underhang = 5.0020
+
+frequencias_rolamento_overhang = [ball_fault_overhang,
+                                #     cage_fault_overhang,
+                                    outer_race_overhang,
+                                #     inner_race_overhang
+                                    ]
+
+frequencias_rolamento_underhang = [ball_fault_underhang,
+                                #     cage_fault_underhang,
+                                    outer_race_underhang,
+                                #     inner_race_underhang
+                                    ]
+
+frequencias_rolamento = {'externo':frequencias_rolamento_overhang,
+                        'interno':frequencias_rolamento_underhang}
 
 ordens = 10
 

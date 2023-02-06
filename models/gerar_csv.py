@@ -26,10 +26,7 @@ class GerarCSV():
         self.numero_de_pastas = len(self.PATH)
         self.nome_padrao_de_arquivo = nome_padrao_de_arquivo
 
-        self.ball_fault = models.ball_fault
-        self.cage_fault = models.cage_fault
-        self.outer_race = models.outer_race
-        self.inner_race = models.inner_race
+        self.frequencias_rolamento = models.frequencias_rolamento
 
         self.no_ordens = ordem_final
         self.ordem_final = ordem_final # Precisa ser >= 1
@@ -82,6 +79,12 @@ class GerarCSV():
     def Percorrer_Sensores(self,ordem):
         for sensor in self.lista_sensores:
             self.cont = 0
+            for rolamento in self.frequencias_rolamento:
+                if sensor.__contains__(rolamento):
+                    self.freq_rolamento = self.frequencias_rolamento[rolamento]
+                    break
+                else:
+                    self.freq_rolamento = self.frequencias_rolamento['interno']
 
     # Hierarquia para percorrer tudo
 
@@ -102,6 +105,7 @@ class GerarCSV():
 
     def Percorrer_Pastas(self,ordem,sensor):
         for pasta in self.PATH: 
+
             self.coluna = self.sensores[sensor]
 
             self.arquivos = []
@@ -128,10 +132,11 @@ class GerarCSV():
     def Percorrer_Arquivos(self,ordem,sensor,pasta):
         for index in range(len(self.arquivos)):
             arquivo = self.arquivos[index]
-            freq = [self.ball_fault,
-                    self.cage_fault,
-                    self.outer_race
-                    ,self.inner_race]
+            freq = [self.freq_rolamento[0],
+                    self.freq_rolamento[1]]
+                    # ,
+                    # self.freq_rolamento[2],
+                    # self.freq_rolamento[3]]
                     
             rpm_medio = self.rpms[index]
 
@@ -192,10 +197,10 @@ class GerarCSV():
         return cont
     
 class RunCSV():
-    def __init__(self,total_de_ordens=1) -> None:
+    def __init__(self,total_de_ordens=10) -> None:
         ordem_final = total_de_ordens
         ordens = []
-        for i in range(ordem_final):
+        for i in range(2,ordem_final):
             ordens.append(f'ordens_{i+1}')
             
         for ordem in ordens:
