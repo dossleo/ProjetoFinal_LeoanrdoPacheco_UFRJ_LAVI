@@ -105,7 +105,7 @@ diametro_gaiola = 2.8519 # mm
 
 # ball_fault = 1.8710 # Original
 ball_fault_overhang = 1.9860 # Adequado para pasta ='database/dados_brutos/overhang/ball_fault/35g'
-ball_fault_underhang = 1.9558 # Adequado para pasta ='database/dados_brutos/underhang/ball_fault/35g'
+ball_fault_underhang = 1.9578 # Adequado para pasta ='database/dados_brutos/underhang/ball_fault/35g'
 
 
 # cage_fault = 0.3750 # Original

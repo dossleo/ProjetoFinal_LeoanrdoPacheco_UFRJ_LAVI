@@ -194,21 +194,13 @@ class GetRPM():
         
 
 
-        # sinal = get_raw_data.GetData(pasta=self.pasta,arquivo=self.arquivo,coluna=2).Get()
-        # self.Objeto_Frequencia = indicadores_frequencia.DominioFrequencia(sinal,self.freq_aquisicao)
+        sinal = get_raw_data.GetData(pasta=self.pasta,arquivo=self.arquivo,coluna=2).Get()
+        self.Objeto_Frequencia = indicadores_frequencia.DominioFrequencia(sinal,self.freq_aquisicao)
 
-        # freq_referencia = 30
-        # ponto_referencia = freq_referencia*5
+        self.fourier_banda, self.frequencia_banda = self.Objeto_Frequencia.banda_frequencia(self.rpm_medio,self.rpm_medio)
+        indice_rpm_correto = list(self.fourier_banda).index(np.max(self.fourier_banda),0,-1)
 
-        # self.Objeto_Frequencia.run_fft()
-
-
-        # # self.fourier_banda, self.frequencia_banda = self.Objeto_Frequencia.banda_frequencia(self.rpm_medio,20)
-        # # indice_rpm_correto = list(self.fourier_banda).index(np.max(self.fourier_banda),0,-1)
-
-        # indice_rpm_correto = list(self.Objeto_Frequencia.fft_transform[0:ponto_referencia]).index(np.max(self.Objeto_Frequencia.fft_transform[0:ponto_referencia]),0,-1)
-
-        # self.rpm_medio = np.abs(self.Objeto_Frequencia.fft_frequencia[indice_rpm_correto])
+        self.rpm_medio = np.abs(self.Objeto_Frequencia.frequencia_banda[indice_rpm_correto])
 
 
         return self.rpm_medio

@@ -32,7 +32,7 @@ class ExtrairIndicadores:
         self.CriarObjeto(sinal,freq_aquisicao)
 
         self.erro = 0.1
-        self.largura = 14
+        self.largura = self.rpm_medio
 
         self.soma_relativa_lista = []
         self.soma_list = []
@@ -43,7 +43,7 @@ class ExtrairIndicadores:
             self.soma_relativa_lista.append(self.Objeto_Frequencia.soma_relativa_sinal(self.sinal_fourier))
             # self.soma_list.append(self.Objeto_Frequencia.soma_sinal(np.real(self.sinal_fourier)))
 
-        self.soma_relativa_media = np.sum(self.soma_relativa_lista)
+        self.soma_relativa = np.sum(self.soma_relativa_lista)
         # self.som = np.mean(self.soma_list)
 
     def Get(self,no_ordens=1):
@@ -76,7 +76,7 @@ class ExtrairIndicadores:
                 local = models.defeito_rolamento[index]
                 self.ExtrairOrdens(sinal,freq_aquisicao,index,no_ordens)
 
-                data_json[f'soma_relativa_{local}'] = np.abs(self.soma_relativa_media)
+                data_json[f'soma_relativa_{local}'] = np.abs(self.soma_relativa)
 
             # data_json[f'soma_{local}'] = np.abs(self.som)
             data_json['sensor'] = self.sensor
