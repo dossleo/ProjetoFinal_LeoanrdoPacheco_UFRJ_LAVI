@@ -3,7 +3,7 @@ from models import gerar_csv
 from os import listdir
 
 
-numero_de_ordens = 10
+numero_de_ordens = 6
 
 gerar = gerar_csv.RunCSV(numero_de_ordens)
 gerar.Run()
