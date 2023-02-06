@@ -146,7 +146,12 @@ defeitos_desbalanceamento = ['6g','10g','15g','20g','25g','30g','35g'] # g grama
 defeitos_desalinhamento_horizontal = ['0.5mm','1.0mm','1.5mm','2.0mm'] # mm de desalinhamento horizontal
 defeitos_desalinhamento_vertical = ['0.51mm','0.63mm','1.27mm','1.40mm','1.78mm','1.90mm'] # mm de desalinhamento vertical
 
-defeito_rolamento = ['ball_fault','cage_fault','outer_race','inner_race','rotacao_hz']
+defeito_rolamento = ['ball_fault',
+                    # 'cage_fault',
+                    'outer_race',
+                    # 'inner_race',
+                    'rotacao_hz']
+
 desbalanceamento_rolamento = ['0g','6g','20g','35g']
 
 defeitos = ['normal',
@@ -154,9 +159,10 @@ defeitos = ['normal',
             'desalinhamento_vertical_baixo','desalinhamento_vertical_médio','desalinhamento_vertical_alto',
             'desbalanceamento_baixo','desbalanceamento_médio','desbalanceamento_alto',
             'ball_fault_baixo','ball_fault_médio','ball_fault_alto',
-            'cage_fault_baixo','cage_fault_médio','cage_fault_alto',
-            'ball_fault_baixo','ball_fault_médio','ball_fault_alto',
-            'ball_fault_baixo','ball_fault_médio','ball_fault_alto',]
+            # 'cage_fault_baixo','cage_fault_médio','cage_fault_alto',
+            'outer_race_baixo','outer_race_médio','outer_race_alto'
+            # ,'inner_race_baixo','inner_race_médio','inner_race_alto'
+            ]
 
 
 
@@ -172,9 +178,9 @@ colunas_tempo = ['rotacao_hz',
                  'defeito']
 
 colunas_freq = ['soma_relativa_ball_fault',
-                'soma_relativa_cage_fault',
+                # 'soma_relativa_cage_fault',
                 'soma_relativa_outer_race',
-                'soma_relativa_inner_race',
+                # 'soma_relativa_inner_race',
                 'soma_relativa_rotacao_hz',
                 'defeito']
 

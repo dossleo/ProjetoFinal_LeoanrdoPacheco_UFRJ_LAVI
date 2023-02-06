@@ -27,7 +27,6 @@ ordens = 10 # Precisa ser >= 1
 ordem_inicial = 2 # Precisa ser >=1 e <= ordens
 ordens = range(ordens)[ordem_inicial:ordens]
 
-
 sensores = models.sensores
 sensor_inicial = 0
 lista_sensores = list(sensores)[sensor_inicial:-1]
