@@ -39,7 +39,7 @@ class ExtrairIndicadores:
     def Get(self,no_ordens=1):
         
         indice = 0
-        janela = 2.0 #segundo
+        janela = 3.0 #segundo
         janela_pontos = janela*self.FREQ_AQUISICAO
 
         sobreposicao = 0.95 # %

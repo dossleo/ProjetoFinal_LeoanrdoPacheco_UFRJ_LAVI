@@ -23,7 +23,7 @@ class GetData():
         
         self.pasta = pasta
         self.arquivo = arquivo
-        self.dataset=pd.read_csv(os.path.join(self.pasta, self.arquivo), sep=',',header=None)
+        self.dataset=pd.read_csv(os.path.join(self.pasta, self.arquivo), sep=',',header=None,low_memory=False)
 
         self.coluna = coluna
         # self.sinal = np.array(self.dataset)
@@ -55,6 +55,6 @@ class GetData():
         return self.result
 
     def GetDataframe(self):
-        self.dataset = pd.read_csv(os.path.join(self.pasta, self.arquivo), sep=',', header=0, index_col=0)
+        self.dataset = pd.read_csv(os.path.join(self.pasta, self.arquivo), sep=',', header=0, index_col=0,low_memory=False)
         self.result = pd.DataFrame(self.dataset)
         return self.result
