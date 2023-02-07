@@ -95,7 +95,8 @@ class GerarCSV(GeneralFuncions):
         # defeito = self.PASTAS[pasta]
         local = f'{models.path_dados_tratados}/ordens_{ordem}'
         dataframe = pd.json_normalize(dados)
-        dataframe.to_csv(f'{local}/{models.nome_padrao_de_arquivo}_concatenado.csv')
+        dataframe = dataframe[dataframe.columns[len(dataframe.columns)-len(models.colunas):len(dataframe.columns)]]
+        dataframe.to_csv(f'{local}/{models.nome_padrao_de_arquivo}_geral.csv')
     
     def ConcatenaCSV(self,ordem):
         # Lista dos nomes dos arquivos CSV
@@ -154,11 +155,10 @@ class GerarCSV(GeneralFuncions):
                 self.tempo_decorrido(start=start, ciclo_atual=ciclo_atual, ciclos_totais = ciclos_totais,cont=cont, ordem=ordem)
 
             self.salvar_dados(lista_dados, ordem,pasta)
-            lista_dados = []
 
 
             # Concatenar Dados
-            self.ConcatenaCSV(ordem=ordem)
+            # self.ConcatenaCSV(ordem=ordem)
 
             # Normalizar Dados
             pasta_completa = f'database/dados_tratados/ordens_{ordem}'
@@ -167,4 +167,5 @@ class GerarCSV(GeneralFuncions):
             df_completo = get_raw_data.GetData(pasta_completa,arquivo_completo).GetDataframe()
 
             normalizar_sinal.NormalizarSinal(df_completo,ordem).save_as_csv()
+            lista_dados = []
 
