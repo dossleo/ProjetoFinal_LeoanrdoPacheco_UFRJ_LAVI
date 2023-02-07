@@ -12,7 +12,7 @@ nome_padrao_de_arquivo = 'dados_extraidos'
 
 PATH = {
         # "Nome da pasta" : "classe do defeito"
-        # f'{path_dados_brutos}/normal':'normal',
+        f'{path_dados_brutos}/normal':'normal',
 
         f'{path_dados_brutos}/horizontal-misalignment/0.5mm':'desalinhamento_horizontal_baixo',
         f'{path_dados_brutos}/horizontal-misalignment/1.0mm':'desalinhamento_horizontal_médio',
@@ -177,11 +177,17 @@ colunas_tempo = ['rotacao_hz',
                  'fator_crista',
                  'defeito']
 
-colunas_freq = ['soma_relativa_ball_fault',
+colunas_freq = [
+                'soma_relativa_ball_fault',
                 # 'soma_relativa_cage_fault',
                 'soma_relativa_outer_race',
                 # 'soma_relativa_inner_race',
                 'soma_relativa_rotacao_hz',
+                'soma_ball_fault',
+                # 'soma_cage_fault',
+                'soma_outer_race',
+                # 'soma_inner_race',
+                'soma_rotacao_hz',
                 'defeito']
 
 coluna_sensor = ['sensor']

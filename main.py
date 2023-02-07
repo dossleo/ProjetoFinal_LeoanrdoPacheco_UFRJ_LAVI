@@ -1,9 +1,10 @@
-from models.gerar_csv_new import GerarCSV
+from models.gerar_csv import GerarCSV
 import os
 
 os.system("cls")
 
-numero_de_ordens = 6
+ordem_inicial = 2
+ordem_final = 6
 
-GerarCSV(2,3).run()
+GerarCSV(ordem_inicial,ordem_final).run()
 

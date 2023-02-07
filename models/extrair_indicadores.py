@@ -43,14 +43,14 @@ class ExtrairIndicadores:
     def Get(self,no_ordens=1):
         freq_aquisicao = models.freq_aquisicao
         indice = 0
-        janela = 2.0 #segundo
+        janela = 3.0 #segundo
         janela_pontos = janela*freq_aquisicao
 
         sobreposicao = 0.90 # %
 
         incrementer = int((janela*(1-sobreposicao))*freq_aquisicao)
 
-        while indice < len(self.sinal):
+        while int(indice+janela_pontos) < len(self.sinal):
             sinal = self.sinal[int(indice):int(indice+janela_pontos)]
             indice += incrementer
 
