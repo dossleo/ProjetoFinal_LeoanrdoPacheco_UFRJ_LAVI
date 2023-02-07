@@ -42,9 +42,10 @@ class ExtrairIndicadores:
         janela = 2.0 #segundo
         janela_pontos = janela*self.FREQ_AQUISICAO
 
-        sobreposicao = 0.90 # %
+        sobreposicao = 0.95 # %
 
         incrementer = int((janela*(1-sobreposicao))*self.FREQ_AQUISICAO)
+        df = []
 
         while int(indice+janela_pontos) < len(self.sinal):
             sinal = self.sinal[int(indice):int(indice+janela_pontos)]
@@ -72,5 +73,7 @@ class ExtrairIndicadores:
             data_json['sensor'] = self.sensor
             data_json['defeito'] = self.defeito
 
-        return data_json
+            df.append(data_json)
+
+        return df
 

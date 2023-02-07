@@ -7,13 +7,15 @@ import pandas as pd
 from rich import pretty, print
 
 import models
-from models import extrair_indicadores, get_rpm
+from models import extrair_indicadores, get_rpm, normalizar_sinal
 
 pretty.install()
 
 
 
 class GeneralFuncions():
+
+    PASTAS = models.PATH
 
     def listar_arquivos(self, pasta:str) -> list:
         arquivos = os.listdir(pasta)
@@ -45,6 +47,19 @@ class GeneralFuncions():
             print(f'\nOrdem: {ordem}\nPastas Percorridas: {cont}/{len(models.PATH)}\nAndamento Total: {np.round(100*ciclo_atual/ciclos_totais,2)}%')
             print("Tempo decorrido: {:02}:{:02}:{:02}".format(int(elapsed_time // 3600), int(elapsed_time % 3600 // 60), int(elapsed_time % 60)))
             print("Tempo Estimado até o Fim: {:02}:{:02}:{:02}".format(int(tempo_estimado // 3600), int(tempo_estimado % 3600 // 60), int(tempo_estimado % 60)))
+    
+    def define_pastas_a_percorrer(self,ordem,pastas):
+        arquivos_totais = int(len(models.PATH))
+        arquivos_existentes = int(len(os.listdir(f'{models.path_dados_tratados}/ordens_{ordem}')))
+
+        if arquivos_existentes < arquivos_totais+2:
+            pastas = pastas[arquivos_existentes-2,arquivos_totais]
+            return pastas
+        
+        
+        return list(pastas)
+    
+
 
 class GerarCSV(GeneralFuncions):
     
@@ -87,10 +102,25 @@ class GerarCSV(GeneralFuncions):
         rpm_medio = get_rpm.GetRPM(sinal_rpm, sinal_sensor).get_rpm_medio('hz')
         return rpm_medio
 
-    def salvar_dados(self, dados:dict, ordem:int):
-        pasta = f'{models.path_dados_tratados}/ordens_{ordem}'
+    def salvar_dados(self, dados:dict, ordem:int,pasta:str):
+        defeito = self.PASTAS[pasta]
+        local = f'{models.path_dados_tratados}/ordens_{ordem}'
         dataframe = pd.json_normalize(dados)
-        dataframe.to_csv(f'{pasta}/{models.nome_padrao_de_arquivo}_geral.csv')
+        dataframe.to_csv(f'{local}/{models.nome_padrao_de_arquivo}_{defeito}.csv')
+    
+    def ConcatenaCSV(self,ordem):
+        # Lista dos nomes dos arquivos CSV
+        pasta = f'{models.path_dados_tratados}/ordens_{ordem}'
+        arquivos = os.listdir(pasta)
+
+        # Lê cada arquivo CSV, considerando a primeira linha como cabeçalho e a primeira coluna como ID
+        dfs = [pd.read_csv(f'{pasta}/{arquivo}', header=0, index_col=0) for arquivo in arquivos]
+
+        # Concatena todos os DataFrames em um único DataFrame
+        result = pd.concat(dfs)
+
+        # Salva o resultado em um arquivo CSV único
+        result.to_csv(f'{pasta}/{models.nome_padrao_de_arquivo}_geral.csv')
 
     def run(self):
         ciclos_totais = self.calcula_ciclos_totais(self.ordem_inicial,self.ordem_final)
@@ -100,9 +130,10 @@ class GerarCSV(GeneralFuncions):
         ordens = self.gerar_lista_ordem()
         for ordem in ordens:
             lista_dados = []
-
+            PASTAS = list(self.PASTAS)
+            # PASTAS = GeneralFuncions().define_pastas_a_percorrer(ordem=ordem,pastas=PASTAS)
             cont = 0
-            for pasta in self.PASTAS:
+            for pasta in PASTAS:
                 defeito = self.PASTAS.get(pasta)
                 arquivos = self.listar_arquivos(pasta)
                 for arquivo in arquivos:
@@ -120,10 +151,24 @@ class GerarCSV(GeneralFuncions):
                             freq_referencia=freq_referencia,
                             sensor = acelerometro
                         ).Get(ordem)
-                        lista_dados.append(dados)
+
+                        for data in dados:
+                            lista_dados.append(data)
                 cont+=1
                 ciclo_atual+=1
                 self.tempo_decorrido(start=start, ciclo_atual=ciclo_atual, ciclos_totais = ciclos_totais,cont=cont, ordem=ordem)
 
-            self.salvar_dados(dados, ordem)
+                self.salvar_dados(lista_dados, ordem,pasta)
+                lista_dados = []
             
+            # Concatenar Dados
+            self.ConcatenaCSV(ordem=ordem)
+
+            # Normalizar Dados
+            pasta_completa = f'database/dados_tratados/ordens_{ordem}'
+            arquivo_completo = f'{models.nome_padrao_de_arquivo}_geral.csv'
+
+            df_completo = GeneralFuncions.ler_dataframe(pasta_completa,arquivo_completo)
+
+            normalizar_sinal.NormalizarSinal(df_completo,ordem).save_as_csv()
+
