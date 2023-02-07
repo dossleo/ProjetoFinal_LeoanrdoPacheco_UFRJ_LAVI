@@ -41,10 +41,10 @@ class ExtrairIndicadores:
             self.largura = self.largura*(1+self.erro*no_ordens)
             self.sinal_fourier,self.sinal_frequencia = self.Objeto_Frequencia.banda_frequencia(self.freq_referencia[index]*(i+1),self.largura)
             self.soma_relativa_lista.append(self.Objeto_Frequencia.soma_relativa_sinal(self.sinal_fourier))
-            # self.soma_list.append(self.Objeto_Frequencia.soma_sinal(np.real(self.sinal_fourier)))
+            self.soma_list.append(self.Objeto_Frequencia.soma_sinal(np.real(self.sinal_fourier)))
 
         self.soma_relativa = np.sum(self.soma_relativa_lista)
-        # self.som = np.mean(self.soma_list)
+        self.som = np.sum(self.soma_list)
 
     def Get(self,no_ordens=1):
         freq_aquisicao = models.freq_aquisicao
@@ -77,8 +77,8 @@ class ExtrairIndicadores:
                 self.ExtrairOrdens(sinal,freq_aquisicao,index,no_ordens)
 
                 data_json[f'soma_relativa_{local}'] = np.abs(self.soma_relativa)
+                data_json[f'soma_{local}'] = np.abs(self.som)
 
-            # data_json[f'soma_{local}'] = np.abs(self.som)
             data_json['sensor'] = self.sensor
             data_json['defeito'] = self.defeito
 

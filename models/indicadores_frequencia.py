@@ -101,8 +101,8 @@ class DominioFrequencia():
 
         return self.soma_relativa
 
-    def soma_sinal(self):
-        self.run_fft(self.frequencia_de_corte)
-        soma = np.sum(np.abs(self.fft_frequencia))
-        return np.sum(soma)
+    def soma_sinal(self,sinal_fourier):
+        # self.run_fft(self.frequencia_de_corte)
+        # soma = np.sum(np.abs(self.fft_frequencia))
+        return np.sum(sinal_fourier)
         
