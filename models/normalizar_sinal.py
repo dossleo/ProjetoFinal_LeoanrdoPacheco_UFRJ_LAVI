@@ -103,6 +103,10 @@ class NormalizarSinal():
         df = pd.concat(lista_dataframes,axis=1,ignore_index=False)
         df = pd.DataFrame(df.reset_index(drop=False))
 
+        coluna = df.columns
+
+        df = df[df.columns[len(df.columns)-len(models.colunas):len(df.columns)]]
+
         return df
 
     def save_as_csv(self):

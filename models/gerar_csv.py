@@ -7,7 +7,7 @@ import pandas as pd
 from rich import pretty, print
 
 import models
-from models import extrair_indicadores, get_rpm, normalizar_sinal
+from models import extrair_indicadores, get_rpm, normalizar_sinal, get_raw_data
 
 pretty.install()
 
@@ -164,7 +164,7 @@ class GerarCSV(GeneralFuncions):
             pasta_completa = f'database/dados_tratados/ordens_{ordem}'
             arquivo_completo = f'{models.nome_padrao_de_arquivo}_geral.csv'
 
-            df_completo = GeneralFuncions.ler_dataframe(pasta_completa,arquivo_completo)
+            df_completo = get_raw_data.GetData(pasta_completa,arquivo_completo).GetDataframe()
 
             normalizar_sinal.NormalizarSinal(df_completo,ordem).save_as_csv()
 
