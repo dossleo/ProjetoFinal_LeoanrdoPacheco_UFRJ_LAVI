@@ -1,19 +1,15 @@
-import models
-
-from models import (
-                    extrair_indicadores,
-                    listar_rpms,
-                    normalizar_sinal,
-                    get_raw_data,
-                    get_rpm
-                    )
+import datetime
+import os
+import time
 
 import numpy as np
 import pandas as pd
-import os
+from rich import pretty, print
 
-import time
-import datetime
+import models
+from models import extrair_indicadores, get_rpm
+
+pretty.install()
 
 class GeneralFuncions():
 
