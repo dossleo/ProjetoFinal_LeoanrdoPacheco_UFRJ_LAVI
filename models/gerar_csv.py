@@ -48,17 +48,6 @@ class GeneralFuncions():
             print("Tempo decorrido: {:02}:{:02}:{:02}".format(int(elapsed_time // 3600), int(elapsed_time % 3600 // 60), int(elapsed_time % 60)))
             print("Tempo Estimado até o Fim: {:02}:{:02}:{:02}".format(int(tempo_estimado // 3600), int(tempo_estimado % 3600 // 60), int(tempo_estimado % 60)))
     
-    def define_pastas_a_percorrer(self,ordem,pastas):
-        arquivos_totais = int(len(models.PATH))
-        arquivos_existentes = int(len(os.listdir(f'{models.path_dados_tratados}/ordens_{ordem}')))
-
-        if arquivos_existentes < arquivos_totais+2:
-            pastas = pastas[arquivos_existentes-2,arquivos_totais]
-            return pastas
-        
-        
-        return list(pastas)
-    
 
 
 class GerarCSV(GeneralFuncions):
@@ -103,10 +92,10 @@ class GerarCSV(GeneralFuncions):
         return rpm_medio
 
     def salvar_dados(self, dados:dict, ordem:int,pasta:str):
-        defeito = self.PASTAS[pasta]
+        # defeito = self.PASTAS[pasta]
         local = f'{models.path_dados_tratados}/ordens_{ordem}'
         dataframe = pd.json_normalize(dados)
-        dataframe.to_csv(f'{local}/{models.nome_padrao_de_arquivo}_{defeito}.csv')
+        dataframe.to_csv(f'{local}/{models.nome_padrao_de_arquivo}_concatenado.csv')
     
     def ConcatenaCSV(self,ordem):
         # Lista dos nomes dos arquivos CSV
@@ -130,37 +119,44 @@ class GerarCSV(GeneralFuncions):
         ordens = self.gerar_lista_ordem()
         for ordem in ordens:
             lista_dados = []
-            PASTAS = list(self.PASTAS)
-            # PASTAS = GeneralFuncions().define_pastas_a_percorrer(ordem=ordem,pastas=PASTAS)
             cont = 0
-            for pasta in PASTAS:
+            for pasta in self.PASTAS:
                 defeito = self.PASTAS.get(pasta)
                 arquivos = self.listar_arquivos(pasta)
-                for arquivo in arquivos:
-                    dataframe = self.ler_dataframe(pasta,arquivo)
-                    rpm = self.calcular_rpm(dataframe)
-                    for acelerometro in self.SENSORES:
-                        col_acelerometro = self.SENSORES.get(acelerometro)
-                        array_sensor = self.extrair_coluna(dataframe, col_acelerometro)
-                        freq_referencia = self.calcular_freq_ref(acelerometro, rpm)
-    
-                        dados = extrair_indicadores.ExtrairIndicadores(
-                            sinal=array_sensor,
-                            rpm=rpm,
-                            defeito=defeito,
-                            freq_referencia=freq_referencia,
-                            sensor = acelerometro
-                        ).Get(ordem)
+  
+                defeito = self.PASTAS[pasta]
+                local = f'{models.path_dados_tratados}/ordens_{ordem}'
+                local = f'{local}/{models.nome_padrao_de_arquivo}_{defeito}.csv'
 
-                        for data in dados:
-                            lista_dados.append(data)
+                if os.path.exists(local):
+                    print(f'O arquivo {local} existe.')
+                else:
+                   
+                    for arquivo in arquivos:
+                        dataframe = self.ler_dataframe(pasta,arquivo)
+                        rpm = self.calcular_rpm(dataframe)
+                        for acelerometro in self.SENSORES:
+                            col_acelerometro = self.SENSORES.get(acelerometro)
+                            array_sensor = self.extrair_coluna(dataframe, col_acelerometro)
+                            freq_referencia = self.calcular_freq_ref(acelerometro, rpm)
+        
+                            dados = extrair_indicadores.ExtrairIndicadores(
+                                sinal=array_sensor,
+                                rpm=rpm,
+                                defeito=defeito,
+                                freq_referencia=freq_referencia,
+                                sensor = acelerometro
+                            ).Get(ordem)
+
+                            lista_dados = lista_dados + dados
                 cont+=1
                 ciclo_atual+=1
                 self.tempo_decorrido(start=start, ciclo_atual=ciclo_atual, ciclos_totais = ciclos_totais,cont=cont, ordem=ordem)
 
-                self.salvar_dados(lista_dados, ordem,pasta)
-                lista_dados = []
-            
+            self.salvar_dados(lista_dados, ordem,pasta)
+            lista_dados = []
+
+
             # Concatenar Dados
             self.ConcatenaCSV(ordem=ordem)
 
