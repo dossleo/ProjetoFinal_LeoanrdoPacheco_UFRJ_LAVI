@@ -96,7 +96,7 @@ class GerarCSV(GeneralFuncions):
         local = f'{models.path_dados_tratados}/ordens_{ordem}'
         dataframe = pd.json_normalize(dados)
         dataframe = dataframe[dataframe.columns[len(dataframe.columns)-len(models.colunas):len(dataframe.columns)]]
-        dataframe.to_csv(f'{local}/{models.nome_padrao_de_arquivo}_geral.csv')
+        dataframe.to_csv(f'{local}/{models.nome_padrao_de_arquivo}_concatenado.csv')
     
     def ConcatenaCSV(self,ordem):
         # Lista dos nomes dos arquivos CSV
@@ -110,7 +110,7 @@ class GerarCSV(GeneralFuncions):
         result = pd.concat(dfs)
 
         # Salva o resultado em um arquivo CSV único
-        result.to_csv(f'{pasta}/{models.nome_padrao_de_arquivo}_geral.csv')
+        result.to_csv(f'{pasta}/{models.nome_padrao_de_arquivo}_concatenado.csv')
 
     def run(self):
         ciclos_totais = self.calcula_ciclos_totais(self.ordem_inicial,self.ordem_final)
@@ -162,7 +162,7 @@ class GerarCSV(GeneralFuncions):
 
             # Normalizar Dados
             pasta_completa = f'database/dados_tratados/ordens_{ordem}'
-            arquivo_completo = f'{models.nome_padrao_de_arquivo}_geral.csv'
+            arquivo_completo = f'{models.nome_padrao_de_arquivo}_concatenado.csv'
 
             df_completo = get_raw_data.GetData(pasta_completa,arquivo_completo).GetDataframe()
 
