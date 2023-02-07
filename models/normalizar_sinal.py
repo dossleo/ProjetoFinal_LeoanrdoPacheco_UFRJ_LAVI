@@ -41,35 +41,37 @@ class NormalizarSinal():
         self.ymax_freq_soma_relativa = np.max(np.array(self.df_freq_soma_relativa[self.COLUNAS_FREQ_SOMA_RELATIVA[0:-1]]))
         self.ymin_freq_soma_relativa = np.min(np.array(self.df_freq_soma_relativa[self.COLUNAS_FREQ_SOMA_RELATIVA[0:-1]]))
 
-        self.ymax_rotacao = np.max(np.array(self.dataframe['rotacao_hz']))
-        self.ymax_maximo = np.max(np.array(self.dataframe['maximo']))
-        self.ymax_rms = np.max(np.array(self.dataframe['rms']))
-        self.ymax_assimetria = np.max(np.array(self.dataframe['assimetria']))
-        self.ymax_curtose = np.max(np.array(self.dataframe['curtose']))
-        self.ymax_fator_crista = np.max(np.array(self.dataframe['fator_crista']))
+        self.ymax_rotacao =         np.max(np.array(self.dataframe['rotacao_hz']))
+        self.ymax_maximo =          np.max(np.array(self.dataframe['maximo']))
+        self.ymax_rms =             np.max(np.array(self.dataframe['rms']))
+        self.ymax_assimetria =      np.max(np.array(self.dataframe['assimetria']))
+        self.ymax_curtose =         np.max(np.array(self.dataframe['curtose']))
+        self.ymax_fator_crista =    np.max(np.array(self.dataframe['fator_crista']))
 
-        self.ymin_rotacao = np.min(np.array(self.dataframe['rotacao_hz']))
-        self.ymin_maximo = np.min(np.array(self.dataframe['maximo']))
-        self.ymin_rms = np.min(np.array(self.dataframe['rms']))
-        self.ymin_assimetria = np.min(np.array(self.dataframe['assimetria']))
-        self.ymin_curtose = np.min(np.array(self.dataframe['curtose']))
-        self.ymin_fator_crista = np.min(np.array(self.dataframe['fator_crista']))
+        self.ymin_rotacao =         np.min(np.array(self.dataframe['rotacao_hz']))
+        self.ymin_maximo =          np.min(np.array(self.dataframe['maximo']))
+        self.ymin_rms =             np.min(np.array(self.dataframe['rms']))
+        self.ymin_assimetria =      np.min(np.array(self.dataframe['assimetria']))
+        self.ymin_curtose =         np.min(np.array(self.dataframe['curtose']))
+        self.ymin_fator_crista =    np.min(np.array(self.dataframe['fator_crista']))
 
         self.xmax = 1
         self.xmin = 0
 
+        self.x = (self.xmax - self.xmin) + self.xmin
+
     def normalizar_freq(self):
-        self.df_freq_soma_normalizado = ( (self.dataframe[self.COLUNAS_FREQ_SOMA[0:-1]] - self.ymin_freq_soma) / (self.ymax_freq_soma - self.ymin_freq_soma) ) * (self.xmax - self.xmin) + self.xmin
-        self.df_freq_soma_relativa_normalizado = ( (self.dataframe[self.COLUNAS_FREQ_SOMA_RELATIVA[0:-1]] - self.ymin_freq_soma_relativa) / (self.ymax_freq_soma_relativa - self.ymin_freq_soma_relativa) ) * (self.xmax - self.xmin) + self.xmin
+        self.df_freq_soma_normalizado =             ( (self.dataframe[self.COLUNAS_FREQ_SOMA[0:-1]]             - self.ymin_freq_soma)          / (self.ymax_freq_soma          - self.ymin_freq_soma           ) ) * self.x
+        self.df_freq_soma_relativa_normalizado =    ( (self.dataframe[self.COLUNAS_FREQ_SOMA_RELATIVA[0:-1]]    - self.ymin_freq_soma_relativa) / (self.ymax_freq_soma_relativa - self.ymin_freq_soma_relativa  ) ) * self.x
 
     def normalizar_tempo(self):
 
-        self.df_rotacao_normalizado = ( (self.dataframe['rotacao_hz'] - self.ymin_rotacao) / (self.ymax_rotacao - self.ymin_rotacao) ) * (self.xmax - self.xmin) + self.xmin
-        self.df_maximo_normalizado = ( (self.dataframe['maximo'] - self.ymin_maximo) / (self.ymax_maximo - self.ymin_maximo) ) * (self.xmax - self.xmin) + self.xmin
-        self.df_rms_normalizado = ( (self.dataframe['rms'] - self.ymin_rms) / (self.ymax_rms - self.ymin_rms) ) * (self.xmax - self.xmin) + self.xmin
-        self.df_assimetria_normalizado = ( (self.dataframe['assimetria'] - self.ymin_assimetria) / (self.ymax_assimetria - self.ymin_assimetria) ) * (self.xmax - self.xmin) + self.xmin
-        self.df_curtose_normalizado = ( (self.dataframe['curtose'] - self.ymin_curtose) / (self.ymax_curtose - self.ymin_curtose) ) * (self.xmax - self.xmin) + self.xmin
-        self.df_fator_crista_normalizado = ( (self.dataframe['fator_crista'] - self.ymin_fator_crista) / (self.ymax_fator_crista - self.ymin_fator_crista) ) * (self.xmax - self.xmin) + self.xmin
+        self.df_rotacao_normalizado =       ( (self.dataframe['rotacao_hz']     - self.ymin_rotacao)        / (self.ymax_rotacao        - self.ymin_rotacao) )          * self.x
+        self.df_maximo_normalizado =        ( (self.dataframe['maximo']         - self.ymin_maximo)         / (self.ymax_maximo         - self.ymin_maximo) )           * self.x
+        self.df_rms_normalizado =           ( (self.dataframe['rms']            - self.ymin_rms)            / (self.ymax_rms            - self.ymin_rms) )              * self.x
+        self.df_assimetria_normalizado =    ( (self.dataframe['assimetria']     - self.ymin_assimetria)     / (self.ymax_assimetria     - self.ymin_assimetria) )       * self.x
+        self.df_curtose_normalizado =       ( (self.dataframe['curtose']        - self.ymin_curtose)        / (self.ymax_curtose        - self.ymin_curtose) )          * self.x
+        self.df_fator_crista_normalizado =  ( (self.dataframe['fator_crista']   - self.ymin_fator_crista)   / (self.ymax_fator_crista   - self.ymin_fator_crista) )     * self.x
 
     def normalizar_sensor(self):
 
@@ -79,7 +81,7 @@ class NormalizarSinal():
 
         self.ymin_sensor = np.min(np.array(self.dataframe['sensor']))
 
-        self.dataframe['sensor'] = ( (self.dataframe['sensor'] - self.ymin_sensor) / (self.ymax_sensor - self.ymin_sensor) ) * (self.xmax - self.xmin) + self.xmin
+        self.dataframe['sensor'] = ( (self.dataframe['sensor'] - self.ymin_sensor) / (self.ymax_sensor - self.ymin_sensor) ) * self.x
         
         self.df_sensor = self.dataframe['sensor']
 
