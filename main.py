@@ -1,4 +1,4 @@
-from models.gerar_csv import GerarCSV
+from models.tratar_dados_brutos import GerarCSV
 import os
 
 os.system("cls")
