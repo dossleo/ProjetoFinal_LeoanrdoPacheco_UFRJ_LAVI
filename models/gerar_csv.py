@@ -84,7 +84,8 @@ class GerarCSV(GeneralFuncions):
     def calcular_rpm(self, dataframe):
         sinal_rpm = self.extrair_coluna(dataframe, self.COLUNA_RPM)
         sinal_sensor = self.extrair_coluna(dataframe, self.COLUNA_CONFERE_RPM)
-        return get_rpm.GetRPM(sinal_rpm, sinal_sensor).get_rpm_medio('hz')
+        rpm_medio = get_rpm.GetRPM(sinal_rpm, sinal_sensor).get_rpm_medio('hz')
+        return rpm_medio
 
     def salvar_dados(self, dados:dict, ordem:int):
         pasta = f'{models.path_dados_tratados}/ordens_{ordem}'
@@ -107,11 +108,11 @@ class GerarCSV(GeneralFuncions):
                 for arquivo in arquivos:
                     dataframe = self.ler_dataframe(pasta,arquivo)
                     rpm = self.calcular_rpm(dataframe)
-
                     for acelerometro in self.SENSORES:
                         col_acelerometro = self.SENSORES.get(acelerometro)
                         array_sensor = self.extrair_coluna(dataframe, col_acelerometro)
                         freq_referencia = self.calcular_freq_ref(acelerometro, rpm)
+    
                         dados = extrair_indicadores.ExtrairIndicadores(
                             sinal=array_sensor,
                             rpm=rpm,

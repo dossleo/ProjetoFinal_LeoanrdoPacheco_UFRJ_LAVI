@@ -12,6 +12,7 @@ class DominioFrequencia():
         self.n_points_dado_bruto = len(self.sinal) # npoints
         self.rpm = rpm #rpm
         self.rotacao_hz = self.rpm/60
+
         self.freq_aquisicao = freq_aquisicao
 
         self.frequencia_de_corte = 1000
@@ -49,6 +50,9 @@ class DominioFrequencia():
             self.fft_frequencia = self.fft_frequencia[0:int(frequencia_de_corte)]
             self.fft_transform = self.fft_transform[0:int(frequencia_de_corte)]
 
+        self.fft_frequencia = np.real(self.fft_frequencia)
+        self.fft_transform = np.real(self.fft_transform)
+
     def plot_fft(self,freq_referencia = []):
         self.run_fft(2000)
 
@@ -67,17 +71,24 @@ class DominioFrequencia():
 
         plt.show()
 
-    def banda_frequencia(self,freq_referencia,largura = 14):
+    def banda_frequencia(self,freq_referencia,largura = 14,no_ordens=2):
 
-        self.run_fft()
+        self.run_fft() 
 
+        erro = 0.1
+        
+        ordens_frequencia = list()
+        ordens_fourier = list()
 
-        banda = np.logical_and(self.fft_frequencia >= (freq_referencia - largura/2), self.fft_frequencia <= (freq_referencia + largura/2))
+        for ordem in range(1,no_ordens+1):
+            larg = largura*(1+erro*no_ordens)
+            
+            banda = np.logical_and(self.fft_frequencia >= (freq_referencia*(ordem) - larg/2), self.fft_frequencia <= (freq_referencia*(ordem) + larg/2))
 
-        self.fourier_banda = self.fft_transform[banda]
-        self.frequencia_banda = self.fft_frequencia[banda]
+            ordens_fourier.append(self.fft_transform[banda])
+            ordens_frequencia.append(self.fft_frequencia[banda])
 
-        return self.fourier_banda, self.frequencia_banda
+        return ordens_fourier, ordens_frequencia
 
     def plot_banda(self,freq_referencia,largura):
 
@@ -93,16 +104,16 @@ class DominioFrequencia():
         plt.vlines(freq_referencia,0,1.1*np.max(self.fft_transform),'green','dashed')
         plt.show()
 
-    def soma_relativa_sinal(self,sinal_fourier):
-        self.run_fft(self.frequencia_de_corte)
+    def soma_relativa_sinal(self,lista_sinal_fourier_banda,sinal_fourier_completo):
+        soma_relativa = 0
+        for i in range(len(lista_sinal_fourier_banda)):
+            fourier_abs = np.sum(lista_sinal_fourier_banda[i])
+            soma_relativa += fourier_abs/np.sum(sinal_fourier_completo)
+        return soma_relativa
 
-        fourier_abs = np.sum(np.abs(sinal_fourier))
-        self.soma_relativa = fourier_abs/np.sum(np.abs(self.fft_frequencia))
-
-        return self.soma_relativa
-
-    def soma_sinal(self,sinal_fourier):
-        # self.run_fft(self.frequencia_de_corte)
-        # soma = np.sum(np.abs(self.fft_frequencia))
-        return np.sum(sinal_fourier)
+    def soma_sinal(self,lista_sinal_fourier_banda):
+        soma = 0
+        for i in range(len(lista_sinal_fourier_banda)):
+            soma += np.sum(lista_sinal_fourier_banda[i])
+        return soma
         

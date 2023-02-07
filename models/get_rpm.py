@@ -186,17 +186,14 @@ class GetRPM():
         # janela = len(self.rpm)//100
 
         self.rpm_medio = np.mean(self.rpm[janela_inferior:janela_superior])
-        
-
 
         sinal = self.sinal_sensor
         self.Objeto_Frequencia = indicadores_frequencia.DominioFrequencia(sinal,self.freq_aquisicao)
 
         self.fourier_banda, self.frequencia_banda = self.Objeto_Frequencia.banda_frequencia(self.rpm_medio,self.rpm_medio)
-        indice_rpm_correto = list(self.fourier_banda).index(np.max(self.fourier_banda),0,-1)
+        indice_rpm_correto = list(self.fourier_banda[0]).index(np.max(self.fourier_banda[0]),0,-1)
 
-        self.rpm_medio = np.abs(self.Objeto_Frequencia.frequencia_banda[indice_rpm_correto])
-
+        self.rpm_medio = np.abs(self.frequencia_banda[0][indice_rpm_correto])
 
         return self.rpm_medio
 

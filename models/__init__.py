@@ -177,12 +177,15 @@ colunas_tempo = ['rotacao_hz',
                  'fator_crista',
                  'defeito']
 
-colunas_freq = [
+colunas_freq_soma_relativa = [
                 'soma_relativa_ball_fault',
                 # 'soma_relativa_cage_fault',
                 'soma_relativa_outer_race',
                 # 'soma_relativa_inner_race',
                 'soma_relativa_rotacao_hz',
+                'defeito']
+
+colunas_freq_soma = [
                 'soma_ball_fault',
                 # 'soma_cage_fault',
                 'soma_outer_race',
@@ -193,8 +196,11 @@ colunas_freq = [
 coluna_sensor = ['sensor']
 
 colunas = colunas_tempo[0:-1]
-for nome in colunas_freq[0:-1]:
-        colunas.append(nome)
+for nome in colunas_freq_soma[0:-1]:
+    colunas.append(nome)
+
+for nome in colunas_freq_soma_relativa[0:-1]:
+    colunas.append(nome)
 
 colunas.append('sensor')
 colunas.append('defeito')
