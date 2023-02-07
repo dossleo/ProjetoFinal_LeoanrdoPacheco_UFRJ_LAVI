@@ -4,18 +4,12 @@ import numpy as np
 import pandas as pd
 
 class ExtrairIndicadores:
-    def __init__(self,pasta,arquivo,coluna,freq_referencia,rpm,defeito = 'normal',sensor = ''):
-        self.pasta = pasta
-        self.arquivo = arquivo
-        self.coluna = coluna
+    def __init__(self,sinal,freq_referencia,rpm,defeito = 'normal',sensor = ''):
+        self.sinal = sinal
         self.defeito = defeito
         self.sensor = sensor
         self.rpm_medio = rpm
-
-        self.sinal = get_raw_data.GetData(self.pasta,self.arquivo,self.coluna).Get()
-
-        self.freq_referencia = freq_referencia
-        self.freq_referencia.append(self.rpm_medio)
+        self.freq_referencia = np.append(freq_referencia, self.rpm_medio)
 
     def CriarObjeto(self,sinal,freq_aquisicao):
 

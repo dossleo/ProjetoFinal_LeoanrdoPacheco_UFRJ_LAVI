@@ -12,7 +12,7 @@ nome_padrao_de_arquivo = 'dados_extraidos'
 
 PATH = {
         # "Nome da pasta" : "classe do defeito"
-        f'{path_dados_brutos}/normal':'normal',
+        # f'{path_dados_brutos}/normal':'normal',
 
         f'{path_dados_brutos}/horizontal-misalignment/0.5mm':'desalinhamento_horizontal_baixo',
         f'{path_dados_brutos}/horizontal-misalignment/1.0mm':'desalinhamento_horizontal_médio',

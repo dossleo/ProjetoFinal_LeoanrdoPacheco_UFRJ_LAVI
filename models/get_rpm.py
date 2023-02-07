@@ -23,14 +23,9 @@ class GetRPM():
     None
     """
 
-    def __init__(self,pasta,arquivo):
-        self.pasta = pasta
-        self.arquivo = arquivo
-
-        self.sinal_rpm = get_raw_data.GetData(pasta=self.pasta,arquivo=self.arquivo,coluna=0)
-        self.sinal_rpm = self.sinal_rpm.Get()
-
-        self.data = np.array(self.sinal_rpm)
+    def __init__(self,sinal_rpm, sinal_sensor):
+        self.sinal_sensor = sinal_sensor
+        self.data = np.array(sinal_rpm)
 
         self.data = np.abs(self.data-np.mean(self.data))
         self.freq_aquisicao = models.freq_aquisicao
@@ -194,7 +189,7 @@ class GetRPM():
         
 
 
-        sinal = get_raw_data.GetData(pasta=self.pasta,arquivo=self.arquivo,coluna=2).Get()
+        sinal = self.sinal_sensor
         self.Objeto_Frequencia = indicadores_frequencia.DominioFrequencia(sinal,self.freq_aquisicao)
 
         self.fourier_banda, self.frequencia_banda = self.Objeto_Frequencia.banda_frequencia(self.rpm_medio,self.rpm_medio)

@@ -1,10 +1,9 @@
-import models
-from models import gerar_csv
-from os import listdir
+from models.gerar_csv_new import GerarCSV
+import os
 
+os.system("cls")
 
 numero_de_ordens = 6
 
-gerar = gerar_csv.RunCSV(numero_de_ordens)
-gerar.Run()
+GerarCSV(2,3).run()
 
