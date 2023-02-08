@@ -7,7 +7,7 @@ class NormalizarSinal():
     COLUNAS_FREQ_SOMA = models.colunas_freq_soma
     COLUNAS_FREQ_SOMA_RELATIVA = models.colunas_freq_soma_relativa
     
-    def __init__(self,dataframe,ordem) -> None:
+    def __init__(self,dataframe,ordem,metodo = 1) -> None:
         self.dataframe = pd.DataFrame(dataframe)
 
         self.colunas = models.colunas
@@ -29,11 +29,13 @@ class NormalizarSinal():
         self.df_sensor = self.dataframe[models.coluna_sensor]
 
         self.df_defeito = self.dataframe[defeito]
+        if metodo == 1:
+            self.calcular_max_min_metodo1()
+        else:
+            self.calcular_max_min_metodo2()
 
-        self.calcular_max_min_sem_defeito()
 
-
-    def calcular_max_min_sem_defeito(self):
+    def calcular_max_min_metodo1(self):
 
         self.ymax_freq_soma = np.max(np.array(self.df_freq_soma[self.COLUNAS_FREQ_SOMA[0:-1]]))
         self.ymin_freq_soma = np.min(np.array(self.df_freq_soma[self.COLUNAS_FREQ_SOMA[0:-1]]))
@@ -60,10 +62,38 @@ class NormalizarSinal():
 
         self.x = (self.xmax - self.xmin) + self.xmin
 
+    def calcular_max_min_metodo2(self):
+        # Modificar o ymin e ymax relativo apenas para os dados do rolamento bom
+        
+        self.ymax_freq_soma = np.max(np.array(self.df_freq_soma_sem_defeito[self.COLUNAS_FREQ_SOMA[0:-1]]))
+        self.ymin_freq_soma = np.min(np.array(self.df_freq_soma_sem_defeito[self.COLUNAS_FREQ_SOMA[0:-1]]))
+
+        self.ymax_freq_soma_relativa = np.max(np.array(self.df_freq_soma_relativa_sem_defeito[self.COLUNAS_FREQ_SOMA_RELATIVA[0:-1]]))
+        self.ymin_freq_soma_relativa = np.min(np.array(self.df_freq_soma_relativa_sem_defeito[self.COLUNAS_FREQ_SOMA_RELATIVA[0:-1]]))
+
+        self.ymax_rotacao =         np.max(np.array(self.df_sem_defeito['rotacao_hz']))
+        self.ymax_maximo =          np.max(np.array(self.df_sem_defeito['maximo']))
+        self.ymax_rms =             np.max(np.array(self.df_sem_defeito['rms']))
+        self.ymax_assimetria =      np.max(np.array(self.df_sem_defeito['assimetria']))
+        self.ymax_curtose =         np.max(np.array(self.df_sem_defeito['curtose']))
+        self.ymax_fator_crista =    np.max(np.array(self.df_sem_defeito['fator_crista']))
+
+        self.ymin_rotacao =         np.min(np.array(self.df_sem_defeito['rotacao_hz']))
+        self.ymin_maximo =          np.min(np.array(self.df_sem_defeito['maximo']))
+        self.ymin_rms =             np.min(np.array(self.df_sem_defeito['rms']))
+        self.ymin_assimetria =      np.min(np.array(self.df_sem_defeito['assimetria']))
+        self.ymin_curtose =         np.min(np.array(self.df_sem_defeito['curtose']))
+        self.ymin_fator_crista =    np.min(np.array(self.df_sem_defeito['fator_crista']))
+
+        self.xmax = 1
+        self.xmin = 0
+
+        self.x = (self.xmax - self.xmin) + self.xmin
+
     def normalizar_freq(self):
         self.df_freq_soma_normalizado =             ( (self.dataframe[self.COLUNAS_FREQ_SOMA[0:-1]]             - self.ymin_freq_soma)          / (self.ymax_freq_soma          - self.ymin_freq_soma           ) ) * self.x
         self.df_freq_soma_relativa_normalizado =    ( (self.dataframe[self.COLUNAS_FREQ_SOMA_RELATIVA[0:-1]]    - self.ymin_freq_soma_relativa) / (self.ymax_freq_soma_relativa - self.ymin_freq_soma_relativa  ) ) * self.x
-
+    
     def normalizar_tempo(self):
 
         self.df_rotacao_normalizado =       ( (self.dataframe['rotacao_hz']     - self.ymin_rotacao)        / (self.ymax_rotacao        - self.ymin_rotacao) )          * self.x
@@ -104,8 +134,6 @@ class NormalizarSinal():
 
         df = pd.concat(lista_dataframes,axis=1,ignore_index=False)
         df = pd.DataFrame(df.reset_index(drop=False))
-
-        coluna = df.columns
 
         df = df[df.columns[len(df.columns)-len(models.colunas):len(df.columns)]]
 

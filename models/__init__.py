@@ -204,3 +204,13 @@ for nome in colunas_freq_soma_relativa[0:-1]:
 
 colunas.append('sensor')
 colunas.append('defeito')
+
+
+# -----------------------------------------------
+# --------- Machine Learning Sets ---------------
+# -----------------------------------------------
+
+seed = 30
+test_size = 0.30
+x_columns = colunas[0:-1]
+y_column = colunas[-1]
