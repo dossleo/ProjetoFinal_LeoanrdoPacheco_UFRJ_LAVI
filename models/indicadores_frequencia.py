@@ -90,7 +90,7 @@ class DominioFrequencia():
 
         return ordens_fourier, ordens_frequencia
 
-    def plot_banda(self,freq_referencia,largura):
+    def plot_banda(self,freq_referencia,largura,title = ''):
 
         fourier_banda, frequencia_banda = self.banda_frequencia(freq_referencia,largura)
 
@@ -100,7 +100,7 @@ class DominioFrequencia():
         plt.xlim(freq_referencia-largura,freq_referencia+largura)
         plt.xlabel("Frequência [Hz]")
         plt.ylabel("Amplitude")
-        plt.title("Banda de Frequência")
+        plt.title(f"Banda de Frequência {title}")
         plt.vlines(freq_referencia,0,1.1*np.max(self.fft_transform),'green','dashed')
         plt.show()
 
