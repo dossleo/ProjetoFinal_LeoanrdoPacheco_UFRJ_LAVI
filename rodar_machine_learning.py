@@ -7,16 +7,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import models
-from models import normalizar_sinal, ml_functions
+from models import data_vis, ml_functions
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC, NuSVC
 from sklearn.tree import DecisionTreeClassifier
-
-from models.data_tools import DataGenerator
-from models.data_vis import (PostProcessing, RawVisualization)
 
 # Carrega os dados, ignorando a primeira linha
 dados_normalizados = 'Dados_Normalizados.csv'
@@ -34,33 +31,31 @@ for ordem in range(11)[1:11]:
     # Executa a predição
     classifier = ml_functions.Classifier(data = df, classifier=RandomForestClassifier, random_state = seed,ordem=ordem)
     classifier.run()
-    score[f"{classifier.classifier.__class__.__name__}"] = round(classifier.score * 100,2)
-    PostProcessing(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix()
+    score[f'{classifier.classifier.__class__.__name__}'] = round(classifier.score * 100,2)
+    data_vis.MatrizConfusao(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix()
 
     classifier = ml_functions.Classifier(data = df, classifier=KNeighborsClassifier,ordem=ordem)
     classifier.run()
-    score[f"{classifier.classifier.__class__.__name__}"] = round(classifier.score * 100,2)
-    PostProcessing(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix()
+    score[f'{classifier.classifier.__class__.__name__}'] = round(classifier.score * 100,2)
+    data_vis.MatrizConfusao(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix()
 
-    classifier = ml_functions.Classifier(data = df, classifier=SVC, random_state = seed,ordem=ordem)
+    # classifier = ml_functions.Classifier(data = df, classifier=SVC, random_state = seed,ordem=ordem)
+    # classifier.run()
+    # score[f'{classifier.classifier.__class__.__name__}'] = round(classifier.score * 100,2)
+    # data_vis.MatrizConfusao(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix()
+
+    # classifier = ml_functions.Classifier(data = df, classifier=NuSVC, random_state = seed,ordem=ordem)
+    # classifier.run()
+    # score[f'{classifier.classifier.__class__.__name__}'] = round(classifier.score * 100,2)
+    # data_vis.MatrizConfusao(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix()
+
+    classifier = ml_functions.Classifier(data = df, classifier=DecisionTreeClassifier, criterion = 'entropy',ordem=ordem)
     classifier.run()
-    score[f"{classifier.classifier.__class__.__name__}"] = round(classifier.score * 100,2)
-    PostProcessing(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix()
+    score[f'{classifier.classifier.__class__.__name__}'] = round(classifier.score * 100,2)
+    data_vis.MatrizConfusao(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix()
 
-    classifier = ml_functions.Classifier(data = df, classifier=GaussianNB,ordem=ordem)
-    classifier.run()
-    score[f"{classifier.classifier.__class__.__name__}"] = round(classifier.score * 100,2)
-    PostProcessing(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix()
-
-    classifier = ml_functions.Classifier(data = df, classifier=NuSVC, random_state = seed,ordem=ordem)
-    classifier.run()
-    score[f"{classifier.classifier.__class__.__name__}"] = round(classifier.score * 100,2)
-    PostProcessing(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix()
-
-    classifier = ml_functions.Classifier(data = df, classifier=DecisionTreeClassifier, criterion = "entropy",ordem=ordem)
-    classifier.run()
-    score[f"{classifier.classifier.__class__.__name__}, "] = round(classifier.score * 100,2)
-    post_processing = PostProcessing(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem)
-    post_processing.plot_confusion_matrix()
-
-    PostProcessing.plot_score(score)
+    data_vis.ComparacaoDeAcuracias().plot_score(ordem,score)
+    score = 0
+    score = {}
+    print(f'Ordem {ordem} finalizada!\n\n')
+    # breakpoint()

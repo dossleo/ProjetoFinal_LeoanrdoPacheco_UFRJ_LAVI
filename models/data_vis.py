@@ -43,7 +43,7 @@ class RawVisualization():
         plt.savefig(F"{create_images_dir(self.ordem)}/raw_data.png")
         plt.show()
 
-class PostProcessing():
+class MatrizConfusao():
 
     def __init__(self, classifier, method_name,ordem) -> None:
         self.classifier = classifier
@@ -72,14 +72,16 @@ class PostProcessing():
 
         if plotar:
             plt.show()
+        plt.close()
 
-    @classmethod
-    def plot_score(self, score,plotar:bool=False):
+class ComparacaoDeAcuracias:
+    def plot_score(self, ordem, score,plotar:bool=False):
         ax = sns.barplot(x=arange(len(score)), y=list(score.values()), hue=list(score.keys()), dodge=False)
         for i in ax.containers:
             ax.bar_label(i,)
         plt.title("Comapração entre a acurácia dos algoritmos")
         plt.legend(loc='lower right', fontsize='x-small')
-        plt.savefig(F"{create_images_dir(self.ordem)}/score_comparations.png",dpi=600)
+        plt.savefig(F"{create_images_dir(ordem)}/Comparacao_Scores_Ordem_{ordem}.png",dpi=600)
         if plotar:
             plt.show()
+        plt.close()
