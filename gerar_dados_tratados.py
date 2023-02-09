@@ -3,8 +3,8 @@ import os
 
 os.system("cls")
 
-ordem_inicial = 6
-ordem_final = 10
+ordem_inicial = 2
+ordem_final = 3
 
 GerarCSV(ordem_inicial,ordem_final).run()
 

@@ -5,13 +5,12 @@ import pandas as pd
 
 class ExtrairIndicadores:
 
-    FREQ_AQUISICAO = models.freq_aquisicao
-
-    def __init__(self,sinal,freq_referencia,rpm,defeito = 'normal',sensor = ''):
+    def __init__(self,sinal,freq_referencia,rpm,defeito = 'normal',sensor = '',freq_aquisicao = models.freq_aquisicao):
         self.sinal = sinal
         self.defeito = defeito
         self.sensor = sensor
         self.rpm_medio = rpm
+        self.FREQ_AQUISICAO = freq_aquisicao
         self.freq_referencia = np.append(freq_referencia, self.rpm_medio)
 
     def CriarObjeto(self,sinal):

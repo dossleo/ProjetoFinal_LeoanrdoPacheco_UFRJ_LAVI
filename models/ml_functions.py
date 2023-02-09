@@ -1,19 +1,15 @@
 import models
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-
 import sklearn.ensemble
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
 class MethodPrepare:
-
 
     def __init__(self, data:pd.DataFrame) -> None:
         self.data = data
         self.x_data = self.get_x_data()
         self.y_data = self.get_y_data()
+        self.x_columns = models.x_columns
 
         self.test_size = models.test_size
         self.seed = models.seed

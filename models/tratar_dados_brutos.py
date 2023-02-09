@@ -166,6 +166,6 @@ class GerarCSV(GeneralFuncions):
 
             df_completo = get_raw_data.GetData(pasta_completa,arquivo_completo).GetDataframe()
 
-            normalizar_sinal.NormalizarSinal(df_completo,ordem).save_as_csv()
+            normalizar_sinal.NormalizarSinal(df_completo,ordem,metodo=2).save_as_csv()
             lista_dados = []
 
