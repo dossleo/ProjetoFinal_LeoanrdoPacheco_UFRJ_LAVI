@@ -53,21 +53,18 @@ class DominioFrequencia():
         self.fft_frequencia = np.real(self.fft_frequencia)
         self.fft_transform = np.real(self.fft_transform)
 
-    def plot_fft(self,freq_referencia = []):
+    def plot_fft(self,freq_referencia=0,title=''):
         self.run_fft(2000)
 
         plt.plot(np.abs(self.fft_frequencia),np.abs(self.fft_transform))
-        if len(freq_referencia)>0:
-            # for index in freq_referencia:
-            #     plt.vlines(index,0,np.max(self.fft_transform),'red','dashed')
-        
+        if freq_referencia !=0:
             for i in range(10):
-                plt.vlines(freq_referencia[0]*(i+1),0,np.max(self.fft_transform),'red','dashed')
-
-        plt.vlines(self.rpm,0,1.1*np.max(self.fft_transform),'green','dashed')
+                plt.vlines(freq_referencia*(i+1),0,np.max(self.fft_transform),'red',linestyles='dotted')
+        
+        plt.vlines(self.rpm,0,1.1*np.max(self.fft_transform),'green',linestyles='dotted')
         plt.xlabel("Frequência [Hz]")
         plt.ylabel("Amplitude")
-        plt.title("Espectrograma")
+        plt.title(f"Espectrograma {title}")
 
         plt.show()
 
@@ -92,16 +89,16 @@ class DominioFrequencia():
 
     def plot_banda(self,freq_referencia,largura,title = ''):
 
-        fourier_banda, frequencia_banda = self.banda_frequencia(freq_referencia,largura)
+        lista_fourier_banda, lista_frequencia_banda = self.banda_frequencia(freq_referencia,largura)
 
         plt.figure()
-        plt.plot(frequencia_banda, np.abs(fourier_banda))
+        plt.plot(lista_frequencia_banda[0], lista_fourier_banda[0])
         plt.ylim((0,1.1*np.max(self.fft_transform)))
         plt.xlim(freq_referencia-largura,freq_referencia+largura)
         plt.xlabel("Frequência [Hz]")
         plt.ylabel("Amplitude")
         plt.title(f"Banda de Frequência {title}")
-        plt.vlines(freq_referencia,0,1.1*np.max(self.fft_transform),'green','dashed')
+        plt.vlines(freq_referencia,0,1.1*np.max(self.fft_transform),'green',linestyles='dotted')
         plt.show()
 
     def soma_relativa_sinal(self,lista_sinal_fourier_banda,sinal_fourier_completo):

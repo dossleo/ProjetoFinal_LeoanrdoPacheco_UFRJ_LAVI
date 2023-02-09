@@ -212,12 +212,16 @@ colunas.append('sensor')
 colunas.append('defeito')
 
 
+
+x_columns = colunas[0:-1]
+y_column = colunas[-1]
+
 # -----------------------------------------------
 # --------- Machine Learning Sets ---------------
 # -----------------------------------------------
 
 seed = 30
-test_size = 0.30
+test_size = 0.50
 x_columns = colunas[0:-1]
 y_column = colunas[-1]
 
@@ -248,7 +252,5 @@ overlap = 90
 # General Machine Learning Parameters
 seed = 30
 test_size = 0.25
-x_columns = ['maximum', 'minimum', 'rms', 'skewness', 'kurtosis', 'form_factor', 'crest_factor'] #, 'mean', 'standard_deviation'
-y_column = 'fault'
 
 os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin/'
