@@ -11,8 +11,6 @@ from models import extrair_indicadores, get_rpm, normalizar_sinal, get_raw_data
 
 pretty.install()
 
-
-
 class GeneralFuncions():
 
     PASTAS = models.PATH

@@ -12,12 +12,6 @@ from sklearn.tree import export_graphviz
 from models import defeitos, frequency_rate_dict, x_columns
 import models
 
-# font = {'family' : 'normal',
-#     'weight' : 'bold',
-#     'size'   : 5}
-# plt.rc('font', **font)
-
-
 def create_images_dir(ordem):
     dir_path = os.path.join(f'{models.path_dados_tratados}/ordens_{ordem}')
     if not os.path.exists(dir_path):
@@ -50,7 +44,7 @@ class MatrizConfusao():
         self.title = method_name
         self.ordem = ordem
 
-    def plot_confusion_matrix(self,plotar:bool=False):
+    def plot_confusion_matrix(self,plotar:bool=False,salvar=True):
 
         disp = ConfusionMatrixDisplay.from_estimator(
             self.classifier.fit_classifier,
@@ -60,28 +54,57 @@ class MatrizConfusao():
             cmap=plt.cm.Blues,
             normalize='true',xticks_rotation='horizontal',
             values_format='.1%',
-            text_kw={'size':5}
+            text_kw={'size':6}
         )
+        fig = disp.ax_.get_figure()
+        fig.set_figwidth(7)
+        fig.set_figheight(7)
+        
         disp.ax_.set_title(f"Matriz de Confusão - {self.title}")
-        disp.ax_.set_xlabel('Categoria Prevista', fontsize=14)
-        disp.ax_.set_ylabel('Categoria Real', fontsize=14)
+        disp.ax_.set_xlabel('Categoria Prevista', fontsize=13)
+        disp.ax_.set_ylabel('Categoria Real', fontsize=13)
         # breakpoint()
         disp.ax_.tick_params(labelsize=5)
         
-        plt.savefig(F"{create_images_dir(self.ordem)}/{self.title}.png",dpi=600)
+        if salvar:
+            plt.savefig(F"{create_images_dir(self.ordem)}/{self.title}.png",dpi=600)
 
         if plotar:
             plt.show()
         plt.close()
 
 class ComparacaoDeAcuracias:
-    def plot_score(self, ordem, score,plotar:bool=False):
+    def plot_score(self, ordem, score,plotar:bool=False,salvar=True):
+        
         ax = sns.barplot(x=arange(len(score)), y=list(score.values()), hue=list(score.keys()), dodge=False)
         for i in ax.containers:
             ax.bar_label(i,)
+        fig = ax.get_figure()
+        fig.set_figwidth(7)
+        fig.set_figheight(7)
         plt.title("Comapração entre a acurácia dos algoritmos")
         plt.legend(loc='lower right', fontsize='x-small')
-        plt.savefig(F"{create_images_dir(ordem)}/Comparacao_Scores_Ordem_{ordem}.png",dpi=600)
+
+        if salvar:
+            plt.savefig(F"{create_images_dir(ordem)}/Comparacao_Scores_Ordem_{ordem}.png",dpi=600)
         if plotar:
             plt.show()
         plt.close()
+
+    def plot_ordens(self, title:str, score,plotar:bool=False,salvar=True):
+        
+        ax = sns.barplot(x=arange(len(score)), y=list(score.values()), hue=list(score.keys()), dodge=False)
+        for i in ax.containers:
+            ax.bar_label(i,)
+        fig = ax.get_figure()
+        fig.set_figwidth(7)
+        fig.set_figheight(7)
+        plt.title(title)
+        plt.legend(loc='lower right', fontsize='x-small')
+
+        if salvar:
+            plt.savefig(F"{models.path_dados_tratados}/Comparacao_Scores_{title}.png",dpi=600)
+        if plotar:
+            plt.show()
+        plt.close()
+
