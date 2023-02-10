@@ -41,7 +41,7 @@ class GeneralFuncions():
         return start
     
     # Pegar o tempo decorrido até o momento a partir do start
-    def tempo_decorrido(self, start, ciclo_atual, ciclos_totais,ordem,cont):
+    def tempo_decorrido(self, start, ciclo_atual, ciclos_totais,harmonico,cont):
             elapsed_time = time.time() - start
 
             # Evita divisão por zero
@@ -50,7 +50,7 @@ class GeneralFuncions():
             else:
                 tempo_estimado = 0
             
-            print(f'\nOrdem: {ordem}\nPastas Percorridas: {cont}/{len(models.PATH)}\nAndamento Total: {np.round(100*ciclo_atual/ciclos_totais,2)}%')
+            print(f'\Harmônico: {harmonico}\nPastas Percorridas: {cont}/{len(models.PATH)}\nAndamento Total: {np.round(100*ciclo_atual/ciclos_totais,2)}%')
             print("Tempo decorrido: {:02}:{:02}:{:02}".format(int(elapsed_time // 3600), int(elapsed_time % 3600 // 60), int(elapsed_time % 60)))
             print("Tempo Estimado até o Fim: {:02}:{:02}:{:02}".format(int(tempo_estimado // 3600), int(tempo_estimado % 3600 // 60), int(tempo_estimado % 60)))
     
@@ -64,20 +64,20 @@ class GerarCSV(GeneralFuncions):
     COLUNA_RPM = 0
     COLUNA_CONFERE_RPM = 2
 
-    def __init__(self, ordem_inicial:int, ordem_final:int) -> None:
-        self.ordem_inicial = ordem_inicial
-        self.ordem_final = ordem_final
+    def __init__(self, harmonico_inicial:int, harmonico_final:int) -> None:
+        self.harmonico_inicial = harmonico_inicial
+        self.harmonico_final = harmonico_final
         super().__init__()
 
     # Calcula o total de ciclos que o processamento de dados irá fazer
-    def calcula_ciclos_totais(self,ordem_inicial,ordem_final):  # Ver como ta isso
-        num_ordens = int(ordem_inicial-ordem_final+1)
+    def calcula_ciclos_totais(self,harmonico_inicial,harmonico_final):  # Ver como ta isso
+        num_ordens = int(harmonico_inicial-harmonico_final+1)
         num_pastas = len(self.PASTAS)
         return num_ordens*num_pastas
 
     # gera uma lista contendo todas as ordens que deverão ser analisadas
-    def gerar_lista_ordem(self):
-        return list(range(self.ordem_inicial,self.ordem_final+1))
+    def gerar_lista_harmonico(self):
+        return list(range(self.harmonico_inicial,self.harmonico_final+1))
 
     # Define a frequência de referência que será utilizada de acordo com o rolamento (interno ou externo)
     # Cada rolamento possui pequenas variações em sua frequência de referência
@@ -98,21 +98,21 @@ class GerarCSV(GeneralFuncions):
         return rpm_medio
 
     # Salva os dados de um dicionário como um arquivo csv
-    def salvar_dados(self, dados:dict, ordem:int,pasta:str=''):
-        local = f'{models.path_dados_tratados}/ordens_{ordem}'
+    def salvar_dados(self, dados:dict, harmonico:int,pasta:str=''):
+        local = f'{models.path_dados_tratados}/ordens_{harmonico}'
         dataframe = pd.json_normalize(dados)
         dataframe = dataframe[dataframe.columns[len(dataframe.columns)-len(models.colunas):len(dataframe.columns)]]
         dataframe.to_csv(f'{local}/{models.nome_padrao_de_arquivo}_concatenado.csv')
 
     # método que executa toda a rotina de extração de dados
     def executar(self):
-        ciclos_totais = self.calcula_ciclos_totais(self.ordem_inicial,self.ordem_final)
+        ciclos_totais = self.calcula_ciclos_totais(self.harmonico_inicial,self.harmonico_final)
         ciclo_atual = 0
         start = self.iniciar_contagem()
 
-        ordens = self.gerar_lista_ordem()
+        ordens = self.gerar_lista_harmonico()
         # percorre a lista de ordens
-        for ordem in ordens:
+        for harmonico in ordens:
             lista_dados = []
             cont = 0
             # Percorre a lista de pastas
@@ -121,7 +121,7 @@ class GerarCSV(GeneralFuncions):
                 arquivos = self.listar_arquivos(pasta)
   
                 defeito = self.PASTAS[pasta]
-                local = f'{models.path_dados_tratados}/ordens_{ordem}'
+                local = f'{models.path_dados_tratados}/ordens_{harmonico}'
                 local = f'{local}/{models.nome_padrao_de_arquivo}_{defeito}.csv'
 
                 # Verifica se a pasta existe
@@ -146,7 +146,7 @@ class GerarCSV(GeneralFuncions):
                                 defeito=defeito,
                                 freq_referencia=freq_referencia,
                                 sensor = acelerometro
-                            ).Get(ordem)
+                            ).Get(harmonico)
 
                             # Concatena os dados a cada loop para salvar em csv
                             lista_dados = lista_dados + dados
@@ -154,16 +154,16 @@ class GerarCSV(GeneralFuncions):
                 # Calcula quanto uma aproximação de quanto tempo falta para finalizar todos os diclos baseado no tempo decorrido
                 cont+=1
                 ciclo_atual+=1
-                self.tempo_decorrido(start=start, ciclo_atual=ciclo_atual, ciclos_totais = ciclos_totais,cont=cont, ordem=ordem)
+                self.tempo_decorrido(start=start, ciclo_atual=ciclo_atual, ciclos_totais = ciclos_totais,cont=cont, harmonico=harmonico)
             
             # Salva os dados concatenados em csv
-            self.salvar_dados(lista_dados, ordem,pasta)
+            self.salvar_dados(lista_dados, harmonico,pasta)
 
             # Normalizar e Salvar Dados tratados
-            pasta_completa = f'database/dados_tratados/ordens_{ordem}'
+            pasta_completa = f'database/dados_tratados/ordens_{harmonico}'
             arquivo_completo = f'{models.nome_padrao_de_arquivo}_concatenado.csv'
             df_completo = get_raw_data.GetData(pasta_completa,arquivo_completo).GetDataframe()
-            normalizar_sinal.NormalizarSinal(df_completo,ordem,metodo=2).save_as_csv()
+            normalizar_sinal.NormalizarSinal(df_completo,harmonico,metodo=2).save_as_csv()
 
             # Limpa a memória alocada em lista_dados
             lista_dados = []

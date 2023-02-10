@@ -31,8 +31,8 @@ class MethodPrepare:
 
 class Classifier(MethodPrepare):
 
-    def __init__(self, data: pd.DataFrame, ordem: int, classifier:sklearn.ensemble, **kwargs) -> None:
-        self.ordem = ordem
+    def __init__(self, data: pd.DataFrame, harmonico: int, classifier:sklearn.ensemble, **kwargs) -> None:
+        self.harmonico = harmonico
         self.classifier = classifier(**kwargs)
         super().__init__(data)
 
@@ -40,12 +40,12 @@ class Classifier(MethodPrepare):
     def exportar_relatorio(self):
         metodo = self.classifier.__class__.__name__
 
-        relatorio_classificador = f'Classificador: {metodo} - {self.ordem}º ordem'
+        relatorio_classificador = f'Classificador: {metodo} - {self.harmonico}º harmonico'
         relatorio_acuracia = f'A precisão do classificador é:{round(100*accuracy_score(self.y_test, self.prediction),1)}%'
         relatorio_report = f'Relatório de classificação:\n{classification_report(self.y_test, self.prediction)}'
         relatorio = f'{relatorio_classificador}\n{relatorio_acuracia}\n{relatorio_report}'
 
-        with open(f"database/dados_tratados/ordens_{self.ordem}/relatorio_{metodo}_ordem{self.ordem}.txt", "w") as text_file:
+        with open(f"database/dados_tratados/harmonicos_{self.harmonico}/relatorio_{metodo}_harmonico{self.harmonico}.txt", "w") as text_file:
             text_file.write(relatorio)
 
         print(f'Método {metodo} exportado com sucesso!')

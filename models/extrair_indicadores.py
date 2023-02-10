@@ -21,7 +21,7 @@ class ExtrairIndicadores:
 
         self.Objeto_Temporal = indicadores_tempo.DominioTempo(sinal)
 
-    def ExtrairOrdens(self,sinal,index=0,no_ordens=1):
+    def ExtrairHarmonicos(self,sinal,index=0,no_harmonicos=1):
         self.CriarObjeto(sinal)
 
         
@@ -31,11 +31,11 @@ class ExtrairIndicadores:
         self.soma_list = []
 
         
-        ordens_fourier, ordens_frequencia = self.Objeto_Frequencia.banda_frequencia(self.freq_referencia[index],self.largura,no_ordens)
-        self.soma_relativa = self.Objeto_Frequencia.soma_relativa_sinal(ordens_fourier,self.Objeto_Frequencia.fft_transform)
-        self.soma = self.Objeto_Frequencia.soma_sinal(ordens_fourier)
+        harmonicos_fourier, harmonicos_frequencia = self.Objeto_Frequencia.banda_frequencia(self.freq_referencia[index],self.largura,no_harmonicos)
+        self.soma_relativa = self.Objeto_Frequencia.soma_relativa_sinal(harmonicos_fourier,self.Objeto_Frequencia.fft_transform)
+        self.soma = self.Objeto_Frequencia.soma_sinal(harmonicos_fourier)
 
-    def Get(self,no_ordens=1):
+    def Get(self,no_harmonicos=1):
         
         indice = 0
         janela = 3.0 #segundo
@@ -64,7 +64,7 @@ class ExtrairIndicadores:
             
             for index in range(len(self.freq_referencia)):
                 local = models.defeito_rolamento[index]
-                self.ExtrairOrdens(sinal,index,no_ordens)
+                self.ExtrairHarmonicos(sinal,index,no_harmonicos)
 
                 data_json[f'soma_relativa_{local}'] = np.abs(self.soma_relativa)
                 data_json[f'soma_{local}'] = np.abs(self.soma)

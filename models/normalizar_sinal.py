@@ -7,11 +7,11 @@ class NormalizarSinal():
     COLUNAS_FREQ_SOMA = models.colunas_freq_soma
     COLUNAS_FREQ_SOMA_RELATIVA = models.colunas_freq_soma_relativa
     
-    def __init__(self,dataframe,ordem,metodo = 1) -> None:
+    def __init__(self,dataframe,harmonico,metodo = 1) -> None:
         self.dataframe = pd.DataFrame(dataframe)
 
         self.colunas = models.colunas
-        self.ordem = ordem
+        self.harmonico = harmonico
         defeito = 'defeito'
         normal = 'normal'
 
@@ -142,5 +142,5 @@ class NormalizarSinal():
     def save_as_csv(self):
         df = self.Get()
 
-        df.to_csv(f'{models.path_dados_tratados}/ordens_{self.ordem}/Dados_Normalizados.csv')
-        print(f'Arquivo salvo com sucesso!\n{models.path_dados_tratados}/ordens_{self.ordem}/Dados_Normalizados.csv')
+        df.to_csv(f'{models.path_dados_tratados}/harmonicos_{self.harmonico}/Dados_Normalizados.csv')
+        print(f'Arquivo salvo com sucesso!\n{models.path_dados_tratados}/harmonicos_{self.harmonico}/Dados_Normalizados.csv')

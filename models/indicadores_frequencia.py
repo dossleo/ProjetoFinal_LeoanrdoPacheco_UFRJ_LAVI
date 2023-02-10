@@ -2,7 +2,13 @@ import models
 import numpy as np
 import matplotlib.pyplot as plt
 from models import filtro_passa_baixa
+import os
 
+def create_images_dir():
+    dir_path = os.path.join(f'{models.path_dados_tratados}/graficos_frequencia')
+    if not os.path.exists(dir_path):
+        os.mkdir(dir_path)
+    return dir_path
 class DominioFrequencia():
 
 
@@ -10,8 +16,7 @@ class DominioFrequencia():
         
         self.sinal = sinal # dados brutos
         self.n_points_dado_bruto = len(self.sinal) # npoints
-        self.rpm = rpm #rpm
-        self.rotacao_hz = self.rpm/60
+        self.rpm = rpm
 
         self.freq_aquisicao = freq_aquisicao
 
@@ -34,8 +39,6 @@ class DominioFrequencia():
 
         self.fft_transform = np.sqrt(self.fft_transform*self.fft_transform_conjugado)
 
-
-
         self.fft_frequencia = np.fft.fftfreq(len(self.sinal),d=1/self.freq_aquisicao)
 
         primeiros_pontos = 1
@@ -53,53 +56,88 @@ class DominioFrequencia():
         self.fft_frequencia = np.real(self.fft_frequencia)
         self.fft_transform = np.real(self.fft_transform)
 
-    def plot_fft(self,freq_referencia=0,title=''):
-        self.run_fft(2000)
+    def plot_fft(self,freq_referencia=0,title='',salvar=True,plotar=True):
+        self.run_fft(1000)
 
-        plt.plot(np.abs(self.fft_frequencia),np.abs(self.fft_transform))
+        fig, ax = plt.subplots()
+        ax.plot(np.abs(self.fft_frequencia),np.abs(self.fft_transform))
         if freq_referencia !=0:
             for i in range(10):
                 plt.vlines(freq_referencia*(i+1),0,np.max(self.fft_transform),'red',linestyles='dotted')
         
+        # Aumenta o tamanho da janela do plot para 10x10 polegadas
+        fig.set_size_inches(14, 7)
+        
         plt.vlines(self.rpm,0,1.1*np.max(self.fft_transform),'green',linestyles='dotted')
+
         plt.xlabel("Frequência [Hz]")
-        plt.ylabel("Amplitude")
+        plt.ylabel("Amplitude [mm/s²]")
+
+        plt.gca().yaxis.get_major_formatter().set_powerlimits((0, 1))
+        plt.tight_layout()
+        
+        plt.grid(axis='y')
+
         plt.title(f"Espectrograma {title}")
 
-        plt.show()
+        if plotar:
+            plt.show()
 
-    def banda_frequencia(self,freq_referencia,largura = 14,no_ordens=2):
+        if salvar:
+            fig.savefig(f"{create_images_dir()}/fft_freq_{np.round(freq_referencia,1)}Hz_Rotação_{np.round(self.rpm,1)}.png",dpi=600)
+        
+        plt.close()
+
+    def banda_frequencia(self,freq_referencia,largura = 14,no_harmonicos=2):
 
         self.run_fft() 
 
         erro = 0.1
         
-        ordens_frequencia = list()
-        ordens_fourier = list()
+        harmonicos_frequencia = list()
+        harmonicos_fourier = list()
 
-        for ordem in range(1,no_ordens+1):
-            larg = largura*(1+erro*no_ordens)
+        for harmonico in range(1,no_harmonicos+1):
+            larg = largura*(1+erro*no_harmonicos)
             
-            banda = np.logical_and(self.fft_frequencia >= (freq_referencia*(ordem) - larg/2), self.fft_frequencia <= (freq_referencia*(ordem) + larg/2))
+            banda = np.logical_and(self.fft_frequencia >= (freq_referencia*(harmonico) - larg/2), self.fft_frequencia <= (freq_referencia*(harmonico) + larg/2))
 
-            ordens_fourier.append(self.fft_transform[banda])
-            ordens_frequencia.append(self.fft_frequencia[banda])
+            harmonicos_fourier.append(self.fft_transform[banda])
+            harmonicos_frequencia.append(self.fft_frequencia[banda])
 
-        return ordens_fourier, ordens_frequencia
+        return harmonicos_fourier, harmonicos_frequencia
 
-    def plot_banda(self,freq_referencia,largura,title = ''):
+    def plot_banda(self,freq_referencia,largura,title = '',salvar=True,plotar=True):
 
         lista_fourier_banda, lista_frequencia_banda = self.banda_frequencia(freq_referencia,largura)
 
-        plt.figure()
-        plt.plot(lista_frequencia_banda[0], lista_fourier_banda[0])
+        fig, ax = plt.subplots()
+        fig.set_size_inches(14, 7)
+
+        ax.plot(lista_frequencia_banda[0], lista_fourier_banda[0])
+
         plt.ylim((0,1.1*np.max(self.fft_transform)))
         plt.xlim(freq_referencia-largura,freq_referencia+largura)
+
         plt.xlabel("Frequência [Hz]")
-        plt.ylabel("Amplitude")
+        plt.ylabel("Amplitude [mm/s²]")
+
+        plt.gca().yaxis.get_major_formatter().set_powerlimits((0, 1))
+        plt.tight_layout()
+
         plt.title(f"Banda de Frequência {title}")
+
         plt.vlines(freq_referencia,0,1.1*np.max(self.fft_transform),'green',linestyles='dotted')
-        plt.show()
+
+        plt.grid(axis='y')
+
+        if plotar:
+            plt.show()
+
+        if salvar:
+            fig.savefig(f"{create_images_dir()}/fft_banda_{np.round(freq_referencia,1)}Hz_Rotação_{np.round(self.rpm,1)}.png",dpi=600,fig=fig)
+        
+        plt.close()
 
     def soma_relativa_sinal(self,lista_sinal_fourier_banda,sinal_fourier_completo):
         soma_relativa = 0

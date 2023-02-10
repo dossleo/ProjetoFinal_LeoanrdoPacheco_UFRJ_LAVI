@@ -3,8 +3,8 @@ import os
 
 os.system("cls")
 
-ordem_inicial = 2
-ordem_final = 3
+harmonico_inicial = 2
+harmonico_final = 3
 
-GerarCSV(ordem_inicial,ordem_final).executar()
+GerarCSV(harmonico_inicial,harmonico_final).executar()
 
