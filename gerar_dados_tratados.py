@@ -6,5 +6,5 @@ os.system("cls")
 ordem_inicial = 2
 ordem_final = 3
 
-GerarCSV(ordem_inicial,ordem_final).run()
+GerarCSV(ordem_inicial,ordem_final).executar()
 

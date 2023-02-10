@@ -11,22 +11,27 @@ from models import extrair_indicadores, get_rpm, normalizar_sinal, get_raw_data
 
 pretty.install()
 
+# Classe para instanciar métodos genéricos que serão utilizados em outras classes
 class GeneralFuncions():
 
     PASTAS = models.PATH
 
+    # retorna uma lista de arquivos contidos em uma pasta
     def listar_arquivos(self, pasta:str) -> list:
         arquivos = os.listdir(pasta)
         return arquivos
 
+    # Lê um dataframe a partir de uma pasta
     def ler_dataframe(self, pasta, arquivo):
         caminho = os.path.join(pasta,arquivo)
         columns = [0,1,2,3,4,5,6,7]
         return pd.read_csv(caminho, sep=',', names=columns, header=None)
 
+    # Extrai uma coluna de um dataframe
     def extrair_coluna(self, dataframe:pd.DataFrame, n_coluna:int):
         return np.array(dataframe[n_coluna])
 
+    # Inicia a contagem de que horas iniciou o tratamento de dados
     def iniciar_contagem(self):
         start = time.time()
         now = datetime.datetime.now()
@@ -34,9 +39,12 @@ class GeneralFuncions():
 
         print(f'___________________________\nInício: {now}\n')
         return start
-
+    
+    # Pegar o tempo decorrido até o momento a partir do start
     def tempo_decorrido(self, start, ciclo_atual, ciclos_totais,ordem,cont):
             elapsed_time = time.time() - start
+
+            # Evita divisão por zero
             if ciclo_atual > 0:
                 tempo_estimado = elapsed_time*((ciclos_totais/ciclo_atual)-1)
             else:
@@ -47,7 +55,7 @@ class GeneralFuncions():
             print("Tempo Estimado até o Fim: {:02}:{:02}:{:02}".format(int(tempo_estimado // 3600), int(tempo_estimado % 3600 // 60), int(tempo_estimado % 60)))
     
 
-
+# Classe que gera os dados tratados e salva em csv
 class GerarCSV(GeneralFuncions):
     
     PASTAS = models.PATH
@@ -61,19 +69,18 @@ class GerarCSV(GeneralFuncions):
         self.ordem_final = ordem_final
         super().__init__()
 
+    # Calcula o total de ciclos que o processamento de dados irá fazer
     def calcula_ciclos_totais(self,ordem_inicial,ordem_final):  # Ver como ta isso
-        cont = 0
-        # sensor_inicial = self.sensor_inicial
-        lista_sensores = list(models.sensores) # [sensor_inicial:len(self.sensores)]
+        num_ordens = int(ordem_inicial-ordem_final+1)
+        num_pastas = len(self.PASTAS)
+        return num_ordens*num_pastas
 
-        for ordem in list(range(ordem_inicial,ordem_final+1)): # self.no_ordens:
-            for pasta in self.PASTAS: 
-                cont+=1
-        return cont
-
+    # gera uma lista contendo todas as ordens que deverão ser analisadas
     def gerar_lista_ordem(self):
         return list(range(self.ordem_inicial,self.ordem_final+1))
 
+    # Define a frequência de referência que será utilizada de acordo com o rolamento (interno ou externo)
+    # Cada rolamento possui pequenas variações em sua frequência de referência
     def calcular_freq_ref(self, acelerometro:str, rpm:float):
         if acelerometro.__contains__("externo"):
             freq = models.frequencias_rolamento.get("externo")
@@ -83,42 +90,32 @@ class GerarCSV(GeneralFuncions):
         freq = np.array(freq)
         return freq*rpm
 
+    # A partir de um dataframe de dado bruto, calcula o rpm associado a este sinal
     def calcular_rpm(self, dataframe):
         sinal_rpm = self.extrair_coluna(dataframe, self.COLUNA_RPM)
         sinal_sensor = self.extrair_coluna(dataframe, self.COLUNA_CONFERE_RPM)
         rpm_medio = get_rpm.GetRPM(sinal_rpm, sinal_sensor).get_rpm_medio('hz')
         return rpm_medio
 
-    def salvar_dados(self, dados:dict, ordem:int,pasta:str):
-        # defeito = self.PASTAS[pasta]
+    # Salva os dados de um dicionário como um arquivo csv
+    def salvar_dados(self, dados:dict, ordem:int,pasta:str=''):
         local = f'{models.path_dados_tratados}/ordens_{ordem}'
         dataframe = pd.json_normalize(dados)
         dataframe = dataframe[dataframe.columns[len(dataframe.columns)-len(models.colunas):len(dataframe.columns)]]
         dataframe.to_csv(f'{local}/{models.nome_padrao_de_arquivo}_concatenado.csv')
-    
-    def ConcatenaCSV(self,ordem):
-        # Lista dos nomes dos arquivos CSV
-        pasta = f'{models.path_dados_tratados}/ordens_{ordem}'
-        arquivos = os.listdir(pasta)
 
-        # Lê cada arquivo CSV, considerando a primeira linha como cabeçalho e a primeira coluna como ID
-        dfs = [pd.read_csv(f'{pasta}/{arquivo}', header=0, index_col=0) for arquivo in arquivos]
-
-        # Concatena todos os DataFrames em um único DataFrame
-        result = pd.concat(dfs)
-
-        # Salva o resultado em um arquivo CSV único
-        result.to_csv(f'{pasta}/{models.nome_padrao_de_arquivo}_concatenado.csv')
-
-    def run(self):
+    # método que executa toda a rotina de extração de dados
+    def executar(self):
         ciclos_totais = self.calcula_ciclos_totais(self.ordem_inicial,self.ordem_final)
         ciclo_atual = 0
         start = self.iniciar_contagem()
 
         ordens = self.gerar_lista_ordem()
+        # percorre a lista de ordens
         for ordem in ordens:
             lista_dados = []
             cont = 0
+            # Percorre a lista de pastas
             for pasta in self.PASTAS:
                 defeito = self.PASTAS.get(pasta)
                 arquivos = self.listar_arquivos(pasta)
@@ -127,18 +124,22 @@ class GerarCSV(GeneralFuncions):
                 local = f'{models.path_dados_tratados}/ordens_{ordem}'
                 local = f'{local}/{models.nome_padrao_de_arquivo}_{defeito}.csv'
 
+                # Verifica se a pasta existe
                 if os.path.exists(local):
                     print(f'O arquivo {local} existe.')
+
                 else:
-                   
+                    # Percorre todos os arquivos presentes na pasta atual
                     for arquivo in arquivos:
                         dataframe = self.ler_dataframe(pasta,arquivo)
                         rpm = self.calcular_rpm(dataframe)
+                        # percorre as colunas associadas com cada acelerômetro dentro do dataframe atual
                         for acelerometro in self.SENSORES:
                             col_acelerometro = self.SENSORES.get(acelerometro)
                             array_sensor = self.extrair_coluna(dataframe, col_acelerometro)
                             freq_referencia = self.calcular_freq_ref(acelerometro, rpm)
-        
+
+                            # Extrai os indicadores da coluna de sinal atual
                             dados = extrair_indicadores.ExtrairIndicadores(
                                 sinal=array_sensor,
                                 rpm=rpm,
@@ -147,23 +148,23 @@ class GerarCSV(GeneralFuncions):
                                 sensor = acelerometro
                             ).Get(ordem)
 
+                            # Concatena os dados a cada loop para salvar em csv
                             lista_dados = lista_dados + dados
+                
+                # Calcula quanto uma aproximação de quanto tempo falta para finalizar todos os diclos baseado no tempo decorrido
                 cont+=1
                 ciclo_atual+=1
                 self.tempo_decorrido(start=start, ciclo_atual=ciclo_atual, ciclos_totais = ciclos_totais,cont=cont, ordem=ordem)
-
+            
+            # Salva os dados concatenados em csv
             self.salvar_dados(lista_dados, ordem,pasta)
 
-
-            # Concatenar Dados
-            # self.ConcatenaCSV(ordem=ordem)
-
-            # Normalizar Dados
+            # Normalizar e Salvar Dados tratados
             pasta_completa = f'database/dados_tratados/ordens_{ordem}'
             arquivo_completo = f'{models.nome_padrao_de_arquivo}_concatenado.csv'
-
             df_completo = get_raw_data.GetData(pasta_completa,arquivo_completo).GetDataframe()
-
             normalizar_sinal.NormalizarSinal(df_completo,ordem,metodo=2).save_as_csv()
+
+            # Limpa a memória alocada em lista_dados
             lista_dados = []
 

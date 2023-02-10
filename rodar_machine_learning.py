@@ -22,59 +22,81 @@ os.system("cls")
 
 pretty.install()
 
-# Carrega os dados, ignorando a primeira linha
+# Nome dos dados normalizados
 dados_normalizados = 'Dados_Normalizados.csv'
-dados_extraidos_geral = 'dados_extraidos_concatenado.csv'
-dado_sensor = 'dados_extraidos_rolamento_interno_radial1.csv'
 
+# Random State
 seed = 15
+
+# Criação de dicionários para comparação de acurácias entre as ordens
 score_RandomForest = {}
 score_KNN = {}
 score_DecisionTree = {}
 
+# Loop percorrendo 10 ordens
 for ordem in range(11)[1:11]:
     pasta = f'{models.path_dados_tratados}/ordens_{ordem}/{dados_normalizados}'
     df = pd.read_csv(pasta, header=0)
 
-
+    # Dicionário para comparar acurácia entre os métodos
     score = {}
 
-
-    # Executa a predição
+    # Instanciando o classificador
     classifier = ml_functions.Classifier(data = df, classifier=RandomForestClassifier, random_state = seed,ordem=ordem)
+    # Realizando a classificação
     classifier.run()
+
+    # Guardando o valor da acurácia no dicionário score
     score[f'{classifier.classifier.__class__.__name__}'] = round(classifier.score * 100,2)
+    # Guardando o valor da acurácia no dicionário referente ao classificador
     score_RandomForest[f'Ordem {ordem}'] = round(classifier.score * 100,2)
+    # Salvando a matriz de confusão    
+    data_vis.MatrizConfusao(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix(plotar=False, salver=True)
 
-    data_vis.MatrizConfusao(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix()
 
-
-
+    # Instanciando o classificador
     classifier = ml_functions.Classifier(data = df, classifier=KNeighborsClassifier,ordem=ordem)
+    # Realizando a classificação
     classifier.run()
+
+    # Guardando o valor da acurácia no dicionário score
     score[f'{classifier.classifier.__class__.__name__}'] = round(classifier.score * 100,2)
+    # Guardando o valor da acurácia no dicionário referente ao classificador
     score_KNN[f'Ordem {ordem}'] = round(classifier.score * 100,2)
-    
-    data_vis.MatrizConfusao(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix()
+    # Salvando a matriz de confusão        
+    data_vis.MatrizConfusao(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix(plotar=False, salver=True)
 
 
-
+    # Instanciando o classificador
     classifier = ml_functions.Classifier(data = df, classifier=DecisionTreeClassifier, criterion = 'entropy',ordem=ordem)
+    # Realizando a classificação
     classifier.run()
+
+    # Guardando o valor da acurácia no dicionário score
     score[f'{classifier.classifier.__class__.__name__}'] = round(classifier.score * 100,2)
+    # Guardando o valor da acurácia no dicionário referente ao classificador
     score_DecisionTree[f'Ordem {ordem}'] = round(classifier.score * 100,2)
+    # Salvando a matriz de confusão    
+    data_vis.MatrizConfusao(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix(plotar=False, salver=True)
 
-    data_vis.MatrizConfusao(classifier, method_name = f'{classifier.classifier.__class__.__name__} - {ordem}º Ordem', ordem=ordem).plot_confusion_matrix()
 
-
-
+    # Plotando o gráfico de barras comparando a acurácia
     data_vis.ComparacaoDeAcuracias().plot_score(ordem,score)
+
+    # Zerando o score para limpar a memória
     score = 0
     score = {}
     print(f'Ordem {ordem} finalizada!\n\n')
 
-data_vis.ComparacaoDeAcuracias().plot_ordens('Comparação de Acurácia - Random Forest Classifier',score_RandomForest)
-data_vis.ComparacaoDeAcuracias().plot_ordens('Comparação de Acurácia - KNeighbours Classfier',score_KNN)
-data_vis.ComparacaoDeAcuracias().plot_ordens('Comparação de Acurácia - Decision Tree Classifier',score_DecisionTree)
+# Salvando o gráfico de barras comparando a acurácia de diferentes ordens
+data_vis.ComparacaoDeAcuracias().plot_ordens('Comparação de Acurácia - Random Forest Classifier',score_RandomForest, 
+        plotar=False, 
+        salvar=True)
+data_vis.ComparacaoDeAcuracias().plot_ordens('Comparação de Acurácia - KNeighbours Classfier',score_KNN, 
+        plotar=False, 
+        salvar=True)
+data_vis.ComparacaoDeAcuracias().plot_ordens('Comparação de Acurácia - Decision Tree Classifier',score_DecisionTree, 
+        plotar=False, 
+        salvar=True)
 
 breakpoint()
