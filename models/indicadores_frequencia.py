@@ -135,7 +135,7 @@ class DominioFrequencia():
             plt.show()
 
         if salvar:
-            fig.savefig(f"{create_images_dir()}/fft_banda_{np.round(freq_referencia,1)}Hz_Rotação_{np.round(self.rpm,1)}.png",dpi=600,fig=fig)
+            fig.savefig(f"{create_images_dir()}/fft_banda_{np.round(freq_referencia,1)}Hz_Rotação_{np.round(self.rpm,1)}.png",dpi=600)
         
         plt.close()
 

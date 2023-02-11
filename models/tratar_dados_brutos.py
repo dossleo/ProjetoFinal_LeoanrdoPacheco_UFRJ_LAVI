@@ -11,6 +11,13 @@ from models import extrair_indicadores, get_rpm, normalizar_sinal, get_raw_data
 
 pretty.install()
 
+# Função para cirar um diretório
+def create_dir(harmonico):
+    dir_path = os.path.join(f'{models.path_dados_tratados}/harmonicos_{harmonico}')
+    if not os.path.exists(dir_path):
+        os.mkdir(dir_path)
+    return dir_path
+
 # Classe para instanciar métodos genéricos que serão utilizados em outras classes
 class GeneralFuncions():
 
@@ -71,11 +78,11 @@ class GerarCSV(GeneralFuncions):
 
     # Calcula o total de ciclos que o processamento de dados irá fazer
     def calcula_ciclos_totais(self,harmonico_inicial,harmonico_final):  # Ver como ta isso
-        num_ordens = int(harmonico_inicial-harmonico_final+1)
+        num_harmonicos = int(harmonico_inicial-harmonico_final+1)
         num_pastas = len(self.PASTAS)
-        return num_ordens*num_pastas
+        return num_harmonicos*num_pastas
 
-    # gera uma lista contendo todas as ordens que deverão ser analisadas
+    # gera uma lista contendo todas as harmonicos que deverão ser analisadas
     def gerar_lista_harmonico(self):
         return list(range(self.harmonico_inicial,self.harmonico_final+1))
 
@@ -98,8 +105,9 @@ class GerarCSV(GeneralFuncions):
         return rpm_medio
 
     # Salva os dados de um dicionário como um arquivo csv
-    def salvar_dados(self, dados:dict, harmonico:int,pasta:str=''):
-        local = f'{models.path_dados_tratados}/ordens_{harmonico}'
+    def salvar_dados(self, dados:dict, harmonico:int):
+        local = create_dir(harmonico=harmonico)
+
         dataframe = pd.json_normalize(dados)
         dataframe = dataframe[dataframe.columns[len(dataframe.columns)-len(models.colunas):len(dataframe.columns)]]
         dataframe.to_csv(f'{local}/{models.nome_padrao_de_arquivo}_concatenado.csv')
@@ -110,9 +118,9 @@ class GerarCSV(GeneralFuncions):
         ciclo_atual = 0
         start = self.iniciar_contagem()
 
-        ordens = self.gerar_lista_harmonico()
-        # percorre a lista de ordens
-        for harmonico in ordens:
+        harmonicos = self.gerar_lista_harmonico()
+        # percorre a lista de harmonicos
+        for harmonico in harmonicos:
             lista_dados = []
             cont = 0
             # Percorre a lista de pastas
@@ -121,7 +129,7 @@ class GerarCSV(GeneralFuncions):
                 arquivos = self.listar_arquivos(pasta)
   
                 defeito = self.PASTAS[pasta]
-                local = f'{models.path_dados_tratados}/ordens_{harmonico}'
+                local = f'{models.path_dados_tratados}/harmonicos_{harmonico}'
                 local = f'{local}/{models.nome_padrao_de_arquivo}_{defeito}.csv'
 
                 # Verifica se a pasta existe
@@ -157,10 +165,11 @@ class GerarCSV(GeneralFuncions):
                 self.tempo_decorrido(start=start, ciclo_atual=ciclo_atual, ciclos_totais = ciclos_totais,cont=cont, harmonico=harmonico)
             
             # Salva os dados concatenados em csv
+            
             self.salvar_dados(lista_dados, harmonico,pasta)
 
             # Normalizar e Salvar Dados tratados
-            pasta_completa = f'database/dados_tratados/ordens_{harmonico}'
+            pasta_completa = f'database/dados_tratados/harmonicos_{harmonico}'
             arquivo_completo = f'{models.nome_padrao_de_arquivo}_concatenado.csv'
             df_completo = get_raw_data.GetData(pasta_completa,arquivo_completo).GetDataframe()
             normalizar_sinal.NormalizarSinal(df_completo,harmonico,metodo=2).save_as_csv()

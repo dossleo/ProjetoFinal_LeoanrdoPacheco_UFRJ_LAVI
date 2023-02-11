@@ -19,14 +19,26 @@ def create_images_dir(harmonico):
         os.mkdir(dir_path)
     return dir_path
 
+def create_images_dir_tempo():
+    dir_path = os.path.join(f'{models.path_dados_tratados}/graficos_tempo')
+    if not os.path.exists(dir_path):
+        os.mkdir(dir_path)
+    return dir_path
+
 
 # Classe para visualização dos dados brutos
-class RawVisualization():
-    def __init__(self,sinal,fault,harmonico,title):
+class VisualizarTempo():
+    def __init__(self, pasta:str,arquivo:str,numero_sensor=1,posicao='interno',title=''):
 
-        self.sinal = sinal
-        self.fault = fault
+        self.pasta = pasta
+        self.arquivo = arquivo   
+        self.posicao = posicao
+        self.numero_sensor = numero_sensor
+        self.sensor = f'rolamento_{self.posicao}_radial{self.numero_sensor}'
+        self.coluna = models.sensores[self.sensor]
         self.title = title
+
+        self.pegar_sinal()
 
         # Frequência de aquisição
         freq_aquisicao = models.freq_aquisicao
@@ -34,15 +46,32 @@ class RawVisualization():
         # Número de pontos do sinal
         self.N = len(self.sinal)
         self.tempo_total = self.N/freq_aquisicao
-        self.harmonico = harmonico
 
-    def plt_sinal(self):
+
+    def pegar_sinal(self):
+        self.sinal = get_raw_data.GetData(self.pasta,self.arquivo,self.coluna).Get()
+
+    def plt_sinal(self,salvar=True,plotar=True):
         self.vetor_tempo = np.linspace(0,self.tempo_total,self.N)
-        plt.plot(self.vetor_tempo,self.sinal)
-        plt.title(f"Dados Brutos - {self.title}")
-        plt.ylabel("Amplitude [gs]")
-        plt.savefig(F"{models.path_dados_tratados}/sinal_bruto_{self.title}.png")
-        plt.show()
+
+        fig, ax = plt.subplots()
+        fig.set_size_inches(14, 5)
+
+        ax.plot(self.vetor_tempo,self.sinal)
+        plt.title(f"Dados Brutos{self.title}")
+        plt.ylabel('Amplitude [g]')
+        plt.xlabel('Tempo [s]')
+
+        plt.ylim((-30,30))
+        plt.grid(True)
+
+        if salvar:
+            fig.savefig(f'{create_images_dir_tempo()}/graficos_tempo_{self.title}.png')
+
+        if plotar:
+            plt.show()
+
+        plt.close()
 
 class VisualizarFrequencia:
     def __init__(self, pasta:str,arquivo:str,numero_sensor=1,posicao='interno',num_frequencia_referencia:int=0) -> None:
@@ -55,6 +84,7 @@ class VisualizarFrequencia:
         self.frequencias_rolamento = models.frequencias_rolamento
         self.num_frequencia_referencia = num_frequencia_referencia
         self.pegar_rpm()
+        self.freq_ref = self.pegar_frequencia_de_referencia()
 
 
     def pegar_sinal(self):
@@ -89,7 +119,7 @@ class VisualizarFrequencia:
 
     def plotar_fft_com_frequencia_de_referencia(self,salvar=True,plotar=True):
         self.definir_objeto()
-        freq = self.pegar_frequencia_de_referencia()
+        freq = self.freq_ref
         self.Objeto_Frequencia.plot_fft(freq_referencia=freq,
                                         title=f'Frequência = {np.round(freq,1)}Hz',
                                         salvar=salvar,plotar=plotar)
@@ -98,12 +128,11 @@ class VisualizarFrequencia:
         self.definir_objeto()
         self.Objeto_Frequencia.plot_banda(self.rpm,self.rpm,title=f'- Rotação da Máquina = {np.round(self.rpm,1)}Hz')
 
-        freq = self.pegar_frequencia_de_referencia()
-
+        freq = self.freq_ref
         for harmonico in range(1,num_harmonicos+1):
             self.Objeto_Frequencia.plot_banda(  freq*(harmonico),
                                                 self.rpm,
-                                                title=f'Frequência = {np.round(freq,1)}Hz - {harmonico}º Harmônico a rotação de {np.round(self.rpm,1)}Hz',
+                                                title=f' - Frequência = {np.round(freq,1)}Hz - {harmonico}º Harmônico à rotação de {np.round(self.rpm,1)}Hz',
                                                 salvar=salvar,
                                                 plotar=plotar)
 

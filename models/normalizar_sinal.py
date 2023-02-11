@@ -1,6 +1,14 @@
 import models
 import numpy as np
 import pandas as pd
+import os
+
+# Função para cirar um diretório para as imagens
+def create_dir(harmonico):
+    dir_path = os.path.join(f'{models.path_dados_tratados}/harmonicos_{harmonico}/Dados_Normalizados.csv')
+    if not os.path.exists(dir_path):
+        os.mkdir(dir_path)
+    return dir_path
 
 class NormalizarSinal():
 
@@ -29,12 +37,14 @@ class NormalizarSinal():
         self.df_sensor = self.dataframe[models.coluna_sensor]
 
         self.df_defeito = self.dataframe[defeito]
+
+        # calcula o máximo e mínimo de acordo com o método escolhido
         if metodo == 1:
             self.calcular_max_min_metodo1()
         else:
             self.calcular_max_min_metodo2()
 
-
+    # Utiliza o máximo e mínimo geral para normalizar
     def calcular_max_min_metodo1(self):
 
         self.ymax_freq_soma = np.max(np.array(self.df_freq_soma[self.COLUNAS_FREQ_SOMA[0:-1]]))
@@ -62,9 +72,10 @@ class NormalizarSinal():
 
         self.x = (self.xmax - self.xmin) + self.xmin
 
+    # Utiliza o máximo e mínimo apenas dos sinais sem defeitos para realizar a normalização
+    # A normalização de todos os dados são feitas em relação ao sinal sem defeito
     def calcular_max_min_metodo2(self):
-        # Modificar o ymin e ymax relativo apenas para os dados do rolamento bom
-        
+
         self.ymax_freq_soma = np.max(np.array(self.df_freq_soma_sem_defeito[self.COLUNAS_FREQ_SOMA[0:-1]]))
         self.ymin_freq_soma = np.min(np.array(self.df_freq_soma_sem_defeito[self.COLUNAS_FREQ_SOMA[0:-1]]))
 
@@ -87,7 +98,6 @@ class NormalizarSinal():
 
         self.xmax = 1
         self.xmin = 0
-
         self.x = (self.xmax - self.xmin) + self.xmin
 
     def normalizar_freq(self):
@@ -106,13 +116,9 @@ class NormalizarSinal():
     def normalizar_sensor(self):
 
         self.dataframe['sensor'] = self.dataframe['sensor'].replace(models.sensores)
-
         self.ymax_sensor = np.max(np.array(self.dataframe['sensor']))
-
         self.ymin_sensor = np.min(np.array(self.dataframe['sensor']))
-
         self.dataframe['sensor'] = ( (self.dataframe['sensor'] - self.ymin_sensor) / (self.ymax_sensor - self.ymin_sensor) ) * self.x
-        
         self.df_sensor = self.dataframe['sensor']
 
     def Get(self):
@@ -142,5 +148,5 @@ class NormalizarSinal():
     def save_as_csv(self):
         df = self.Get()
 
-        df.to_csv(f'{models.path_dados_tratados}/harmonicos_{self.harmonico}/Dados_Normalizados.csv')
+        df.to_csv(create_dir(self.harmonico))
         print(f'Arquivo salvo com sucesso!\n{models.path_dados_tratados}/harmonicos_{self.harmonico}/Dados_Normalizados.csv')
