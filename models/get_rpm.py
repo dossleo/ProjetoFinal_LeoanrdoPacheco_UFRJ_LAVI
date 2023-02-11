@@ -270,7 +270,7 @@ class GetRPM():
         """
 
         rpm_ponto = self.get_rpm_ponto_a_ponto(unidade)
-        title = f'Rotação ao longo do tempo - Rotação Média = {self.get_rpm_medio()} Hz'
+        title = f'Rotação ao longo do tempo - Rotação Média = {np.round(self.get_rpm_medio(),1)} Hz'
 
         fig, ax = plt.subplots()
         fig.set_size_inches(14, 5)

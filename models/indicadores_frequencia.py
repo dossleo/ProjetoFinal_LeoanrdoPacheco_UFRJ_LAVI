@@ -64,8 +64,9 @@ class DominioFrequencia():
         
         # Aumenta o tamanho da janela do plot para 10x10 polegadas
         fig.set_size_inches(14, 7)
-        
+        # print(np.max(self.fft_transform))
         plt.vlines(self.rpm,0,1.1*np.max(self.fft_transform),'green',linestyles='dotted')
+        plt.ylim((0,300000))
 
         plt.xlabel("Frequência [Hz]")
         plt.ylabel("Amplitude [mm/s²]")
@@ -113,7 +114,8 @@ class DominioFrequencia():
 
         ax.plot(lista_frequencia_banda[0], lista_fourier_banda[0])
 
-        plt.ylim((0,1.1*np.max(self.fft_transform)))
+        # plt.ylim((0,1.1*np.max(self.fft_transform)))
+        plt.ylim((0,300000))
         plt.xlim(freq_referencia-largura,freq_referencia+largura)
 
         plt.xlabel("Frequência [Hz]")

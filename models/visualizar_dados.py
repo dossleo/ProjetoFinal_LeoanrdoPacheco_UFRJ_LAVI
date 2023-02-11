@@ -86,7 +86,7 @@ class VisualizarFrequencia:
         self.coluna = models.sensores[self.sensor]
         self.frequencias_rolamento = models.frequencias_rolamento
         self.num_frequencia_referencia = num_frequencia_referencia
-        self.pegar_rpm()
+        self.rpm = self.pegar_rpm()
         self.freq_ref = self.pegar_frequencia_de_referencia()
 
 
@@ -96,8 +96,8 @@ class VisualizarFrequencia:
 
     def pegar_rpm(self):
         self.pegar_sinal()
-        self.rpm = get_rpm.GetRPM(sinal_rpm=self.sinal_rpm,sinal_sensor=self.sinal).get_rpm_medio()
-        self.largura_banda = self.rpm
+        rpm = get_rpm.GetRPM(sinal_rpm=self.sinal_rpm,sinal_sensor=self.sinal).get_rpm_medio()
+        return rpm
 
     def pegar_frequencia_de_referencia(self):
         frequencia_de_referencia=[]
