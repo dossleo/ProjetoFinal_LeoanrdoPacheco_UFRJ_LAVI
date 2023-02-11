@@ -10,7 +10,7 @@ from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.tree import export_graphviz
 
 import models
-from models import get_raw_data,get_rpm, indicadores_frequencia
+from models import get_raw_data,get_rpm, indicadores_frequencia, criar_pastas
 
 # Função para cirar um diretório para as imagens
 def create_images_dir(harmonico):
@@ -28,7 +28,9 @@ def create_images_dir_tempo():
 
 # Classe para visualização dos dados brutos
 class VisualizarTempo():
-    def __init__(self, pasta:str,arquivo:str,numero_sensor=1,posicao='interno',title=''):
+    def __init__(self, pasta:str,arquivo:str,numero_sensor=1,posicao='interno',title='', path_to_save = f'{models.path_dados_tratados}/graficos_tempo'):
+
+        self.path_to_save = path_to_save
 
         self.pasta = pasta
         self.arquivo = arquivo   
@@ -66,7 +68,7 @@ class VisualizarTempo():
         plt.grid(True)
 
         if salvar:
-            fig.savefig(f'{create_images_dir_tempo()}/graficos_tempo_{self.title}.png')
+            fig.savefig(f'{criar_pastas.create_dir(self.path_to_save)}/graficos_tempo_{self.title}.png',dpi=600)
 
         if plotar:
             plt.show()
@@ -75,6 +77,7 @@ class VisualizarTempo():
 
 class VisualizarFrequencia:
     def __init__(self, pasta:str,arquivo:str,numero_sensor=1,posicao='interno',num_frequencia_referencia:int=0) -> None:
+        
         self.pasta = pasta
         self.arquivo = arquivo   
         self.posicao = posicao
@@ -108,29 +111,30 @@ class VisualizarFrequencia:
 
         return frequencia_de_referencia[self.num_frequencia_referencia]
     
-    def definir_objeto(self):
-        self.Objeto_Frequencia = indicadores_frequencia.DominioFrequencia(self.sinal,self.rpm)
+    def definir_objeto(self,path_to_save = f'{models.path_dados_tratados}/graficos_frequencia'):
+        Objeto_Frequencia = indicadores_frequencia.DominioFrequencia(self.sinal, self.rpm, path_to_save=path_to_save)
+        return Objeto_Frequencia
+    def plotar_fft(self,salvar=True,plotar=True,path_to_save = f'{models.path_dados_tratados}/graficos_frequencia'):
+        Objeto_Frequencia = self.definir_objeto(path_to_save=path_to_save)
 
-    def plotar_fft(self,salvar=True,plotar=True):
-        self.definir_objeto()
-        self.Objeto_Frequencia.plot_fft(title=f'Sinal do sensor {self.posicao} número {self.numero_sensor} no domínio da frequência',
+        Objeto_Frequencia.plot_fft(title=f'Sinal do sensor {self.posicao} número {self.numero_sensor} no domínio da frequência',
                                         salvar=salvar,
                                         plotar=plotar)
 
-    def plotar_fft_com_frequencia_de_referencia(self,salvar=True,plotar=True):
-        self.definir_objeto()
+    def plotar_fft_com_frequencia_de_referencia(self,salvar=True,plotar=True, path_to_save = f'{models.path_dados_tratados}/graficos_frequencia'):
+        Objeto_Frequencia = self.definir_objeto(path_to_save=path_to_save)
         freq = self.freq_ref
-        self.Objeto_Frequencia.plot_fft(freq_referencia=freq,
+        Objeto_Frequencia.plot_fft(freq_referencia=freq,
                                         title=f'Frequência = {np.round(freq,1)}Hz',
                                         salvar=salvar,plotar=plotar)
 
-    def plotar_bandas(self,num_harmonicos=10,salvar=True,plotar=True):
-        self.definir_objeto()
-        self.Objeto_Frequencia.plot_banda(self.rpm,self.rpm,title=f'- Rotação da Máquina = {np.round(self.rpm,1)}Hz')
+    def plotar_bandas(self,num_harmonicos=10,salvar=True,plotar=True, path_to_save = f'{models.path_dados_tratados}/graficos_frequencia'):
+        Objeto_Frequencia = self.definir_objeto(path_to_save=path_to_save)
+        Objeto_Frequencia.plot_banda(self.rpm,self.rpm,title=f'- Rotação da Máquina = {np.round(self.rpm,1)}Hz')
 
         freq = self.freq_ref
         for harmonico in range(1,num_harmonicos+1):
-            self.Objeto_Frequencia.plot_banda(  freq*(harmonico),
+            Objeto_Frequencia.plot_banda(  freq*(harmonico),
                                                 self.rpm,
                                                 title=f' - Frequência = {np.round(freq,1)}Hz - {harmonico}º Harmônico à rotação de {np.round(self.rpm,1)}Hz',
                                                 salvar=salvar,
@@ -183,7 +187,7 @@ class MatrizConfusao():
         
         # Condicional para salvar
         if salvar:
-            plt.savefig(F"{create_images_dir(self.harmonico)}/{self.title}.png",dpi=600)
+            plt.savefig(f"{create_images_dir(self.harmonico)}/{self.title}.png",dpi=600)
 
         # Condicional para plotar
         if plotar:

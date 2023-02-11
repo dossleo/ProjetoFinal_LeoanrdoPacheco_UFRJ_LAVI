@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import models
-from models import indicadores_frequencia, get_raw_data
+from models import indicadores_frequencia, get_raw_data, criar_pastas
+import numpy as np
+import math
 
 
 class GetRPM():
@@ -23,9 +25,13 @@ class GetRPM():
     None
     """
 
-    def __init__(self,sinal_rpm, sinal_sensor):
+    def __init__(self,sinal_rpm, sinal_sensor, path_to_save = f'{models.path_dados_tratados}/dados_rotacao'):
+
+        self.path_to_save = path_to_save
+
         self.sinal_sensor = sinal_sensor
         self.data = np.array(sinal_rpm)
+        self.sinal_rpm = self.data
 
         self.data = np.abs(self.data-np.mean(self.data))
         self.freq_aquisicao = models.freq_aquisicao
@@ -182,8 +188,6 @@ class GetRPM():
         porcentagem_janela = 0.35
         janela_inferior = int(porcentagem_janela*len(self.rpm))
         janela_superior = int((1-porcentagem_janela)*len(self.rpm))
-        # metade = len(self.rpm)//2
-        # janela = len(self.rpm)//100
 
         self.rpm_medio = np.mean(self.rpm[janela_inferior:janela_superior])
 
@@ -197,7 +201,26 @@ class GetRPM():
 
         return self.rpm_medio
 
-    def plot_picos(self):
+    def plot_rpm_bruto(self, salvar=True, plotar=True,title='Dados Brutos - Sensor de Rotação'):
+
+        fig, ax = plt.subplots()
+        fig.set_size_inches(14, 5)
+        ax.plot(self.vetor_tempo,self.sinal_rpm)
+        plt.ylim((0,np.max(self.data)*1.5))
+        plt.xlabel('Tempo [s]')
+        plt.ylabel('Amplitude [Volt]')
+        plt.title(title)
+
+        if salvar:
+            fig.savefig(f'{criar_pastas.create_dir(self.path_to_save)}/rotacao_bruta_{title}.png',dpi=600)
+
+        if plotar:
+            plt.show()
+
+        plt.close()
+    
+    
+    def plot_picos(self, salvar=True, plotar=True,title='Dados de Rotação tratados'):
         """
         plot_picos() é um método da Classe GetRPM() 
         que tem por objetivo exibir graficamente o array extraído 
@@ -214,12 +237,23 @@ class GetRPM():
         """
 
         self.data = self.square_wave()
-
-        plt.plot(self.vetor_tempo,self.data)
+        fig, ax = plt.subplots()
+        fig.set_size_inches(14, 5)
+        ax.plot(self.vetor_tempo,self.data)
         plt.ylim((0,np.max(self.data)*1.5))
-        plt.show()
+        plt.xlabel('Tempo [s]')
+        plt.ylabel('Amplitude [Volt]')
+        plt.title(title)
 
-    def plot_rpm(self,unidade = 'hz'):
+        if salvar:
+            fig.savefig(f'{criar_pastas.create_dir(self.path_to_save)}/rotacao_bruta_{title}.png',dpi=600)
+
+        if plotar:
+            plt.show()
+
+        plt.close()
+
+    def plot_rpm(self,unidade = 'hz', salvar=True, plotar=True):
         """
         plot_rpm() é um método da Classe GetRPM() 
         que tem por objetivo exibir graficamente o valor constante 
@@ -236,10 +270,94 @@ class GetRPM():
         """
 
         rpm_ponto = self.get_rpm_ponto_a_ponto(unidade)
-        plt.plot(self.vetor_tempo,rpm_ponto)
+        title = f'Rotação ao longo do tempo - Rotação Média = {self.get_rpm_medio()} Hz'
+
+        fig, ax = plt.subplots()
+        fig.set_size_inches(14, 5)
+        ax.plot(self.vetor_tempo,rpm_ponto)
         plt.grid(True)
         plt.ylim((0,np.max(rpm_ponto)*1.5))
-        plt.show()
+        plt.xlabel('Tempo [s]')
+        plt.ylabel('Rotação [Hz]')
+        plt.title(title)
+
+        if salvar:
+            fig.savefig(f'{criar_pastas.create_dir(self.path_to_save)}/rotacao_bruta_{title}.png',dpi=600)
+
+        if plotar:
+            plt.show()
+
+        plt.close()
+
+class PlotRPMPASTAS:
+    def __init__(self,pasta,path_to_save = f'{models.path_dados_tratados}/graficos_rpm') -> None:
+        self.path_to_save = path_to_save
+        
+        self.pasta = pasta
+        self.arquivos = os.listdir(pasta)
+
+    def extrai_sinal_rpm(self,index):
+        sinal_rpm = get_raw_data.GetData(self.pasta,self.arquivos[index],0).Get()
+        return sinal_rpm
+
+    def extrai_sinal_sensor(self,index):
+        sinal_rpm = get_raw_data.GetData(self.pasta,self.arquivos[index],1).Get()
+        return sinal_rpm
+
+    def Cria_Objeto(self,sinal_rpm,sinal_sensor):
+        Objeto_RPM = GetRPM(sinal_rpm,sinal_sensor)
+        return Objeto_RPM
+
+    def extrai_medio(self,Objeto_RPM):
+        rpm_medio = Objeto_RPM.get_rpm_medio('hz')
+        return rpm_medio
+
+    def plot_rpm_pasta_inteira(self, unidade = 'hz', salvar=True, plotar=True):
+        
+
+        sinal_rpm_inicial = self.extrai_sinal_rpm(0)
+        sinal_sensor_inicial = self.extrai_sinal_sensor(0)
+
+        Objeto_rpm_inicial = self.Cria_Objeto(sinal_rpm_inicial,sinal_sensor_inicial)
+
+        rpm_medio_inicial = Objeto_rpm_inicial.get_rpm_medio('hz')
+        rpms = [rpm_medio_inicial]
+
+        for i in range(len(self.arquivos)):
+            sinal_rpm = 0
+            sinal_sensor = 0
+
+            sinal_rpm = self.extrai_sinal_rpm(i)
+            sinal_sensor = self.extrai_sinal_sensor(i)
+
+            Objeto_rpm = self.Cria_Objeto(sinal_rpm,sinal_sensor)
+            rpm_medio = Objeto_rpm.get_rpm_medio('hz')
+
+            if np.abs(rpm_medio) > np.abs(rpms[-1])+3:
+                rpm_medio = rpms[-1]+1
+
+            rpms.append(rpm_medio)
+
+        rpms.pop(0)
+
+        title = f'Rotações dos sinais ao longo dos testes - Rotação Mínima = {np.round(np.min(rpms),1)} Hz - Rotação Máxima = {np.round(np.max(rpms),1)} Hz'
+        
+        fig, ax = plt.subplots()
+        fig.set_size_inches(14, 5)
+        ax.plot(range(len(rpms)),rpms)
+        plt.grid(True)
+        plt.ylim((0,np.max(rpms)*1.5))
+        plt.xlabel('Número do Experimento')
+        plt.ylabel('Rotação [Hz]')
+        plt.title(title)
+        
+        if salvar:
+            fig.savefig(f'{criar_pastas.create_dir(self.path_to_save)}/rotacao_bruta_{title}.png',dpi=600)
+
+        if plotar:
+            plt.show()
+
+        plt.close()
 
 
     

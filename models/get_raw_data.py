@@ -19,7 +19,7 @@ class GetData():
     None
     """
 
-    def __init__(self,pasta,arquivo,coluna=0):
+    def __init__(self,pasta:str,arquivo:str,coluna=0):
         
         self.pasta = pasta
         self.arquivo = arquivo

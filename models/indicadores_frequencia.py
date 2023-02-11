@@ -1,19 +1,17 @@
 import models
 import numpy as np
 import matplotlib.pyplot as plt
-from models import filtro_passa_baixa
+from models import filtro_passa_baixa, criar_pastas
 import os
 
-def create_images_dir():
-    dir_path = os.path.join(f'{models.path_dados_tratados}/graficos_frequencia')
-    if not os.path.exists(dir_path):
-        os.mkdir(dir_path)
-    return dir_path
+
 class DominioFrequencia():
 
 
-    def __init__(self,sinal,rpm,freq_aquisicao = models.freq_aquisicao):
+    def __init__(self,sinal,rpm,freq_aquisicao = models.freq_aquisicao,path_to_save = f'{models.path_dados_tratados}/graficos_frequencia'):
         
+        self.path_to_save = path_to_save
+
         self.sinal = sinal # dados brutos
         self.n_points_dado_bruto = len(self.sinal) # npoints
         self.rpm = rpm
@@ -31,7 +29,6 @@ class DominioFrequencia():
         # self.sinal = filtro_passa_baixa.Filtro(self.sinal,900,5).FiltroPassaBaixa()
 
         frequencia_de_corte = frequencia_de_corte*5
-        # Todo: verificar unidades do dado de entrada e saída da FFT
 
         # Definindo o valor da amplitude de FFT
         self.fft_transform = np.fft.fft(self.sinal)
@@ -84,7 +81,7 @@ class DominioFrequencia():
             plt.show()
 
         if salvar:
-            fig.savefig(f"{create_images_dir()}/fft_freq_{np.round(freq_referencia,1)}Hz_Rotação_{np.round(self.rpm,1)}.png",dpi=600)
+            fig.savefig(f"{criar_pastas.create_dir(self.path_to_save)}/fft_freq_{np.round(freq_referencia,1)}Hz_Rotação_{np.round(self.rpm,1)}.png",dpi=600)
         
         plt.close()
 
@@ -135,7 +132,7 @@ class DominioFrequencia():
             plt.show()
 
         if salvar:
-            fig.savefig(f"{create_images_dir()}/fft_banda_{np.round(freq_referencia,1)}Hz_Rotação_{np.round(self.rpm,1)}.png",dpi=600)
+            fig.savefig(f"{criar_pastas.create_dir(self.path_to_save)}/fft_banda_{np.round(freq_referencia,1)}Hz_Rotação_{np.round(self.rpm,1)}.png",dpi=600)
         
         plt.close()
 
