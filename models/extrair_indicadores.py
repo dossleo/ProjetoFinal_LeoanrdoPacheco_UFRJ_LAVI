@@ -16,7 +16,7 @@ class ExtrairIndicadores:
     def CriarObjeto(self,sinal):
 
         self.Objeto_Frequencia = indicadores_frequencia.DominioFrequencia(  sinal=sinal,
-                                                                            rpm=self.rpm_medio,
+                                                                            rpm=self.rpm_medio
                                                                             )
 
         self.Objeto_Temporal = indicadores_tempo.DominioTempo(sinal)

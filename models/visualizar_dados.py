@@ -211,6 +211,9 @@ class ComparacaoDeAcuracias:
         fig.set_figwidth(7)
         fig.set_figheight(7)
 
+        plt.ylim((0,110))
+        plt.hlines(100,0,len(score),colors='black',linestyles='dashdot')
+
         # Configurando título e legenda da imagem
         plt.title("Comapração entre a acurácia dos algoritmos")
         plt.legend(loc='lower right', fontsize='x-small')
@@ -239,6 +242,8 @@ class ComparacaoDeAcuracias:
         fig = ax.get_figure()
         fig.set_figwidth(7)
         fig.set_figheight(7)
+
+        plt.ylim((0,110))
 
         # Setando título e legenda
         plt.title(title)
