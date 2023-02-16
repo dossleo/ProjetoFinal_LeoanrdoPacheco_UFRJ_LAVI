@@ -6,13 +6,13 @@ from sklearn.metrics import accuracy_score, classification_report
 from numpy import round
 class MethodPrepare:
 
-    def __init__(self, data:pd.DataFrame) -> None:
+    def __init__(self, data:pd.DataFrame, test_size = models.test_size) -> None:
         self.data = data
         self.x_data = self.get_x_data()
         self.y_data = self.get_y_data()
         self.x_columns = models.x_columns
 
-        self.test_size = models.test_size
+        self.test_size = test_size
         self.seed = models.seed
 
     def get_x_data(self):
@@ -31,19 +31,21 @@ class MethodPrepare:
 
 class Classifier(MethodPrepare):
 
-    def __init__(self, data: pd.DataFrame, harmonico: int, classifier:sklearn.ensemble, **kwargs) -> None:
+    def __init__(self, data: pd.DataFrame, harmonico: int,classifier:sklearn.ensemble, rede_oculta = '', test_size=models.test_size,**kwargs) -> None:
         self.harmonico = harmonico
         self.classifier = classifier(**kwargs)
-        super().__init__(data)
+        self.test_size = test_size
+        self.rede = rede_oculta
+        super().__init__(data,test_size=self.test_size)
 
 
     def exportar_relatorio(self):
-        metodo = self.classifier.__class__.__name__
+        metodo = f'{self.classifier.__class__.__name__}{self.rede}'
 
         relatorio_classificador = f'Classificador: {metodo} - {self.harmonico}º harmonico'
-        relatorio_acuracia = f'A precisão do classificador é:{round(100*accuracy_score(self.y_test, self.prediction),1)}%'
+        self.relatorio_acuracia = f'A precisão do classificador é:{round(100*accuracy_score(self.y_test, self.prediction),1)}%'
         relatorio_report = f'Relatório de classificação:\n{classification_report(self.y_test, self.prediction)}'
-        relatorio = f'{relatorio_classificador}\n{relatorio_acuracia}\n{relatorio_report}'
+        relatorio = f'{relatorio_classificador}\n{self.relatorio_acuracia}\n{relatorio_report}'
 
         with open(f"database/dados_tratados/harmonicos_{self.harmonico}/relatorio_{metodo}_harmonico{self.harmonico}.txt", "w") as text_file:
             text_file.write(relatorio)

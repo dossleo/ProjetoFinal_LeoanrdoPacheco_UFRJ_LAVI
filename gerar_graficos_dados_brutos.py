@@ -21,12 +21,12 @@ import os
 # pasta ='database/dados_brutos/overhang/ball_fault/0g'
 # pasta ='database/dados_brutos/overhang/ball_fault/6g'
 # pasta ='database/dados_brutos/overhang/ball_fault/20g'
-pasta ='database/dados_brutos/overhang/ball_fault/35g'
+# pasta ='database/dados_brutos/overhang/ball_fault/35g'
 
 # pasta ='database/dados_brutos/overhang/cage_fault/0g'
 # pasta ='database/dados_brutos/overhang/cage_fault/6g'
 # pasta ='database/dados_brutos/overhang/cage_fault/20g'
-# pasta ='database/dados_brutos/overhang/cage_fault/35g'
+pasta ='database/dados_brutos/overhang/cage_fault/35g'
 
 # pasta ='database/dados_brutos/overhang/outer_race/0g'
 # pasta ='database/dados_brutos/overhang/outer_race/6g'
@@ -48,15 +48,15 @@ pasta ='database/dados_brutos/overhang/ball_fault/35g'
 # pasta ='database/dados_brutos/underhang/outer_race/20g'
 # pasta ='database/dados_brutos/underhang/outer_race/35g'
 
-numero_sensor = 2
 posicao_sensor = 'externo'
+numero_sensor = 2
 numero_frequencia_referencia = 1
 
 arquivo = os.listdir(pasta)[-1]
 
 executar_grafico_rpm = False
-executar_grafico_tempo = False
-executar_grafico_frequencia = True
+executar_grafico_tempo = True
+executar_grafico_frequencia = False
 
 numero_de_harmonicos = 2
 
@@ -76,7 +76,7 @@ if executar_grafico_tempo:
                                                                 arquivo=arquivo,
                                                                 numero_sensor=numero_sensor,
                                                                 posicao=posicao_sensor,
-                                                                title=f' - Rolamento número {numero_sensor} {posicao_sensor}'
+                                                                title=f' - Rolamento {posicao_sensor} - Sensor número {numero_sensor}'
                                                                 )   
     Objeto_Visualizar_Tempo.plt_sinal(  salvar=True,
                                         plotar=True)

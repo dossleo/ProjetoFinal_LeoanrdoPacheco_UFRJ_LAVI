@@ -220,7 +220,7 @@ y_column = colunas[-1]
 # --------- Machine Learning Sets ---------------
 # -----------------------------------------------
 
-seed = 30
+seed = 10
 test_size = 0.50
 x_columns = colunas[0:-1]
 y_column = colunas[-1]

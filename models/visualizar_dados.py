@@ -144,10 +144,11 @@ class VisualizarFrequencia:
 # Classe para gerar a matriz de confusão e relatório de scores de um método
 class MatrizConfusao():
 
-    def __init__(self, classifier, method_name,harmonico) -> None:
+    def __init__(self, classifier, method_name,harmonico,legenda_rede='') -> None:
         self.classifier = classifier
         self.title = method_name
         self.harmonico = harmonico
+        self.legenda_rede = legenda_rede
 
     def plot_confusion_matrix(self,plotar:bool=False,salvar=True):
         # Criando matriz de confusão
@@ -180,14 +181,14 @@ class MatrizConfusao():
         
         
         # Configurando título de labels
-        disp.ax_.set_title(f"Matriz de Confusão - {self.title}")
+        disp.ax_.set_title(f"Matriz de Confusão - {self.title}\n{self.legenda_rede}")
         disp.ax_.set_xlabel('Categoria Prevista', fontsize=13)
         disp.ax_.set_ylabel('Categoria Real', fontsize=13)
         disp.ax_.tick_params(labelsize=5)
         
         # Condicional para salvar
         if salvar:
-            plt.savefig(f"{create_images_dir(self.harmonico)}/{self.title}.png",dpi=600)
+            plt.savefig(f"{create_images_dir(self.harmonico)}/{self.title}{self.legenda_rede}.png",dpi=600)
 
         # Condicional para plotar
         if plotar:
@@ -212,7 +213,6 @@ class ComparacaoDeAcuracias:
         fig.set_figheight(7)
 
         plt.ylim((0,110))
-        plt.hlines(100,0,len(score),colors='black',linestyles='dashdot')
 
         # Configurando título e legenda da imagem
         plt.title("Comapração entre a acurácia dos algoritmos")

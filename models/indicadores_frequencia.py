@@ -26,8 +26,6 @@ class DominioFrequencia():
 
     def run_fft(self,frequencia_de_corte = 0):
 
-        # self.sinal = filtro_passa_baixa.Filtro(self.sinal,900,5).FiltroPassaBaixa()
-
         frequencia_de_corte = frequencia_de_corte*5
 
         # Definindo o valor da amplitude de FFT
