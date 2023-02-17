@@ -215,7 +215,7 @@ class ComparacaoDeAcuracias:
         plt.ylim((0,110))
 
         # Configurando título e legenda da imagem
-        plt.title("Comapração entre a acurácia dos algoritmos")
+        plt.title("Comparação entre a acurácia dos algoritmos")
         plt.legend(loc='lower right', fontsize='x-small')
         plt.ylabel('Acurácia [%]')
 
