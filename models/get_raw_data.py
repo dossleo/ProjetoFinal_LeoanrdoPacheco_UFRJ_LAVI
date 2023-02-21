@@ -26,16 +26,6 @@ class GetData():
         self.dataset=pd.read_csv(os.path.join(self.pasta, self.arquivo), sep=',',header=None,low_memory=False)
 
         self.coluna = coluna
-        # self.sinal = np.array(self.dataset)
-
-        # # # # Split the string values into separate columns
-        # # cols = np.array([row.split(',') for row in self.sinal])
-
-        # # # # Convert the columns to float values
-        # self.sinal = self.sinal.astype(float)
-
-        # # # # Reshape the array to have 8 columns and 2 rows
-        # self.result = self.sinal.reshape((8, len(self.sinal)))
     
     def Get(self):
         """
