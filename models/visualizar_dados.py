@@ -76,8 +76,9 @@ class VisualizarTempo():
         plt.close()
 
 class VisualizarFrequencia:
-    def __init__(self, pasta:str,arquivo:str,numero_sensor=1,posicao='interno',num_frequencia_referencia:int=0) -> None:
+    def __init__(self, sinal_sensor,pasta:str,arquivo:str,numero_sensor=1,posicao='interno',num_frequencia_referencia:int=0) -> None:
         
+        self.df = sinal_sensor
         self.pasta = pasta
         self.arquivo = arquivo   
         self.posicao = posicao
@@ -86,12 +87,13 @@ class VisualizarFrequencia:
         self.coluna = models.sensores[self.sensor]
         self.frequencias_rolamento = models.frequencias_rolamento
         self.num_frequencia_referencia = num_frequencia_referencia
+        
         self.rpm = self.pegar_rpm()
         self.freq_ref = self.pegar_frequencia_de_referencia()
 
 
     def pegar_sinal(self):
-        self.sinal = get_raw_data.GetData(self.pasta,self.arquivo,self.coluna).Get()
+        self.sinal = self.df
         self.sinal_rpm = get_raw_data.GetData(self.pasta,self.arquivo,0).Get()
 
     def pegar_rpm(self):

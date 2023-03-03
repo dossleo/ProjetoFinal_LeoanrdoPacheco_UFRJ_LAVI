@@ -28,11 +28,11 @@ class DominioTempo():
         plt.show()
 
     def maximum(self):
-        self.max = np.max(self.sinal)        
+        self.max = np.max(np.abs(self.sinal))        
         return self.max
 
     def minimum(self):
-        self.min = np.min(self.sinal)        
+        self.min = np.min(np.abs(self.sinal))        
         return self.min
 
     def mean(self):

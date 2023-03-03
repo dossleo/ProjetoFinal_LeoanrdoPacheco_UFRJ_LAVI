@@ -148,5 +148,5 @@ class NormalizarSinal():
     def save_as_csv(self):
         df = self.Get()
 
-        df.to_csv(create_dir(self.harmonico))
+        df.to_csv(f'{models.path_dados_tratados}/harmonicos_{self.harmonico}/Dados_Normalizados.csv')
         print(f'Arquivo salvo com sucesso!\n{models.path_dados_tratados}/harmonicos_{self.harmonico}/Dados_Normalizados.csv')

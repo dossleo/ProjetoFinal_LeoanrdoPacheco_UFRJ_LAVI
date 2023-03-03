@@ -3,7 +3,7 @@ import os
 
 os.system("cls")
 
-harmonico_inicial = 1
+harmonico_inicial = 2
 harmonico_final = 10
 
 GerarCSV(harmonico_inicial,harmonico_final).executar()

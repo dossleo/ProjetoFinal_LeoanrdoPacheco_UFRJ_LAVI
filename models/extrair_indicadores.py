@@ -67,7 +67,7 @@ class ExtrairIndicadores:
                 self.ExtrairHarmonicos(sinal,index,no_harmonicos)
 
                 # data_json[f'pot_relativa_{local}'] = np.abs(self.pot_relativa)
-                data_json[f'Pot_{local}'] = np.abs(self.pot)
+                data_json[f'pot_{local}'] = np.abs(self.pot)
 
             data_json['sensor'] = self.sensor
             data_json['defeito'] = self.defeito

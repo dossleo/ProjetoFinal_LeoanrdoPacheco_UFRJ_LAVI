@@ -57,6 +57,7 @@ class GeneralFuncions():
             else:
                 tempo_estimado = 0
             
+            
             print(f'\Harmônico: {harmonico}\nPastas Percorridas: {cont}/{len(models.PATH)}\nAndamento Total: {np.round(100*ciclo_atual/ciclos_totais,2)}%')
             print("Tempo decorrido: {:02}:{:02}:{:02}".format(int(elapsed_time // 3600), int(elapsed_time % 3600 // 60), int(elapsed_time % 60)))
             print("Tempo Estimado até o Fim: {:02}:{:02}:{:02}".format(int(tempo_estimado // 3600), int(tempo_estimado % 3600 // 60), int(tempo_estimado % 60)))
@@ -78,7 +79,7 @@ class GerarCSV(GeneralFuncions):
 
     # Calcula o total de ciclos que o processamento de dados irá fazer
     def calcula_ciclos_totais(self,harmonico_inicial,harmonico_final):  # Ver como ta isso
-        num_harmonicos = int(harmonico_inicial-harmonico_final+1)
+        num_harmonicos = int(harmonico_final-harmonico_inicial+1)
         num_pastas = len(self.PASTAS)
         return num_harmonicos*num_pastas
 
@@ -166,7 +167,7 @@ class GerarCSV(GeneralFuncions):
             
             # Salva os dados concatenados em csv
             
-            self.salvar_dados(lista_dados, harmonico,pasta)
+            self.salvar_dados(dados=lista_dados, harmonico=harmonico)
 
             # Normalizar e Salvar Dados tratados
             pasta_completa = f'database/dados_tratados/harmonicos_{harmonico}'

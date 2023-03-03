@@ -18,7 +18,7 @@ class DominioFrequencia():
 
         self.freq_aquisicao = freq_aquisicao
 
-        self.frequencia_de_corte = 1000
+        self.frequencia_de_corte = 2000
 
         duracao_seg = self.n_points_dado_bruto/self.freq_aquisicao # duração em segundos
 
@@ -52,7 +52,7 @@ class DominioFrequencia():
         self.fft_transform = np.real(self.fft_transform)
 
     def plot_fft(self,freq_referencia=0,title='',salvar=True,plotar=True):
-        self.run_fft(1000)
+        self.run_fft(2000)
 
         fig, ax = plt.subplots()
         ax.plot(np.abs(self.fft_frequencia),np.abs(self.fft_transform))
@@ -61,13 +61,14 @@ class DominioFrequencia():
                 plt.vlines(freq_referencia*(i+1),0,np.max(self.fft_transform),'red',linestyles='dotted')
         
         # Aumenta o tamanho da janela do plot para 10x10 polegadas
-        fig.set_size_inches(14, 7)
+        fig.set_size_inches(12, 6)
         # print(np.max(self.fft_transform))
         plt.vlines(self.rpm,0,1.1*np.max(self.fft_transform),'green',linestyles='dotted')
-        plt.ylim((0,300000))
+        plt.ylim((0,100000))
+        plt.xlim((0,2000))
 
         plt.xlabel("Frequência [Hz]")
-        plt.ylabel("Amplitude [mm/s²]")
+        plt.ylabel("Amplitude de Potência [W/Hz]")
 
         plt.gca().yaxis.get_major_formatter().set_powerlimits((0, 1))
         plt.tight_layout()

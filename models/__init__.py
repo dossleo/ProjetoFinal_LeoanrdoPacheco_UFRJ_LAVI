@@ -111,7 +111,7 @@ diametro_gaiola = 2.8519 # mm
 
 # ball_fault = 1.8710 # Original
 ball_fault_overhang = 1.9860 # Adequado para pasta ='database/dados_brutos/overhang/ball_fault/35g'
-ball_fault_underhang = 1.9878 # Adequado para pasta ='database/dados_brutos/underhang/ball_fault/35g'
+ball_fault_underhang = 1.9678 # Adequado para pasta ='database/dados_brutos/underhang/ball_fault/35g'
 
 
 # cage_fault = 0.3750 # Original
@@ -221,36 +221,10 @@ y_column = colunas[-1]
 # -----------------------------------------------
 
 seed = 10
-test_size = 0.50
+test_size = 0.51
 x_columns = colunas[0:-1]
 y_column = colunas[-1]
 
-# -----------------------------------------------
-# -----------------------------------------------
-# --------- Base de dados MFPT ------------------
-# -----------------------------------------------
-# -----------------------------------------------
 
-mapped_databases = {
-        '1 - Three Baseline Conditions': 'normal',
-        '2 - Three Outer Race Fault Conditions': 'outer race',
-        '3 - Seven More Outer Race Fault Conditions': 'outer race',
-        # '4 - Seven Inner Race Fault Conditions': 'inner race'
-    }
-
-faults = ["normal","outer race"]#,"inner race"]
-
-# Data Parameters
-frequency_rate_dict = {
-    "normal":97656,
-    "outer race": 97656,
-    # "inner race": 48828
-}
 time_window = 1
-overlap = 0.5
-
-# General Machine Learning Parameters
-seed = 30
-test_size = 0.25
-
-os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin/'
+overlap = 0.51
