@@ -183,30 +183,30 @@ colunas_tempo = ['rotacao_hz',
                  'fator_crista',
                  'defeito']
 
-colunas_freq_soma_relativa = [
-                'soma_relativa_ball_fault',
-                # 'soma_relativa_cage_fault',
-                'soma_relativa_outer_race',
-                # 'soma_relativa_inner_race',
-                'soma_relativa_rotacao_hz',
-                'defeito']
+# colunas_freq_pot_relativa = [
+#                 'pot_relativa_ball_fault',
+#                 # 'pot_relativa_cage_fault',
+#                 'pot_relativa_outer_race',
+#                 # 'pot_relativa_inner_race',
+#                 'pot_relativa_rotacao_hz',
+#                 'defeito']
 
-colunas_freq_soma = [
-                'soma_ball_fault',
-                # 'soma_cage_fault',
-                'soma_outer_race',
-                # 'soma_inner_race',
-                'soma_rotacao_hz',
+colunas_freq_pot = [
+                'pot_ball_fault',
+                # 'pot_cage_fault',
+                'pot_outer_race',
+                # 'pot_inner_race',
+                'pot_rotacao_hz',
                 'defeito']
 
 coluna_sensor = ['sensor']
 
 colunas = colunas_tempo[0:-1]
-for nome in colunas_freq_soma[0:-1]:
+for nome in colunas_freq_pot[0:-1]:
     colunas.append(nome)
 
-for nome in colunas_freq_soma_relativa[0:-1]:
-    colunas.append(nome)
+# for nome in colunas_freq_pot_relativa[0:-1]:
+#     colunas.append(nome)
 
 colunas.append('sensor')
 colunas.append('defeito')
@@ -246,8 +246,8 @@ frequency_rate_dict = {
     "outer race": 97656,
     # "inner race": 48828
 }
-time_window = 3
-overlap = 90
+time_window = 1
+overlap = 0.5
 
 # General Machine Learning Parameters
 seed = 30

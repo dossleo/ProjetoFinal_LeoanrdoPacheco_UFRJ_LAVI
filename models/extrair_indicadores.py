@@ -27,22 +27,22 @@ class ExtrairIndicadores:
         
         self.largura = self.rpm_medio
 
-        self.soma_relativa_lista = []
-        self.soma_list = []
+        # self.pot_relativa_lista = []
+        self.pot_list = []
 
         
         harmonicos_fourier, harmonicos_frequencia = self.Objeto_Frequencia.banda_frequencia(self.freq_referencia[index],self.largura,no_harmonicos)
-        self.soma_relativa = self.Objeto_Frequencia.soma_relativa_sinal(harmonicos_fourier,self.Objeto_Frequencia.fft_transform)
-        self.soma = self.Objeto_Frequencia.soma_sinal(harmonicos_fourier)
+        # self.pot_relativa = self.Objeto_Frequencia.pot_relativa_sinal(harmonicos_fourier,self.Objeto_Frequencia.fft_transform)
+        self.pot = self.Objeto_Frequencia.pot_sinal(harmonicos_fourier)
 
     def Get(self,no_harmonicos=1):
         
         indice = 0
-        janela = 3.0 #segundo
+        janela = models.time_window
+
+        sobreposicao = models.overlap
+
         janela_pontos = janela*self.FREQ_AQUISICAO
-
-        sobreposicao = 0.95 # %
-
         incrementer = int((janela*(1-sobreposicao))*self.FREQ_AQUISICAO)
         df = []
 
@@ -66,8 +66,8 @@ class ExtrairIndicadores:
                 local = models.defeito_rolamento[index]
                 self.ExtrairHarmonicos(sinal,index,no_harmonicos)
 
-                data_json[f'soma_relativa_{local}'] = np.abs(self.soma_relativa)
-                data_json[f'soma_{local}'] = np.abs(self.soma)
+                # data_json[f'pot_relativa_{local}'] = np.abs(self.pot_relativa)
+                data_json[f'Pot_{local}'] = np.abs(self.pot)
 
             data_json['sensor'] = self.sensor
             data_json['defeito'] = self.defeito

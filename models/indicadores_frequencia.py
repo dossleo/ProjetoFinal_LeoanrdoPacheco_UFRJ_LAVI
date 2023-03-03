@@ -84,17 +84,18 @@ class DominioFrequencia():
         
         plt.close()
 
-    def banda_frequencia(self,freq_referencia,largura = 14,no_harmonicos=2):
+    def banda_frequencia(self,freq_referencia:float,largura = 14,no_harmonicos=2):
 
         self.run_fft() 
 
-        erro = 0.1
+        incerteza = 0.1
         
         harmonicos_frequencia = list()
         harmonicos_fourier = list()
 
+        larg = largura*(1+incerteza)
+        
         for harmonico in range(1,no_harmonicos+1):
-            larg = largura*(1+erro*no_harmonicos)
             
             banda = np.logical_and(self.fft_frequencia >= (freq_referencia*(harmonico) - larg/2), self.fft_frequencia <= (freq_referencia*(harmonico) + larg/2))
 
@@ -103,7 +104,7 @@ class DominioFrequencia():
 
         return harmonicos_fourier, harmonicos_frequencia
 
-    def plot_banda(self,freq_referencia,largura,title = '',salvar=True,plotar=True):
+    def plot_banda(self,freq_referencia:float,largura:float,title = '',salvar=True,plotar=True):
 
         lista_fourier_banda, lista_frequencia_banda = self.banda_frequencia(freq_referencia,largura)
 
@@ -136,16 +137,16 @@ class DominioFrequencia():
         
         plt.close()
 
-    def soma_relativa_sinal(self,lista_sinal_fourier_banda,sinal_fourier_completo):
-        soma_relativa = 0
+    def pot_relativa_sinal(self,lista_sinal_fourier_banda,sinal_fourier_completo):
+        pot_relativa = 0
         for i in range(len(lista_sinal_fourier_banda)):
             fourier_abs = np.sum(lista_sinal_fourier_banda[i])
-            soma_relativa += fourier_abs/np.sum(sinal_fourier_completo)
-        return soma_relativa
+            pot_relativa += fourier_abs/np.sum(sinal_fourier_completo)
+        return pot_relativa
 
-    def soma_sinal(self,lista_sinal_fourier_banda):
-        soma = 0
+    def pot_sinal(self,lista_sinal_fourier_banda):
+        pot = 0
         for i in range(len(lista_sinal_fourier_banda)):
-            soma += np.sum(lista_sinal_fourier_banda[i])
-        return soma
+            pot += np.sum(lista_sinal_fourier_banda[i])
+        return pot
         

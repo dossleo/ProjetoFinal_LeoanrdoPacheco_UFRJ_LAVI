@@ -61,7 +61,3 @@ class DominioTempo():
     def crest_factor(self):
         self.cf = self.maximum()/self.rms()
         return self.cf
-
-    # def form_factor(self):
-    #     self.ff = self.rms()/self.mean()
-    #     return self.ff
