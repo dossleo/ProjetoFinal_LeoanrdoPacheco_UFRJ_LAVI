@@ -254,7 +254,7 @@ colunas_pot_relativa = [
 # -----------------------------------------------
 
 seed = 10
-test_size = 0.51
+test_size = 0.2
 
 
 time_window = 1

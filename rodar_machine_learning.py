@@ -66,11 +66,12 @@ redes = [
         (256,),
         (128,128),
         (64,128,64),
-        # (256,128,64),
+        (256,128,64),
         (64,128,256),
         (64,128,128,64),
         (128,128,128),
-        # (128,256,128),
+        (128,256,128),
+        (128,256,256,128),
         (256,512,256)
         # (512,1024,1024,512)
         ]
@@ -152,12 +153,12 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
 
                 ciclo_atual+=1
                 tempo_decorrido(start,ciclo_atual,ciclos_totais,harmonico)
-        breakpoint()
+        # breakpoint()
                 
 
         # Início do aprendizado de máquina de outros classificadores
         
-        # Instanciando o classificador
+        # # Instanciando o classificador
         classifier = ml_functions.Classifier(data = df, colunas=colunas, classifier=RandomForestClassifier, random_state = models.seed,harmonico=harmonico)
         # Realizando a classificação
         classifier.run()
@@ -175,7 +176,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
 
 
         # Instanciando o classificador
-        classifier = ml_functions.Classifier(data = df, colunas=colunas, classifier=KNeighborsClassifier,harmonico=harmonico)
+        classifier = ml_functions.Classifier(data = df, colunas=colunas, classifier=KNeighborsClassifier,harmonico=harmonico,n_neighbors=1)
         # Realizando a classificação
         classifier.run()
 
@@ -191,7 +192,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
 
 
 
-        # Instanciando o classificador
+        # # Instanciando o classificador
         classifier = ml_functions.Classifier(data = df, colunas=colunas, classifier=DecisionTreeClassifier, criterion = 'entropy',harmonico=harmonico)
         # Realizando a classificação
         classifier.run()

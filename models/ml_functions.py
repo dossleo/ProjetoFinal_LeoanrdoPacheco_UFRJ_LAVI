@@ -30,7 +30,8 @@ class MethodPrepare:
             self.x_data,
             self.y_data,
             test_size=self.test_size,
-            random_state = self.seed
+            random_state = self.seed,
+            stratify=self.y_data
         )
 
 class Classifier(MethodPrepare):
