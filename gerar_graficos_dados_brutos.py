@@ -2,6 +2,7 @@ import models
 from models import visualizar_dados, get_rpm, criar_pastas, get_raw_data
 
 import os
+os.system("cls")
 
 # pasta ='database/dados_brutos/normal'
 

@@ -6,20 +6,24 @@ from sklearn.metrics import accuracy_score, classification_report
 from numpy import round
 class MethodPrepare:
 
-    def __init__(self, data:pd.DataFrame, test_size = models.test_size) -> None:
+    def __init__(self, data:pd.DataFrame,colunas:list, test_size = models.test_size) -> None:
         self.data = data
+        self.colunas = colunas
         self.x_data = self.get_x_data()
         self.y_data = self.get_y_data()
-        self.x_columns = models.x_columns
+        self.x_columns = self.colunas[0:-1]
 
         self.test_size = test_size
         self.seed = models.seed
 
     def get_x_data(self):
-        return self.data[models.x_columns]
+        df = self.data[self.colunas]
+        df = df[df.columns[0:-1]]
+
+        return df
 
     def get_y_data(self):
-        return self.data[models.y_column]
+        return self.data[self.data.columns[-1]]
 
     def prepare_data(self):
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
@@ -31,12 +35,13 @@ class MethodPrepare:
 
 class Classifier(MethodPrepare):
 
-    def __init__(self, data: pd.DataFrame, harmonico: int,classifier:sklearn.ensemble, rede_oculta = '', test_size=models.test_size,**kwargs) -> None:
+    def __init__(self, data: pd.DataFrame, colunas: list,harmonico: int,classifier:sklearn.ensemble, rede_oculta = '', test_size=models.test_size,**kwargs) -> None:
         self.harmonico = harmonico
         self.classifier = classifier(**kwargs)
         self.test_size = test_size
         self.rede = rede_oculta
-        super().__init__(data,test_size=self.test_size)
+        self.colunas = colunas
+        super().__init__(data,self.colunas,test_size=self.test_size)
 
 
     def exportar_relatorio(self):

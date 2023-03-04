@@ -26,13 +26,13 @@ class DominioFrequencia():
 
     def run_fft(self,frequencia_de_corte = 0):
 
-        frequencia_de_corte = frequencia_de_corte*5
+        frequencia_de_corte = frequencia_de_corte
 
         # Definindo o valor da amplitude de FFT
         self.fft_transform = np.fft.fft(self.sinal)
         self.fft_transform_conjugado = np.conj(self.fft_transform)
 
-        self.fft_transform = np.sqrt(self.fft_transform*self.fft_transform_conjugado)
+        self.fft_transform = np.abs(self.fft_transform*self.fft_transform_conjugado)
 
         self.fft_frequencia = np.fft.fftfreq(len(self.sinal),d=1/self.freq_aquisicao)
 
@@ -52,7 +52,7 @@ class DominioFrequencia():
         self.fft_transform = np.real(self.fft_transform)
 
     def plot_fft(self,freq_referencia=0,title='',salvar=True,plotar=True):
-        self.run_fft(2000)
+        self.run_fft(self.frequencia_de_corte)
 
         fig, ax = plt.subplots()
         ax.plot(np.abs(self.fft_frequencia),np.abs(self.fft_transform))
@@ -65,7 +65,7 @@ class DominioFrequencia():
         # print(np.max(self.fft_transform))
         plt.vlines(self.rpm,0,1.1*np.max(self.fft_transform),'green',linestyles='dotted')
         plt.ylim((0,100000))
-        plt.xlim((0,2000))
+        plt.xlim((0,self.frequencia_de_corte))
 
         plt.xlabel("Frequência [Hz]")
         plt.ylabel("Amplitude de Potência [W/Hz]")
@@ -115,7 +115,7 @@ class DominioFrequencia():
         ax.plot(lista_frequencia_banda[0], lista_fourier_banda[0])
 
         # plt.ylim((0,1.1*np.max(self.fft_transform)))
-        plt.ylim((0,300000))
+        plt.ylim((0,100000))
         plt.xlim(freq_referencia-largura,freq_referencia+largura)
 
         plt.xlabel("Frequência [Hz]")
@@ -142,7 +142,7 @@ class DominioFrequencia():
         pot_relativa = 0
         for i in range(len(lista_sinal_fourier_banda)):
             fourier_abs = np.sum(lista_sinal_fourier_banda[i])
-            pot_relativa += fourier_abs/np.sum(sinal_fourier_completo)
+            pot_relativa += fourier_abs/np.sum(sinal_fourier_completo[0:self.frequencia_de_corte])
         return pot_relativa
 
     def pot_sinal(self,lista_sinal_fourier_banda):

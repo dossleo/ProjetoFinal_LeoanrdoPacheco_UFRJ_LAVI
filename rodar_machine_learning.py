@@ -63,18 +63,32 @@ score_rede = {}
 
 redes = [
         (128,),
+        (256,),
         (128,128),
         (64,128,64),
-        # (64,128,128,64),
         # (256,128,64),
-        # (64,128,256),
+        (64,128,256),
+        (64,128,128,64),
         (128,128,128),
         # (128,256,128),
-        # (256,512,256)
+        (256,512,256)
+        # (512,1024,1024,512)
         ]
 
-ciclos_totais = (len(redes)+3)*harmonico_final
+ciclos_totais = (len(redes)+3)*(harmonico_final-harmonico_inicial+1)
 ciclo_atual = 0
+
+colunas = models.colunas_pot
+
+# colunas = [
+#         'rotacao_hz',
+#         'maximo',
+#         'rms',
+#         'assimetria',
+#         'curtose',
+#         'fator_crista',
+#         'sensor',
+#         'defeito']
 
 
 start = iniciar_contagem()
@@ -82,8 +96,11 @@ start = iniciar_contagem()
 
 # Loop percorrendo 10 harmonicos
 for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
-        local_arquivo = f'{models.path_dados_tratados}/harmonicos_{harmonico}/{dados_normalizados}'
-        df = pd.read_csv(local_arquivo, header=0)
+        arquivo = f'{models.path_dados_tratados}/harmonicos_{harmonico}/{dados_normalizados}'
+        df = pd.read_csv(arquivo, header=0)
+        
+        df = df[colunas]
+
 
         # Dicionário para comparar acurácia entre os métodos
         score = {}
@@ -93,7 +110,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         for rede in redes:
                 legenda_rede =  f'Camadas Ocultas da rede {rede}'
         # Instanciando o classificador
-                classifier = ml_functions.Classifier(data = df, classifier=MLPClassifier,harmonico=harmonico,test_size=0.2,
+                classifier = ml_functions.Classifier(data = df,colunas=colunas ,classifier=MLPClassifier,harmonico=harmonico,test_size=0.2,
                         rede_oculta=f' - {rede}',
                         hidden_layer_sizes=rede, 
                         activation='relu', 
@@ -135,12 +152,13 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
 
                 ciclo_atual+=1
                 tempo_decorrido(start,ciclo_atual,ciclos_totais,harmonico)
+        breakpoint()
                 
 
         # Início do aprendizado de máquina de outros classificadores
         
         # Instanciando o classificador
-        classifier = ml_functions.Classifier(data = df, classifier=RandomForestClassifier, random_state = models.seed,harmonico=harmonico)
+        classifier = ml_functions.Classifier(data = df, colunas=colunas, classifier=RandomForestClassifier, random_state = models.seed,harmonico=harmonico)
         # Realizando a classificação
         classifier.run()
 
@@ -157,7 +175,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
 
 
         # Instanciando o classificador
-        classifier = ml_functions.Classifier(data = df, classifier=KNeighborsClassifier,harmonico=harmonico)
+        classifier = ml_functions.Classifier(data = df, colunas=colunas, classifier=KNeighborsClassifier,harmonico=harmonico)
         # Realizando a classificação
         classifier.run()
 
@@ -174,7 +192,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
 
 
         # Instanciando o classificador
-        classifier = ml_functions.Classifier(data = df, classifier=DecisionTreeClassifier, criterion = 'entropy',harmonico=harmonico)
+        classifier = ml_functions.Classifier(data = df, colunas=colunas, classifier=DecisionTreeClassifier, criterion = 'entropy',harmonico=harmonico)
         # Realizando a classificação
         classifier.run()
 

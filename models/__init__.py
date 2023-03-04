@@ -183,13 +183,13 @@ colunas_tempo = ['rotacao_hz',
                  'fator_crista',
                  'defeito']
 
-# colunas_freq_pot_relativa = [
-#                 'pot_relativa_ball_fault',
-#                 # 'pot_relativa_cage_fault',
-#                 'pot_relativa_outer_race',
-#                 # 'pot_relativa_inner_race',
-#                 'pot_relativa_rotacao_hz',
-#                 'defeito']
+colunas_freq_pot_relativa = [
+                'pot_relativa_ball_fault',
+                # 'pot_relativa_cage_fault',
+                'pot_relativa_outer_race',
+                # 'pot_relativa_inner_race',
+                'pot_relativa_rotacao_hz',
+                'defeito']
 
 colunas_freq_pot = [
                 'pot_ball_fault',
@@ -201,20 +201,53 @@ colunas_freq_pot = [
 
 coluna_sensor = ['sensor']
 
-colunas = colunas_tempo[0:-1]
-for nome in colunas_freq_pot[0:-1]:
-    colunas.append(nome)
+colunas = [
+            'rotacao_hz',
+            'maximo','rms',
+            'assimetria',
+            'curtose',
+            'fator_crista',
 
-# for nome in colunas_freq_pot_relativa[0:-1]:
-#     colunas.append(nome)
+            'pot_ball_fault',
+            'pot_outer_race',
+            'pot_rotacao_hz',
 
-colunas.append('sensor')
-colunas.append('defeito')
+            'pot_relativa_ball_fault',
+            'pot_relativa_outer_race',
+            'pot_relativa_rotacao_hz',
+
+            'sensor',
+            'defeito']
 
 
+colunas_pot = [
+                'rotacao_hz',
+                'maximo','rms',
+                'assimetria',
+                'curtose',
+                'fator_crista',
 
-x_columns = colunas[0:-1]
-y_column = colunas[-1]
+                'pot_ball_fault',
+                'pot_outer_race',
+                'pot_rotacao_hz',
+
+                'sensor',
+                'defeito']
+
+colunas_pot_relativa = [
+                'rotacao_hz',
+                'maximo','rms',
+                'assimetria',
+                'curtose',
+                'fator_crista',
+
+                'pot_relativa_ball_fault',
+                'pot_relativa_outer_race',
+                'pot_relativa_rotacao_hz',
+
+                'sensor',
+                'defeito']
+
 
 # -----------------------------------------------
 # --------- Machine Learning Sets ---------------
@@ -222,8 +255,6 @@ y_column = colunas[-1]
 
 seed = 10
 test_size = 0.51
-x_columns = colunas[0:-1]
-y_column = colunas[-1]
 
 
 time_window = 1

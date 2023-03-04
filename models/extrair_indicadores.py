@@ -27,12 +27,12 @@ class ExtrairIndicadores:
         
         self.largura = self.rpm_medio
 
-        # self.pot_relativa_lista = []
+        self.pot_relativa_lista = []
         self.pot_list = []
 
         
         harmonicos_fourier, harmonicos_frequencia = self.Objeto_Frequencia.banda_frequencia(self.freq_referencia[index],self.largura,no_harmonicos)
-        # self.pot_relativa = self.Objeto_Frequencia.pot_relativa_sinal(harmonicos_fourier,self.Objeto_Frequencia.fft_transform)
+        self.pot_relativa = self.Objeto_Frequencia.pot_relativa_sinal(harmonicos_fourier,self.Objeto_Frequencia.fft_transform)
         self.pot = self.Objeto_Frequencia.pot_sinal(harmonicos_fourier)
 
     def Get(self,no_harmonicos=1):
@@ -66,7 +66,7 @@ class ExtrairIndicadores:
                 local = models.defeito_rolamento[index]
                 self.ExtrairHarmonicos(sinal,index,no_harmonicos)
 
-                # data_json[f'pot_relativa_{local}'] = np.abs(self.pot_relativa)
+                data_json[f'pot_relativa_{local}'] = np.abs(self.pot_relativa)
                 data_json[f'pot_{local}'] = np.abs(self.pot)
 
             data_json['sensor'] = self.sensor

@@ -58,7 +58,7 @@ class GeneralFuncions():
                 tempo_estimado = 0
             
             
-            print(f'\Harmônico: {harmonico}\nPastas Percorridas: {cont}/{len(models.PATH)}\nAndamento Total: {np.round(100*ciclo_atual/ciclos_totais,2)}%')
+            print(f'\nHarmônico: {harmonico}\nPastas Percorridas: {cont}/{len(models.PATH)}\nAndamento Total: {np.round(100*ciclo_atual/ciclos_totais,2)}%')
             print("Tempo decorrido: {:02}:{:02}:{:02}".format(int(elapsed_time // 3600), int(elapsed_time % 3600 // 60), int(elapsed_time % 60)))
             print("Tempo Estimado até o Fim: {:02}:{:02}:{:02}".format(int(tempo_estimado // 3600), int(tempo_estimado % 3600 // 60), int(tempo_estimado % 60)))
     
