@@ -66,7 +66,7 @@ class GeneralFuncions():
 # Classe que gera os dados tratados e salva em csv
 class GerarCSV(GeneralFuncions):
     
-    PASTAS = models.PATH
+    PASTAS = models.intensidade_defeitos
     SENSORES = models.sensores
     FREQUENCIAS_REF = models.frequencias_rolamento
     COLUNA_RPM = 0
@@ -110,8 +110,8 @@ class GerarCSV(GeneralFuncions):
         local = create_dir(harmonico=harmonico)
 
         dataframe = pd.json_normalize(dados)
-        dataframe = dataframe[dataframe.columns[len(dataframe.columns)-len(models.colunas):len(dataframe.columns)]]
-        dataframe.to_csv(f'{local}/{models.nome_padrao_de_arquivo}_concatenado.csv')
+        # dataframe = dataframe[dataframe.columns[len(dataframe.columns)-len(models.colunas):len(dataframe.columns)]]
+        dataframe.to_csv(f'{local}/{models.nome_padrao_de_arquivo}_concatenado_novo.csv')
 
     # método que executa toda a rotina de extração de dados
     def executar(self):
@@ -127,11 +127,11 @@ class GerarCSV(GeneralFuncions):
             # Percorre a lista de pastas
             for pasta in self.PASTAS:
                 defeito = self.PASTAS.get(pasta)
+
                 arquivos = self.listar_arquivos(pasta)
   
-                defeito = self.PASTAS[pasta]
                 local = f'{models.path_dados_tratados}/harmonicos_{harmonico}'
-                local = f'{local}/{models.nome_padrao_de_arquivo}_{defeito}.csv'
+                local = f'{local}/{models.nome_padrao_de_arquivo}_{defeito[0]}_novo.csv'
 
                 # Verifica se a pasta existe
                 if os.path.exists(local):
@@ -171,7 +171,7 @@ class GerarCSV(GeneralFuncions):
 
             # Normalizar e Salvar Dados tratados
             pasta_completa = f'database/dados_tratados/harmonicos_{harmonico}'
-            arquivo_completo = f'{models.nome_padrao_de_arquivo}_concatenado.csv'
+            arquivo_completo = f'{models.nome_padrao_de_arquivo}_concatenado_novo.csv'
             df_completo = get_raw_data.GetData(pasta_completa,arquivo_completo).GetDataframe()
             normalizar_sinal.NormalizarSinal(df_completo,harmonico,metodo=2).save_as_csv()
 

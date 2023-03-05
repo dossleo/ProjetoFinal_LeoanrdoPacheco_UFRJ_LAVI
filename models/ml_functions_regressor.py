@@ -9,6 +9,9 @@ from sklearn.linear_model import Ridge
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.linear_model import LinearRegression
+
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
@@ -19,7 +22,7 @@ class MethodPrepare:
     def __init__(self, data:pd.DataFrame, test_size = models.test_size) -> None:
         self.data = data
         self.x_data = self.get_x_data()
-        self.y_data = self.get_y_data()
+        self.y_normalizado, self.y_original = self.get_y_data()
         self.x_columns = self.data[models.colunas_x]
 
         self.test_size = test_size
@@ -32,19 +35,23 @@ class MethodPrepare:
     def get_y_data(self):
         defeitos = models.defeitos_gerais
         df = self.data
-        for defeito in defeitos:
-            # Adicionando uma nova coluna com valores condicionais
-            df[defeito] = [0.3 if f'{defeito}_baixo' in x else (0.6 if f'{defeito}_medio' in x else (1 if f'{defeito}_alto' in x else 0)) for x in df['defeito']]
 
-        return df[defeitos]
+        y_original = df[defeitos]
+        # Criando um objeto scaler para normalizar os dados
+        self.scaler = MinMaxScaler()
+
+        # Normalizando os dados de y
+        y_norm = self.scaler.fit_transform(y_original)
+
+        return y_norm, y_original
 
     def prepare_data(self):
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
             self.x_data,
-            self.y_data,
+            self.y_normalizado,
             test_size=self.test_size,
             random_state = self.seed,
-            stratify=self.y_data
+            stratify=self.y_normalizado
         )
 
 class Regressor(MethodPrepare):
@@ -64,7 +71,7 @@ class Regressor(MethodPrepare):
         relatorio_Regressor = f'Regressor: {metodo} - {self.harmonico}º harmonico'
         # Cria o arquivo txt e escreve as informações
         with open(f"database/dados_tratados/harmonicos_{self.harmonico}/relatorio_{metodo}_harmonico{self.harmonico}.txt", 'w') as f:
-            f.write("Relatório de Performance do Regressor\n\n")
+            f.write(f"Relatório de Performance do Regressor: {metodo} - {self.harmonico} Harmônicos\n\n")
             f.write("Erro Médio Quadrático (MSE): {:.3f}\n".format(self.mse))
             f.write(f'Erro Médio Absoluto (MAE): {self.mae:.3f}\n')
             f.write("Coeficiente de Determinação (R²): {:.3f}\n".format(self.r2))
@@ -77,6 +84,10 @@ class Regressor(MethodPrepare):
 
         # Faz a predição dos dados de teste
         y_pred = self.fit_regressor.predict(self.x_test)
+
+        y_pred = self.scaler.inverse_transform(y_pred)
+        y_test = self.scaler.inverse_transform(y_test)
+        
         # Avalia o desempenho do modelo
         self.mse = mean_squared_error(self.y_test, y_pred)
         self.mae = mean_absolute_error(self.y_test, y_pred)

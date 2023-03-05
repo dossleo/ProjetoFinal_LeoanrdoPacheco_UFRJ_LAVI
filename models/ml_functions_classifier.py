@@ -23,7 +23,13 @@ class MethodPrepare:
         return df
 
     def get_y_data(self):
-        return self.data[self.data.columns[-1]]
+        defeitos = models.defeitos_gerais
+        df = self.data
+        for defeito in defeitos:
+            # Adicionando uma nova coluna com valores condicionais
+            df[defeito] = ['baixo' if f'{defeito}_baixo' in x else ('medio' if f'{defeito}_medio' in x else ('alto' if f'{defeito}_alto' in x else 0)) for x in df['defeito']]
+
+        return df[defeitos]
 
     def prepare_data(self):
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(

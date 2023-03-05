@@ -13,30 +13,30 @@ def create_dir(harmonico):
 class NormalizarSinal():
 
     COLUNAS_FREQ_pot = models.colunas_freq_pot
-    COLUNAS_FREQ_pot_RELATIVA = models.colunas_freq_pot_relativa
+    # COLUNAS_FREQ_pot_RELATIVA = models.colunas_freq_pot_relativa
     
     def __init__(self,dataframe,harmonico,metodo = 1) -> None:
         self.dataframe = pd.DataFrame(dataframe)
 
         self.colunas = models.colunas
         self.harmonico = harmonico
-        defeito = 'defeito'
-        normal = 'normal'
+        defeito = 'normal'
+        normal = 1
 
         self.df_sem_defeito = self.dataframe[self.dataframe[defeito]==normal]
 
         self.df_freq_pot = self.dataframe[self.COLUNAS_FREQ_pot]
-        self.df_freq_pot_relativa = self.dataframe[self.COLUNAS_FREQ_pot_RELATIVA]
+        # # self.df_freq_pot_relativa = self.dataframe[self.COLUNAS_FREQ_pot_RELATIVA]
 
         self.df_tempo = self.dataframe[models.colunas_tempo]
 
         self.df_freq_pot_sem_defeito = self.df_freq_pot[self.df_freq_pot[defeito]==normal]
-        self.df_freq_pot_relativa_sem_defeito = self.df_freq_pot_relativa[self.df_freq_pot_relativa[defeito]==normal]
+        # # # self.df_freq_pot_relativa_sem_defeito = self.df_freq_pot_relativa[self.df_freq_pot_relativa[defeito]==normal]
         self.df_tempo_sem_defeito = self.df_tempo[self.df_tempo[defeito]==normal]
 
         self.df_sensor = self.dataframe[models.coluna_sensor]
 
-        self.df_defeito = self.dataframe[defeito]
+        self.df_defeito = self.dataframe[models.defeitos_gerais]
 
         # calcula o máximo e mínimo de acordo com o método escolhido
         if metodo == 1:
@@ -50,8 +50,8 @@ class NormalizarSinal():
         self.ymax_freq_pot = np.max(np.array(self.df_freq_pot[self.COLUNAS_FREQ_pot[0:-1]]))
         self.ymin_freq_pot = np.min(np.array(self.df_freq_pot[self.COLUNAS_FREQ_pot[0:-1]]))
 
-        self.ymax_freq_pot_relativa = np.max(np.array(self.df_freq_pot_relativa[self.COLUNAS_FREQ_pot_RELATIVA[0:-1]]))
-        self.ymin_freq_pot_relativa = np.min(np.array(self.df_freq_pot_relativa[self.COLUNAS_FREQ_pot_RELATIVA[0:-1]]))
+        # # # self.ymax_freq_pot_relativa = np.max(np.array(self.df_freq_pot_relativa[self.COLUNAS_FREQ_pot_RELATIVA[0:-1]]))
+        # # # self.ymin_freq_pot_relativa = np.min(np.array(self.df_freq_pot_relativa[self.COLUNAS_FREQ_pot_RELATIVA[0:-1]]))
 
         self.ymax_rotacao =         np.max(np.array(self.dataframe['rotacao_hz']))
         self.ymax_maximo =          np.max(np.array(self.dataframe['maximo']))
@@ -79,8 +79,8 @@ class NormalizarSinal():
         self.ymax_freq_pot = np.max(np.array(self.df_freq_pot_sem_defeito[self.COLUNAS_FREQ_pot[0:-1]]))
         self.ymin_freq_pot = np.min(np.array(self.df_freq_pot_sem_defeito[self.COLUNAS_FREQ_pot[0:-1]]))
 
-        self.ymax_freq_pot_relativa = np.max(np.array(self.df_freq_pot_relativa_sem_defeito[self.COLUNAS_FREQ_pot_RELATIVA[0:-1]]))
-        self.ymin_freq_pot_relativa = np.min(np.array(self.df_freq_pot_relativa_sem_defeito[self.COLUNAS_FREQ_pot_RELATIVA[0:-1]]))
+        # # # self.ymax_freq_pot_relativa = np.max(np.array(self.df_freq_pot_relativa_sem_defeito[self.COLUNAS_FREQ_pot_RELATIVA[0:-1]]))
+        # # # self.ymin_freq_pot_relativa = np.min(np.array(self.df_freq_pot_relativa_sem_defeito[self.COLUNAS_FREQ_pot_RELATIVA[0:-1]]))
 
         self.ymax_rotacao =         np.max(np.array(self.df_sem_defeito['rotacao_hz']))
         self.ymax_maximo =          np.max(np.array(self.df_sem_defeito['maximo']))
@@ -102,7 +102,7 @@ class NormalizarSinal():
 
     def normalizar_freq(self):
         self.df_freq_pot_normalizado =             ( (self.dataframe[self.COLUNAS_FREQ_pot[0:-1]]             - self.ymin_freq_pot)          / (self.ymax_freq_pot          - self.ymin_freq_pot           ) ) * self.x
-        self.df_freq_pot_relativa_normalizado =    ( (self.dataframe[self.COLUNAS_FREQ_pot_RELATIVA[0:-1]]    - self.ymin_freq_pot_relativa) / (self.ymax_freq_pot_relativa - self.ymin_freq_pot_relativa  ) ) * self.x
+        # # # # # self.df_freq_pot_relativa_normalizado =    ( (self.dataframe[self.COLUNAS_FREQ_pot_RELATIVA[0:-1]]    - self.ymin_freq_pot_relativa) / (self.ymax_freq_pot_relativa - self.ymin_freq_pot_relativa  ) ) * self.x
     
     def normalizar_tempo(self):
 
@@ -127,6 +127,8 @@ class NormalizarSinal():
         self.normalizar_freq()
         self.normalizar_sensor()
 
+        self.df_freq_pot_normalizado = self.df_freq_pot_normalizado[['pot_ball_fault','pot_outer_race','pot_rotacao_hz']]
+
         lista_dataframes = [self.df_rotacao_normalizado,
                             self.df_maximo_normalizado,
                             self.df_rms_normalizado,
@@ -134,14 +136,16 @@ class NormalizarSinal():
                             self.df_curtose_normalizado,
                             self.df_fator_crista_normalizado,
                             self.df_freq_pot_normalizado,
-                            self.df_freq_pot_relativa_normalizado,
+                            # self.df_freq_pot_relativa_normalizado,
                             self.df_sensor,
                             self.df_defeito]
+        
 
         df = pd.concat(lista_dataframes,axis=1,ignore_index=False)
-        df = pd.DataFrame(df.reset_index(drop=False))
+    
+        df = pd.DataFrame(df.reset_index(drop=True))
 
-        df = df[df.columns[len(df.columns)-len(models.colunas):len(df.columns)]]
+        # df = df.drop(df.columns[0])
 
         return df
 

@@ -47,8 +47,8 @@ def tempo_decorrido(start, ciclo_atual, ciclos_totais,harmonico):
         print("Tempo Estimado até o Fim: {:02}:{:02}:{:02}\n\n".format(int(tempo_estimado // 3600), int(tempo_estimado % 3600 // 60), int(tempo_estimado % 60)))
 
 
-harmonico_inicial = 2
-harmonico_final = 10
+harmonico_inicial = 1
+harmonico_final = 1
 
 # Nome dos dados normalizados
 dados_normalizados = 'Dados_Normalizados.csv'
@@ -79,16 +79,6 @@ ciclo_atual = 0
 
 colunas = models.colunas_pot
 
-# colunas = [
-#         'rotacao_hz',
-#         'maximo',
-#         'rms',
-#         'assimetria',
-#         'curtose',
-#         'fator_crista',
-#         'sensor',
-#         'defeito']
-
 
 start = iniciar_contagem()
 
@@ -108,7 +98,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         # Loop para percorrer e executar o aprendizado das redes neurais artificiais
         for rede in redes:
                 legenda_rede =  f'Camadas Ocultas da rede {rede}'
-        # Instanciando o classificador
+        # Instanciando o regressor
                 regressor = ml_functions_regressor.Regressor(data = df,colunas=colunas ,regressor=MLPRegressor,harmonico=harmonico,test_size=0.2,
                         rede_oculta=f' - {rede}',
                         hidden_layer_sizes=rede, 
@@ -135,7 +125,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
                         n_iter_no_change=10, 
                         max_fun=15000)
         
-                # Realizando a classificação
+                # Realizando a regressão
                 regressor.run()
 
 
@@ -144,11 +134,11 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         # breakpoint()
                 
 
-        # Início do aprendizado de máquina de outros classificadores
+        # Início do aprendizado de máquina de outros regressores
         
-        # # Instanciando o classificador
+        # # Instanciando o regressor
         regressor = ml_functions_regressor.Regressor(data = df, colunas=colunas, regressor=RandomForestRegressor, random_state = models.seed,harmonico=harmonico)
-        # Realizando a classificação
+        # Realizando a regressão
         regressor.run()
 
 
@@ -157,9 +147,9 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
 
 
 
-        # Instanciando o classificador
+        # Instanciando o regressor
         regressor = ml_functions_regressor.Regressor(data = df, colunas=colunas, regressor=KNeighborsRegressor,harmonico=harmonico,n_neighbors=1)
-        # Realizando a classificação
+        # Realizando a regressão
         regressor.run()
 
         ciclo_atual+=1
@@ -167,13 +157,23 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
 
 
 
-        # # Instanciando o classificador
+        # # Instanciando o regressor
         regressor = ml_functions_regressor.Regressor(data = df, colunas=colunas, regressor=DecisionTreeRegressor,harmonico=harmonico)
-        # Realizando a classificação
+        # Realizando a regressão
         regressor.run()
 
         ciclo_atual+=1
         tempo_decorrido(start,ciclo_atual,ciclos_totais,harmonico)
+
+
+
+        # # # Instanciando o regressor
+        # regressor = ml_functions_regressor.Regressor(data = df, colunas=colunas, regressor=SVR,harmonico=harmonico)
+        # # Realizando a regressão
+        # regressor.run()
+
+        # ciclo_atual+=1
+        # tempo_decorrido(start,ciclo_atual,ciclos_totais,harmonico)
 
 
         print(f'Harmônico {harmonico} finalizado!\n\n')
