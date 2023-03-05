@@ -259,3 +259,25 @@ test_size = 0.2
 
 time_window = 1
 overlap = 0.51
+
+colunas_x = [
+            'rotacao_hz',
+            'maximo','rms',
+            'assimetria',
+            'curtose',
+            'fator_crista',
+
+            'pot_ball_fault',
+            'pot_outer_race',
+            'pot_rotacao_hz',
+
+            'sensor']
+
+defeitos_gerais =   [
+                    'normal',
+                    'desalinhamento_horizontal',
+                    'desalinhamento_vertical',
+                    'desbalanceamento',
+                    'ball_fault',
+                    'outer_race'
+                    ]       

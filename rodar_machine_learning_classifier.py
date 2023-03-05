@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import models
-from models import ml_functions
+from models import ml_functions_classifier
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
@@ -111,7 +111,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         for rede in redes:
                 legenda_rede =  f'Camadas Ocultas da rede {rede}'
         # Instanciando o classificador
-                classifier = ml_functions.Classifier(data = df,colunas=colunas ,classifier=MLPClassifier,harmonico=harmonico,test_size=0.2,
+                classifier = ml_functions_classifier.Classifier(data = df,colunas=colunas ,classifier=MLPClassifier,harmonico=harmonico,test_size=0.2,
                         rede_oculta=f' - {rede}',
                         hidden_layer_sizes=rede, 
                         activation='relu', 
@@ -159,7 +159,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         # Início do aprendizado de máquina de outros classificadores
         
         # # Instanciando o classificador
-        classifier = ml_functions.Classifier(data = df, colunas=colunas, classifier=RandomForestClassifier, random_state = models.seed,harmonico=harmonico)
+        classifier = ml_functions_classifier.Classifier(data = df, colunas=colunas, classifier=RandomForestClassifier, random_state = models.seed,harmonico=harmonico)
         # Realizando a classificação
         classifier.run()
 
@@ -176,7 +176,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
 
 
         # Instanciando o classificador
-        classifier = ml_functions.Classifier(data = df, colunas=colunas, classifier=KNeighborsClassifier,harmonico=harmonico,n_neighbors=1)
+        classifier = ml_functions_classifier.Classifier(data = df, colunas=colunas, classifier=KNeighborsClassifier,harmonico=harmonico,n_neighbors=1)
         # Realizando a classificação
         classifier.run()
 
@@ -193,7 +193,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
 
 
         # # Instanciando o classificador
-        classifier = ml_functions.Classifier(data = df, colunas=colunas, classifier=DecisionTreeClassifier, criterion = 'entropy',harmonico=harmonico)
+        classifier = ml_functions_classifier.Classifier(data = df, colunas=colunas, classifier=DecisionTreeClassifier, criterion = 'entropy',harmonico=harmonico)
         # Realizando a classificação
         classifier.run()
 
