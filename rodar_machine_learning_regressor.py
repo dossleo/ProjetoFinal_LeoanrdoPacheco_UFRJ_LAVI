@@ -48,7 +48,7 @@ def tempo_decorrido(start, ciclo_atual, ciclos_totais,harmonico):
 
 
 harmonico_inicial = 1
-harmonico_final = 1
+harmonico_final = 10
 
 # Nome dos dados normalizados
 dados_normalizados = 'Dados_Normalizados.csv'
@@ -76,6 +76,7 @@ redes = [
 
 ciclos_totais = (len(redes)+3)*(harmonico_final-harmonico_inicial+1)
 ciclo_atual = 0
+
 
 colunas = models.colunas_pot
 
@@ -164,16 +165,6 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
 
         ciclo_atual+=1
         tempo_decorrido(start,ciclo_atual,ciclos_totais,harmonico)
-
-
-
-        # # # Instanciando o regressor
-        # regressor = ml_functions_regressor.Regressor(data = df, colunas=colunas, regressor=SVR,harmonico=harmonico)
-        # # Realizando a regressão
-        # regressor.run()
-
-        # ciclo_atual+=1
-        # tempo_decorrido(start,ciclo_atual,ciclos_totais,harmonico)
 
 
         print(f'Harmônico {harmonico} finalizado!\n\n')

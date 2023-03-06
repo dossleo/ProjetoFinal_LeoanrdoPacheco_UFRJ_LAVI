@@ -83,15 +83,15 @@ class Regressor(MethodPrepare):
         self.fit_regressor = self.regressor.fit(self.x_train,self.y_train)
 
         # Faz a predição dos dados de teste
-        y_pred = self.fit_regressor.predict(self.x_test)
+        self.y_pred = self.fit_regressor.predict(self.x_test)
 
-        y_pred = self.scaler.inverse_transform(y_pred)
-        y_test = self.scaler.inverse_transform(y_test)
+        self.y_pred = self.scaler.inverse_transform(self.y_pred)
+        self.y_test = self.scaler.inverse_transform(self.y_test)
         
         # Avalia o desempenho do modelo
-        self.mse = mean_squared_error(self.y_test, y_pred)
-        self.mae = mean_absolute_error(self.y_test, y_pred)
-        self.r2 = r2_score(self.y_test, y_pred)
+        self.mse = mean_squared_error(self.y_test, self.y_pred)
+        self.mae = mean_absolute_error(self.y_test, self.y_pred)
+        self.r2 = r2_score(self.y_test, self.y_pred)
 
         self.exportar_relatorio()
 
