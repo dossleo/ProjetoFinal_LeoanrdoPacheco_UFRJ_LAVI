@@ -1,5 +1,6 @@
 import models
 import pandas as pd
+import numpy as np
 
 import sklearn.ensemble
 from sklearn.neural_network import MLPRegressor
@@ -66,17 +67,17 @@ class Regressor(MethodPrepare):
 
 
     def exportar_relatorio(self):
-        metodo = f'{self.regressor.__class__.__name__}{self.rede}'
+        self.metodo = f'{self.regressor.__class__.__name__}{self.rede}'
 
-        relatorio_Regressor = f'Regressor: {metodo} - {self.harmonico}º harmonico'
         # Cria o arquivo txt e escreve as informações
-        with open(f"database/dados_tratados/harmonicos_{self.harmonico}/relatorio_{metodo}_harmonico{self.harmonico}.txt", 'w') as f:
-            f.write(f"Relatório de Performance do Regressor: {metodo} - {self.harmonico} Harmônicos\n\n")
+        with open(f"database/dados_tratados/harmonicos_{self.harmonico}/relatorio_{self.metodo}_harmonico{self.harmonico}.txt", 'w') as f:
+            f.write(f"Regressor {self.metodo} - {self.harmonico} Harmônicos\n\n")
             f.write("Erro Médio Quadrático (MSE): {:.3f}\n".format(self.mse))
+            f.write("RMS Erro (RMSE): {:.3f}\n".format(np.sqrt(self.mse)))
             f.write(f'Erro Médio Absoluto (MAE): {self.mae:.3f}\n')
             f.write("Coeficiente de Determinação (R²): {:.3f}\n".format(self.r2))
 
-        print(f'Método {metodo} exportado com sucesso!')
+        print(f'Método {self.metodo} exportado com sucesso!')
 
     def run(self):
         self.prepare_data()

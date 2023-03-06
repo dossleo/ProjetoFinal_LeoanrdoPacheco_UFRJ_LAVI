@@ -83,6 +83,8 @@ colunas = models.colunas_pot
 
 start = iniciar_contagem()
 
+indicadores = []
+
 
 # Loop percorrendo 10 harmonicos
 for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
@@ -91,9 +93,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         
         df = df[colunas]
 
-
-        # Dicionário para comparar acurácia entre os métodos
-        score = {}
+        
 
 
         # Loop para percorrer e executar o aprendizado das redes neurais artificiais
@@ -129,6 +129,15 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
                 # Realizando a regressão
                 regressor.run()
 
+                ind = {'harmonico':harmonico,
+                       'metodo': regressor.metodo,
+                       'MSE':regressor.mse,
+                       'RMSE':np.sqrt(regressor.mse),
+                       'MAE':regressor.mae,
+                       'R²':regressor.r2}
+                
+                indicadores.append(ind)
+
 
                 ciclo_atual+=1
                 tempo_decorrido(start,ciclo_atual,ciclos_totais,harmonico)
@@ -142,6 +151,15 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         # Realizando a regressão
         regressor.run()
 
+        ind = {'harmonico':harmonico,
+                'metodo': regressor.metodo,
+                'MSE':regressor.mse,
+                'RMSE':np.sqrt(regressor.mse),
+                'MAE':regressor.mae,
+                'R²':regressor.r2}
+        
+        indicadores.append(ind)
+
 
         ciclo_atual+=1
         tempo_decorrido(start,ciclo_atual,ciclos_totais,harmonico)
@@ -153,6 +171,15 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         # Realizando a regressão
         regressor.run()
 
+        ind = {'harmonico':harmonico,
+                'metodo': regressor.metodo,
+                'MSE':regressor.mse,
+                'RMSE':np.sqrt(regressor.mse),
+                'MAE':regressor.mae,
+                'R²':regressor.r2}
+        
+        indicadores.append(ind)
+
         ciclo_atual+=1
         tempo_decorrido(start,ciclo_atual,ciclos_totais,harmonico)
 
@@ -161,13 +188,25 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         # # Instanciando o regressor
         regressor = ml_functions_regressor.Regressor(data = df, colunas=colunas, regressor=DecisionTreeRegressor,harmonico=harmonico)
         # Realizando a regressão
-        regressor.run()
+        regressor.run() 
+
+        ind = {'harmonico':harmonico,
+                'metodo': regressor.metodo,
+                'MSE':regressor.mse,
+                'RMSE':np.sqrt(regressor.mse),
+                'MAE':regressor.mae,
+                'R²':regressor.r2}
+        
+        indicadores.append(ind)
 
         ciclo_atual+=1
         tempo_decorrido(start,ciclo_atual,ciclos_totais,harmonico)
 
 
         print(f'Harmônico {harmonico} finalizado!\n\n')
+
+indicadores = pd.json_normalize(indicadores)
+indicadores.to_csv('database/dados_tratados/Indicadores_Regressor.csv')
 
 
 breakpoint()
