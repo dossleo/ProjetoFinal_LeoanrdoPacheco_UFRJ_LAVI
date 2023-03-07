@@ -61,6 +61,8 @@ score_KNN = {}
 score_DecisionTree = {}
 score_rede = {}
 
+indicadores = []
+
 redes = [
         (128,),
         (256,),
@@ -140,6 +142,14 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
                 # Realizando a classificação
                 classifier.run()
 
+                ind = {'harmonico':harmonico,
+                       'metodo': classifier.metodo,
+                       'Acuracia':classifier.acuracia,
+                       'Precisao':classifier.precisao,
+                       'F1_SCORE':classifier.f1}
+                
+                indicadores.append(ind)
+
                 # Guardando o valor da acurácia no dicionário score
                 score[f'{classifier.classifier.__class__.__name__} - {rede}'] = round(classifier.score * 100,2)
                 # Guardando o valor da acurácia no dicionário referente ao classificador
@@ -163,6 +173,14 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         # Realizando a classificação
         classifier.run()
 
+        ind = {'harmonico':harmonico,
+                'metodo': classifier.metodo,
+                'Acuracia':classifier.acuracia,
+                'Precisao':classifier.precisao,
+                'F1_SCORE':classifier.f1}
+        
+        indicadores.append(ind)
+
         # Guardando o valor da acurácia no dicionário score
         score[f'{classifier.classifier.__class__.__name__}'] = round(classifier.score * 100,2)
         # Guardando o valor da acurácia no dicionário referente ao classificador
@@ -180,6 +198,14 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         # Realizando a classificação
         classifier.run()
 
+        ind = {'harmonico':harmonico,
+                'metodo': classifier.metodo,
+                'Acuracia':classifier.acuracia,
+                'Precisao':classifier.precisao,
+                'F1_SCORE':classifier.f1}
+        
+        indicadores.append(ind)
+
         # Guardando o valor da acurácia no dicionário score
         score[f'{classifier.classifier.__class__.__name__}'] = round(classifier.score * 100,2)
         # Guardando o valor da acurácia no dicionário referente ao classificador
@@ -196,6 +222,14 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         classifier = ml_functions_classifier.Classifier(data = df, colunas=colunas, classifier=DecisionTreeClassifier, criterion = 'entropy',harmonico=harmonico)
         # Realizando a classificação
         classifier.run()
+
+        ind = {'harmonico':harmonico,
+                'metodo': classifier.metodo,
+                'Acuracia':classifier.acuracia,
+                'Precisao':classifier.precisao,
+                'F1_SCORE':classifier.f1}
+        
+        indicadores.append(ind)
 
         # Guardando o valor da acurácia no dicionário score
         score[f'{classifier.classifier.__class__.__name__}'] = round(classifier.score * 100,2)
@@ -232,5 +266,8 @@ for rede in redes:
         visualizar_dados.ComparacaoDeAcuracias().plot_harmonicos(f'Comparação de Acurácia - Rede Neural {rede}',dicionario_filtrado, 
                 plotar=False, 
                 salvar=True)
+
+indicadores = pd.json_normalize(indicadores)
+indicadores.to_csv('database/dados_tratados/Indicadores_Regressor.xls')
 
 breakpoint()

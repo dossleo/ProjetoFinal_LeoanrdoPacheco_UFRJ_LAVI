@@ -206,7 +206,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         print(f'Harmônico {harmonico} finalizado!\n\n')
 
 indicadores = pd.json_normalize(indicadores)
-indicadores.to_csv('database/dados_tratados/Indicadores_Regressor.csv')
+indicadores.to_csv('database/dados_tratados/Indicadores_Regressor.xls')
 
 
 breakpoint()

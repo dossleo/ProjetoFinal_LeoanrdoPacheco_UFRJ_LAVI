@@ -233,7 +233,7 @@ class ComparacaoDeAcuracias:
         plt.close()
 
     # Método para criar gráfico de barras para comparar um mesmo método em várias harmonicos
-    def plot_harmonicos(self, title:str, score,plotar:bool=False,salvar=True):
+    def plot_harmonicos(self, title:str,score,plotar:bool=False,salvar=True):
         
         # Criando gráfico de barras
         ax = sns.barplot(x=arange(len(score)), y=list(score.values()), hue=list(score.keys()), dodge=False)
