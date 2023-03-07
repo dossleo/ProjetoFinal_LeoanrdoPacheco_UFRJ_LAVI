@@ -70,7 +70,12 @@ class ExtrairIndicadores:
                 data_json[f'pot_{local}'] = np.abs(self.pot)
 
             data_json['sensor'] = self.sensor
-            data_json['defeito'] = self.defeito
+
+            for defeito in models.defeitos_gerais:
+                if defeito == self.defeito[0]:
+                    data_json[defeito] = self.defeito[1]
+                else:
+                    data_json[defeito] = 0
 
             df.append(data_json)
 

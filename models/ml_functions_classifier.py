@@ -2,7 +2,7 @@ import models
 import pandas as pd
 import sklearn.ensemble
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score, classification_report, precision_score, f1_score
 from numpy import round
 class MethodPrepare:
 
@@ -23,7 +23,13 @@ class MethodPrepare:
         return df
 
     def get_y_data(self):
-        return self.data[self.data.columns[-1]]
+        defeitos = models.defeitos_gerais
+        df = self.data
+        for defeito in defeitos:
+            # Adicionando uma nova coluna com valores condicionais
+            df[defeito] = ['baixo' if f'{defeito}_baixo' in x else ('medio' if f'{defeito}_medio' in x else ('alto' if f'{defeito}_alto' in x else 0)) for x in df['defeito']]
+
+        return df[defeitos]
 
     def prepare_data(self):
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
@@ -46,22 +52,28 @@ class Classifier(MethodPrepare):
 
 
     def exportar_relatorio(self):
-        metodo = f'{self.classifier.__class__.__name__}{self.rede}'
+        self.metodo = f'{self.classifier.__class__.__name__}{self.rede}'
 
-        relatorio_classificador = f'Classificador: {metodo} - {self.harmonico}º harmonico'
-        self.relatorio_acuracia = f'A precisão do classificador é:{round(100*accuracy_score(self.y_test, self.prediction),1)}%'
+        self.acuracia = accuracy_score(self.y_test,self.prediction)
+        self.precisao = precision_score(self.y_test,self.prediction)
+        self.f1 = f1_score(self.y_test,self.prediction)
+
+
+        relatorio_classificador = f'Classificador: {self.metodo} - {self.harmonico}º harmonico'
+        self.relatorio_acuracia = f'A acurácia do classificador é:{round(100*accuracy_score(self.y_test, self.prediction),1)}%'
         relatorio_report = f'Relatório de classificação:\n{classification_report(self.y_test, self.prediction)}'
         relatorio = f'{relatorio_classificador}\n{self.relatorio_acuracia}\n{relatorio_report}'
 
-        with open(f"database/dados_tratados/harmonicos_{self.harmonico}/relatorio_{metodo}_harmonico{self.harmonico}.txt", "w") as text_file:
+        with open(f"database/dados_tratados/harmonicos_{self.harmonico}/relatorio_{self.metodo}_harmonico{self.harmonico}.txt", "w") as text_file:
             text_file.write(relatorio)
 
-        print(f'Método {metodo} exportado com sucesso!')
+        print(f'Método {self.metodo} exportado com sucesso!')
 
     def run(self):
         self.prepare_data()
         self.fit_classifier = self.classifier.fit(self.x_train,self.y_train)
         self.prediction = self.classifier.predict(self.x_test)
         self.score = self.classifier.score(self.x_test, self.y_test)
+        
         self.exportar_relatorio()
 

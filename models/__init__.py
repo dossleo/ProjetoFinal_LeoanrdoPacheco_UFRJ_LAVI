@@ -71,6 +71,50 @@ PATH = {
         f'{path_dados_brutos}/underhang/outer_race/35g':'outer_race_alto',
            }
 
+
+intensidade_defeitos = {
+        # "Nome da pasta" : ['coluna referente ao defeito':intensidade do defeito]
+
+        f'{path_dados_brutos}/normal':['normal',1],
+
+        f'{path_dados_brutos}/horizontal-misalignment/0.5mm':['desalinhamento_horizontal',0.50],
+        f'{path_dados_brutos}/horizontal-misalignment/1.0mm':['desalinhamento_horizontal',1.00],
+        f'{path_dados_brutos}/horizontal-misalignment/1.5mm':['desalinhamento_horizontal',1.50],
+        f'{path_dados_brutos}/horizontal-misalignment/2.0mm':['desalinhamento_horizontal',2.00],
+
+        f'{path_dados_brutos}/vertical-misalignment/0.51mm':['desalinhamento_vertical',0.51],
+        f'{path_dados_brutos}/vertical-misalignment/0.63mm':['desalinhamento_vertical',0.63],
+        f'{path_dados_brutos}/vertical-misalignment/1.27mm':['desalinhamento_vertical',1.27],
+        f'{path_dados_brutos}/vertical-misalignment/1.40mm':['desalinhamento_vertical',1.40],
+        f'{path_dados_brutos}/vertical-misalignment/1.78mm':['desalinhamento_vertical',1.78],
+        f'{path_dados_brutos}/vertical-misalignment/1.90mm':['desalinhamento_vertical',1.90],
+           
+        f'{path_dados_brutos}/imbalance/6g':['desbalanceamento',06.0],
+        f'{path_dados_brutos}/imbalance/10g':['desbalanceamento',10.0],
+        f'{path_dados_brutos}/imbalance/15g':['desbalanceamento',15.0],
+        f'{path_dados_brutos}/imbalance/20g':['desbalanceamento',20.0],
+        f'{path_dados_brutos}/imbalance/25g':['desbalanceamento',25.0],
+        f'{path_dados_brutos}/imbalance/30g':['desbalanceamento',30.0],
+        f'{path_dados_brutos}/imbalance/35g':['desbalanceamento',35.0],
+        
+        f'{path_dados_brutos}/overhang/ball_fault/6g':['ball_fault',06.0],
+        f'{path_dados_brutos}/overhang/ball_fault/20g':['ball_fault',20.0],
+        f'{path_dados_brutos}/overhang/ball_fault/35g':['ball_fault',35.0],
+
+        f'{path_dados_brutos}/overhang/outer_race/6g':['outer_race',06.0],
+        f'{path_dados_brutos}/overhang/outer_race/20g':['outer_race',20.0],
+        f'{path_dados_brutos}/overhang/outer_race/35g':['outer_race',35.0],
+           
+        f'{path_dados_brutos}/underhang/ball_fault/6g':['ball_fault',06.0],
+        f'{path_dados_brutos}/underhang/ball_fault/20g':['ball_fault',20.0],
+        f'{path_dados_brutos}/underhang/ball_fault/35g':['ball_fault',35.0],
+
+        f'{path_dados_brutos}/underhang/outer_race/6g':['outer_race',06.0],
+        f'{path_dados_brutos}/underhang/outer_race/20g':['outer_race',20.0],
+        f'{path_dados_brutos}/underhang/outer_race/35g':['outer_race',35.0],
+           }
+
+
 # General configs
 DEBUG = True
 
@@ -181,7 +225,12 @@ colunas_tempo = ['rotacao_hz',
                  'assimetria',
                  'curtose',
                  'fator_crista',
-                 'defeito']
+                 'normal',
+                    'desalinhamento_horizontal',
+                    'desalinhamento_vertical',
+                    'desbalanceamento',
+                    'ball_fault',
+                    'outer_race']
 
 colunas_freq_pot_relativa = [
                 'pot_relativa_ball_fault',
@@ -189,7 +238,12 @@ colunas_freq_pot_relativa = [
                 'pot_relativa_outer_race',
                 # 'pot_relativa_inner_race',
                 'pot_relativa_rotacao_hz',
-                'defeito']
+                'normal',
+                    'desalinhamento_horizontal',
+                    'desalinhamento_vertical',
+                    'desbalanceamento',
+                    'ball_fault',
+                    'outer_race']
 
 colunas_freq_pot = [
                 'pot_ball_fault',
@@ -197,7 +251,12 @@ colunas_freq_pot = [
                 'pot_outer_race',
                 # 'pot_inner_race',
                 'pot_rotacao_hz',
-                'defeito']
+                'normal',
+                    'desalinhamento_horizontal',
+                    'desalinhamento_vertical',
+                    'desbalanceamento',
+                    'ball_fault',
+                    'outer_race']
 
 coluna_sensor = ['sensor']
 
@@ -217,7 +276,12 @@ colunas = [
             'pot_relativa_rotacao_hz',
 
             'sensor',
-            'defeito']
+            'normal',
+                    'desalinhamento_horizontal',
+                    'desalinhamento_vertical',
+                    'desbalanceamento',
+                    'ball_fault',
+                    'outer_race']
 
 
 colunas_pot = [
@@ -232,7 +296,12 @@ colunas_pot = [
                 'pot_rotacao_hz',
 
                 'sensor',
-                'defeito']
+                'normal',
+                    'desalinhamento_horizontal',
+                    'desalinhamento_vertical',
+                    'desbalanceamento',
+                    'ball_fault',
+                    'outer_race']
 
 colunas_pot_relativa = [
                 'rotacao_hz',
@@ -246,7 +315,12 @@ colunas_pot_relativa = [
                 'pot_relativa_rotacao_hz',
 
                 'sensor',
-                'defeito']
+                'normal',
+                    'desalinhamento_horizontal',
+                    'desalinhamento_vertical',
+                    'desbalanceamento',
+                    'ball_fault',
+                    'outer_race']
 
 
 # -----------------------------------------------
@@ -259,3 +333,25 @@ test_size = 0.2
 
 time_window = 1
 overlap = 0.51
+
+colunas_x = [
+            'rotacao_hz',
+            'maximo','rms',
+            'assimetria',
+            'curtose',
+            'fator_crista',
+
+            'pot_ball_fault',
+            'pot_outer_race',
+            'pot_rotacao_hz',
+
+            'sensor']
+
+defeitos_gerais =   [
+                    'normal',
+                    'desalinhamento_horizontal',
+                    'desalinhamento_vertical',
+                    'desbalanceamento',
+                    'ball_fault',
+                    'outer_race'
+                    ]       
