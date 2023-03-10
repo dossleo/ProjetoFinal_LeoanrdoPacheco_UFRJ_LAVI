@@ -71,7 +71,7 @@ redes = [
         (128,256,128),
         (128,256,256,128),
         (256,512,256)
-        # (512,1024,1024,512)
+
         ]
 
 ciclos_totais = (len(redes)+3)*(harmonico_final-harmonico_inicial+1)
@@ -110,7 +110,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
                         learning_rate='constant', 
                         learning_rate_init=0.001, 
                         power_t=0.5, 
-                        max_iter=500, 
+                        max_iter=1500, 
                         shuffle=True, 
                         random_state=None, 
                         tol=0.0001, 
@@ -206,7 +206,7 @@ for harmonico in range(harmonico_final+1)[harmonico_inicial:harmonico_final+1]:
         print(f'Harmônico {harmonico} finalizado!\n\n')
 
 indicadores = pd.json_normalize(indicadores)
-indicadores.to_csv('database/dados_tratados/Indicadores_Regressor.xls')
+indicadores.to_csv(f'{models.path_dados_tratados}/Indicadores_Regressor.xls')
 
 
 breakpoint()

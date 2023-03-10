@@ -268,6 +268,6 @@ for rede in redes:
                 salvar=True)
 
 indicadores = pd.json_normalize(indicadores)
-indicadores.to_csv('database/dados_tratados/Indicadores_Regressor.xls')
+indicadores.to_csv(f'{models.path_dados_tratados}/Indicadores_Regressor.xls')
 
 breakpoint()
